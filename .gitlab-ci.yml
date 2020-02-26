@@ -26,4 +26,5 @@ test:
 deploy:
   stage: deploy
   script:
+    - pip install awscli
     - npm run-script deploy
