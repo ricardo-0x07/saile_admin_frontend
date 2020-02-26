@@ -1,12 +1,12 @@
 # https://hub.docker.com/r/library/node/tags/
-image: nikolaik/python-nodejs:latest
+image: node:latest
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
-#AWS access keys stored as secret variables
+#AWS access keys stored as secret variables 
 variables:
-  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID 
   AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-#This declares the pipeline stages
+#This declares the pipeline stages  
 stages:
   - build
   - test
@@ -23,13 +23,7 @@ test:
   stage: test
   script:
     - echo "Running react test suite......"
-deploy to s3:
-    type: deploy
-    only:
-        - master
-    script:
-        - pip3 install awscli
-        - aws configure set profile bucket-prod
-        - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-        - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-        - aws s3 sync ./build/ s3://sailestackfrontend-20200226141313-hostingbucket-saileui
+deploy:
+  stage: deploy
+  script:
+    - npm run-script deploy
