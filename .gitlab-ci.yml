@@ -17,6 +17,7 @@ cache:
 build:
   stage: build
   script:
+    - npm -g install npm --silent
     - npm install
     - npm run-script build
 test:
