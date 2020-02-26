@@ -25,10 +25,11 @@ test:
     - echo "Running react test suite......"
 deploy to s3:
     type: deploy
-    image: srikoushik/aws-cli-node-docker
-    script:
-        - npm install
-        - CI=false npm run build
-        - sh sync.sh
     only:
         - master
+    script:
+        - pip3 install awscli
+        - aws configure set profile bucket-prod
+        - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        - aws s3 sync ./build/ s3://sailestackfrontend-20200226141313-hostingbucket-saileui
