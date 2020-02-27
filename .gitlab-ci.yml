@@ -27,6 +27,9 @@ test:
 deploy:
   stage: deploy
   script:
+    - npm -g install npm --silent
+    - npm install
+    - npm run-script build
     - apt-get update
     - apt-get -y install python
     - apt-get install -y python-pip
