@@ -27,5 +27,6 @@ test:
 deploy:
   stage: deploy
   script:
+    - apt-get install -y python3-pip
     - pip install awscli
     - npm run-script deploy
