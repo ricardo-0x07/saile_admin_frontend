@@ -1,0 +1,65 @@
+type Campaign @model {
+  id: ID!
+  name: String
+  description: String
+  targets: [Target] @connection(name: "CampaignTargets")
+  templates: [Template] @connection(name: "CampaignTemplates")
+}
+type Account @model {
+  id: ID!
+  name: String
+  employees: String
+  revenue: String
+  phone: String
+  fax: String
+  email: String
+  address: String
+  billing_state: String
+  billing_city: String
+  billing_country: String
+  website: String
+  targets: [Target] @connection(name: "AccountTargets")
+}
+type Target @model {
+  id: ID!
+  firstname: String
+  lastname: String
+  gender: String
+  title: String
+  phone: String
+  fax: String
+  email: String
+  sam_status: String
+  bounce_type: String
+  isema_eligible: Boolean
+  iseva_eligible: Boolean
+  member_status: String
+  role: String
+  position: String
+  first_outbound_done: Boolean
+  second_outbound_done: Boolean
+  is_referral: Boolean
+  to_referral: Boolean
+  account: Account @connection(name: "AccountTargets")
+  campaign: Campaign @connection(name: "CampaignTargets")
+  events: [Event] @connection(name: "TargetEvents")
+}
+type Event @model {
+  id: ID!
+  label: String
+  date: String
+  sender: String
+  to: String
+  cc: String
+  subject: String
+  body: String
+  target: Target @connection(name: "TargetEvents")
+}
+type Template @model {
+  id: ID!
+  name: String
+  subject: String
+  body_text: String
+  body_html_text: String
+  campaigns: Campaign @connection(name: "CampaignTemplates")
+}
