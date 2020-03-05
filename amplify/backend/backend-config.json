@@ -15,8 +15,8 @@
 					"defaultAuthentication": {
 						"authenticationType": "API_KEY",
 						"apiKeyConfig": {
-							"description": "Saile Graphql API dev",
-							"apiKeyExpirationDays": "60"
+							"description": "api_key",
+							"apiKeyExpirationDays": "65"
 						}
 					}
 				}

@@ -1,1042 +1,320 @@
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
+import gql from 'graphql-tag';
 
-export const getCampaign = /* GraphQL */ `
-  query GetCampaign($id: ID!) {
-    getCampaign(id: $id) {
-      id
-      name
-      description
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
+export const listCompanies = (limit) => {
+    return gql`
+        query ListCompanies {
+            company(limit: ${limit}) {
+                address
+                email
+                fax
+                id
+                name
+                phone
+                website
+                clients {
+                    company_id
+                    id
+                    name
+                }
             }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
         }
-        nextToken
-      }
-      templates {
-        items {
-          id
-          name
-          subject
-          body_text
-          body_html_text
-          campaigns {
-            id
-            name
-            description
-            targets {
-              nextToken
+    `;
+}
+
+export const listClients = (limit) => {
+    return gql`
+        query ListClients {
+            client(limit: ${limit}, offset: 0) {
+                company_id
+                id
+                name
+                sailebots {
+                    client_id
+                    email
+                    fullname
+                    id
+                    name
+                    no_targets
+                    phone
+                    title
+                }
             }
-            templates {
-              nextToken
-            }
-          }
         }
-        nextToken
-      }
-    }
-  }
-`;
-export const listCampaigns = /* GraphQL */ `
-  query ListCampaigns(
-    $filter: ModelCampaignFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCampaigns(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
+    `;
+}
+
+
+export const listSaileBots = (limit) => {
+    return gql`
+        query ListSaileBots {
+            sailebot(limit: ${limit}, offset: 0) {
+                client_id
+                email
+                fullname
+                id
+                name
+                no_targets
+                phone
+                title
+                requirements {
+                    auto_reject
+                    city
+                    contract_no
+                    elasticity
+                    function
+                    geography
+                    id
+                    is_duplicate
+                    launch_date
+                    ldr_notes
+                    level
+                    max_hits_per_contact
+                    name
+                    priority
+                    sailebot_id
+                    size
+                    source
+                    state
+                }
+                domains {
+                    active
+                    dns
+                    host
+                    id
+                    ip
+                    name
+                    provider
+                    sailebot_id
+                    smtp
+                    smtp_login
+                    smtp_password
+                }
             }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
         }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
+    `;
+}
+
+export const listCampaigns = (limit) => {
+    return gql`
+        query ListCampaigns {
+            campaign(limit: ${limit}, offset: 0) {
+                description
+                id
+                name
+                requirement_id
+                schedules {
+                    campaign_id
+                    daily_outbound_limit
+                    id
+                    name
+                    no_targets_per_accounts
+                }
+                templates {
+                    body_html_text
+                    body_text
+                    campaign_id
+                    id
+                    name
+                    subject
+                }
+                accounts {
+                    address
+                    campaign_id
+                    domain
+                    email
+                    employees
+                    fax
+                    id
+                    name
+                    phone
+                    revenue
+                    state
+                    website
+                }
             }
-          }
-          nextToken
         }
-      }
-      nextToken
-    }
-  }
-`;
-export const getAccount = /* GraphQL */ `
-  query GetAccount($id: ID!) {
-    getAccount(id: $id) {
-      id
-      name
-      employees
-      revenue
-      phone
-      fax
-      email
-      address
-      billing_state
-      billing_city
-      billing_country
-      website
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
+    `;
+}
+
+export const listTemplates = (limit) => {
+    return gql`
+        query ListTemplates {
+            template(limit: ${limit}, offset: 0) {
+                body_html_text
+                body_text
+                campaign_id
+                id
+                name
+                subject
             }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
         }
-        nextToken
-      }
-    }
-  }
-`;
-export const listAccounts = /* GraphQL */ `
-  query ListAccounts(
-    $filter: ModelAccountFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        employees
-        revenue
-        phone
-        fax
-        email
-        address
-        billing_state
-        billing_city
-        billing_country
-        website
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
+    `;
+}
+
+export const listSchedules = (limit) => {
+    return gql`
+        query ListSchedules {
+            schedule(limit: ${limit}, offset: 0) {
+                campaign_id
+                id
+                name
+                no_targets_per_accounts
+                daily_outbound_limit
             }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
         }
-      }
-      nextToken
-    }
-  }
-`;
-export const getTarget = /* GraphQL */ `
-  query GetTarget($id: ID!) {
-    getTarget(id: $id) {
-      id
-      firstname
-      lastname
-      gender
-      title
-      phone
-      fax
-      email
-      sam_status
-      bounce_type
-      isema_eligible
-      iseva_eligible
-      member_status
-      role
-      position
-      first_outbound_done
-      second_outbound_done
-      is_referral
-      to_referral
-      account {
-        id
-        name
-        employees
-        revenue
-        phone
-        fax
-        email
-        address
-        billing_state
-        billing_city
-        billing_country
-        website
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
+    `;
+}
+
+export const listAccounts = (limit=10, offset=0, target_limit=10, target_offset=0) => {
+    return gql`
+        query ListAccounts {
+            account(limit: ${limit}, offset: ${offset}) {
+                address
+                domain
+                email
+                employees
+                fax
+                id
+                name
+                phone
+                revenue
+                campaign_id
+                state
+                website
+                targets(limit: ${target_limit}, offset: ${target_offset}) {
+                    account_id
+                    bounce_type
+                    email
+                    fax
+                    first_outbound_done
+                    firstname
+                    gender
+                    id
+                    is_ema_eligible
+                    is_eva_eligible
+                    is_referral
+                    lastname
+                    member_status
+                    phone
+                    position
+                    role
+                    sam_status
+                    second_outbound_done
+                    source
+                    title
+                    to_followup
+                }
             }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
         }
-      }
-      campaign {
-        id
-        name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
+    `;
+}
+
+export const listContacts = (limit=10, offset=0, event_limit=10, event_offset=0) => {
+    return gql`
+        query ListContacts {
+            contact(limit: ${limit}, offset: ${offset}) {
+                account_id
+                bounce_type
+                email
+                first_outbound_done
+                firstname
+                gender
+                id
+                is_ema_eligible
+                is_eva_eligible
+                is_referral
+                lastname
+                member_status
+                phone
+                position
+                role
+                sam_status
+                second_outbound_done
+                source
+                title
+                to_followup
+                events(limit: ${event_limit}, offset: ${event_offset}, order_by: {date: desc}) {
+                    body
+                    cc
+                    date
+                    id
+                    label
+                    sender
+                    subject
+                    contact_id
+                    to
+                }
             }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
         }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
+    `;
+}
+
+export const listEvents = (limit=10, offset=0) => {
+    return gql`
+        query ListEvents {
+            event(limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                contact_id
+                to
             }
-          }
-          nextToken
         }
-      }
-      events {
-        items {
-          id
-          label
-          date
-          sender
-          to
-          cc
-          subject
-          body
-          target {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
+    `;
+}
+
+export const listRequirements = (limit=10, offset=0, campaign_limit=10, campaign_offset=0) => {
+    return gql`
+        query ListRequirements {
+            requirement(limit: ${limit}, offset: ${offset}) {
+                auto_reject
+                city
+                contract_no
+                elasticity
+                function
+                geography
+                id
+                is_duplicate
+                launch_date
+                ldr_notes
+                level
+                max_hits_per_contact
+                name
+                priority
+                sailebot_id
+                size
+                source
+                state
+                campaigns(limit: ${campaign_limit}, offset: ${campaign_offset}) {
+                    description
+                    id
+                    name
+                    requirement_id
+                }
             }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
         }
-        nextToken
-      }
-    }
-  }
-`;
-export const listTargets = /* GraphQL */ `
-  query ListTargets(
-    $filter: ModelTargetFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listTargets(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        firstname
-        lastname
-        gender
-        title
-        phone
-        fax
-        email
-        sam_status
-        bounce_type
-        isema_eligible
-        iseva_eligible
-        member_status
-        role
-        position
-        first_outbound_done
-        second_outbound_done
-        is_referral
-        to_referral
-        account {
-          id
-          name
-          employees
-          revenue
-          phone
-          fax
-          email
-          address
-          billing_state
-          billing_city
-          billing_country
-          website
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
+    `;
+}
+
+export const listDomains = (limit=10, offset=0) => {
+    return gql`
+        query ListDomains {
+            domain(limit: ${limit}, offset: ${offset}) {
+                active
+                dns
+                host
+                id
+                ip
+                name
+                provider
+                sailebot_id
+                smtp
             }
-            nextToken
-          }
         }
-        campaign {
-          id
-          name
-          description
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-          templates {
-            items {
-              id
-              name
-              subject
-              body_text
-              body_html_text
-            }
-            nextToken
-          }
-        }
-        events {
-          items {
-            id
-            label
-            date
-            sender
-            to
-            cc
-            subject
-            body
-            target {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-          }
-          nextToken
-        }
-      }
-      nextToken
-    }
-  }
-`;
-export const getEvent = /* GraphQL */ `
-  query GetEvent($id: ID!) {
-    getEvent(id: $id) {
-      id
-      label
-      date
-      sender
-      to
-      cc
-      subject
-      body
-      target {
-        id
-        firstname
-        lastname
-        gender
-        title
-        phone
-        fax
-        email
-        sam_status
-        bounce_type
-        isema_eligible
-        iseva_eligible
-        member_status
-        role
-        position
-        first_outbound_done
-        second_outbound_done
-        is_referral
-        to_referral
-        account {
-          id
-          name
-          employees
-          revenue
-          phone
-          fax
-          email
-          address
-          billing_state
-          billing_city
-          billing_country
-          website
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-        }
-        campaign {
-          id
-          name
-          description
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-          templates {
-            items {
-              id
-              name
-              subject
-              body_text
-              body_html_text
-            }
-            nextToken
-          }
-        }
-        events {
-          items {
-            id
-            label
-            date
-            sender
-            to
-            cc
-            subject
-            body
-            target {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-          }
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const listEvents = /* GraphQL */ `
-  query ListEvents(
-    $filter: ModelEventFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        label
-        date
-        sender
-        to
-        cc
-        subject
-        body
-        target {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
-            }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
-        }
-      }
-      nextToken
-    }
-  }
-`;
-export const getTemplate = /* GraphQL */ `
-  query GetTemplate($id: ID!) {
-    getTemplate(id: $id) {
-      id
-      name
-      subject
-      body_text
-      body_html_text
-      campaigns {
-        id
-        name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
-            }
-          }
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const listTemplates = /* GraphQL */ `
-  query ListTemplates(
-    $filter: ModelTemplateFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listTemplates(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        subject
-        body_text
-        body_html_text
-        campaigns {
-          id
-          name
-          description
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-          templates {
-            items {
-              id
-              name
-              subject
-              body_text
-              body_html_text
-            }
-            nextToken
-          }
-        }
-      }
-      nextToken
-    }
-  }
-`;
+    `;
+}
+

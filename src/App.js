@@ -1,65 +1,42 @@
 import React, { useEffect, useReducer } from "react";
 import Amplify from "@aws-amplify/core";
 import { API, graphqlOperation } from "aws-amplify";
-import { createCampaign } from "./graphql/mutations";
-import { listCampaigns } from "./graphql/queries";
-import { onCreateCampaign, onUpdateCampaign } from "./graphql/subscriptions";
+import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+// import { createCampaign } from "./graphql/mutations";
+// import { listCampaigns } from "./graphql/queries";
+// import { onCreateCampaign, onUpdateCampaign } from "./graphql/subscriptions";
 
 import config from "./aws-exports";
+import Routes from './routes';
 
 
-Amplify.configure(config); // Configure Amplify
 
-const initialState = { todos: [] };
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "QUERY":
-      return { ...state, todos: action.todos };
-    case "SUBSCRIPTION":
-      return { ...state, todos: [...state.todos, action.campaign] };
-    default:
-      return state;
-  }
-};
-
-async function createNewCampaign() {
-  const campaign = { name: "Use AppSync", description: "Realtime and Offline" };
-  await API.graphql(graphqlOperation(createCampaign, { input: campaign }));
-}
-function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    getData();
-    // const subscription = API.graphql(graphqlOperation(onCreateCampaign)).subscribe({
-    //   next: eventData => {
-    //     const campaign = eventData.value.data.onCreateCampaign;
-    //     dispatch({ type: "SUBSCRIPTION", campaign });
-    //   }
-    // });
-    // return () => {
-    //   subscription.unsubscribe();
-    // };
-  }, []);
-
-  async function getData() {
-    const todoData = await API.graphql(graphqlOperation(listCampaigns));
-    dispatch({ type: "QUERY", todos: todoData.data.listCampaigns.items });
-  }
+function App(props) {
 
   return (
     <div>
-      <div className="App">
-        <button onClick={createNewCampaign}>Add Campaign</button>
-      </div>
-      <div>
-        {state.todos.map((campaign, i) => (
-          <p key={campaign.id}>
-            {campaign.name} : {campaign.description}
-          </p>
-        ))}
-      </div>
+      <Paper style={{paddingTop: '5em', display: 'flex', flex: 1, height: '100vh'}} elevation={0}>
+        <Routes />
+      </Paper>
     </div>
   );
 }
-export default App;
+
+const styles = {
+  root: {
+    width: '100%',
+    overflowX: 'visible',
+  },
+  table: {
+    minWidth: 700,
+  },
+};
+
+export default withStyles(styles)(App);

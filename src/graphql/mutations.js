@@ -1,1872 +1,407 @@
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
+import gql from 'graphql-tag';
 
-export const createCampaign = /* GraphQL */ `
-  mutation CreateCampaign(
-    $input: CreateCampaignInput!
-    $condition: ModelCampaignConditionInput
-  ) {
-    createCampaign(input: $input, condition: $condition) {
-      id
-      name
-      description
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
-            }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
-        }
-        nextToken
-      }
-      templates {
-        items {
-          id
-          name
-          subject
-          body_text
-          body_html_text
-          campaigns {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const updateCampaign = /* GraphQL */ `
-  mutation UpdateCampaign(
-    $input: UpdateCampaignInput!
-    $condition: ModelCampaignConditionInput
-  ) {
-    updateCampaign(input: $input, condition: $condition) {
-      id
-      name
-      description
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
-            }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
-        }
-        nextToken
-      }
-      templates {
-        items {
-          id
-          name
-          subject
-          body_text
-          body_html_text
-          campaigns {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const deleteCampaign = /* GraphQL */ `
-  mutation DeleteCampaign(
-    $input: DeleteCampaignInput!
-    $condition: ModelCampaignConditionInput
-  ) {
-    deleteCampaign(input: $input, condition: $condition) {
-      id
-      name
-      description
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
-            }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
-        }
-        nextToken
-      }
-      templates {
-        items {
-          id
-          name
-          subject
-          body_text
-          body_html_text
-          campaigns {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const createAccount = /* GraphQL */ `
-  mutation CreateAccount(
-    $input: CreateAccountInput!
-    $condition: ModelAccountConditionInput
-  ) {
-    createAccount(input: $input, condition: $condition) {
-      id
-      name
-      employees
-      revenue
-      phone
-      fax
-      email
-      address
-      billing_state
-      billing_city
-      billing_country
-      website
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
-            }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const updateAccount = /* GraphQL */ `
-  mutation UpdateAccount(
-    $input: UpdateAccountInput!
-    $condition: ModelAccountConditionInput
-  ) {
-    updateAccount(input: $input, condition: $condition) {
-      id
-      name
-      employees
-      revenue
-      phone
-      fax
-      email
-      address
-      billing_state
-      billing_city
-      billing_country
-      website
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
-            }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const deleteAccount = /* GraphQL */ `
-  mutation DeleteAccount(
-    $input: DeleteAccountInput!
-    $condition: ModelAccountConditionInput
-  ) {
-    deleteAccount(input: $input, condition: $condition) {
-      id
-      name
-      employees
-      revenue
-      phone
-      fax
-      email
-      address
-      billing_state
-      billing_city
-      billing_country
-      website
-      targets {
-        items {
-          id
-          firstname
-          lastname
-          gender
-          title
-          phone
-          fax
-          email
-          sam_status
-          bounce_type
-          isema_eligible
-          iseva_eligible
-          member_status
-          role
-          position
-          first_outbound_done
-          second_outbound_done
-          is_referral
-          to_referral
-          account {
-            id
-            name
-            employees
-            revenue
-            phone
-            fax
-            email
-            address
-            billing_state
-            billing_city
-            billing_country
-            website
-            targets {
-              nextToken
-            }
-          }
-          campaign {
-            id
-            name
-            description
-            targets {
-              nextToken
-            }
-            templates {
-              nextToken
-            }
-          }
-          events {
-            items {
-              id
-              label
-              date
-              sender
-              to
-              cc
-              subject
-              body
-            }
-            nextToken
-          }
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const createTarget = /* GraphQL */ `
-  mutation CreateTarget(
-    $input: CreateTargetInput!
-    $condition: ModelTargetConditionInput
-  ) {
-    createTarget(input: $input, condition: $condition) {
-      id
-      firstname
-      lastname
-      gender
-      title
-      phone
-      fax
-      email
-      sam_status
-      bounce_type
-      isema_eligible
-      iseva_eligible
-      member_status
-      role
-      position
-      first_outbound_done
-      second_outbound_done
-      is_referral
-      to_referral
-      account {
-        id
-        name
-        employees
-        revenue
-        phone
-        fax
-        email
+
+export const createCompany = gql`
+  mutation insert_company($objects: [company_insert_input!]!) {
+    insert_company(objects: $objects) {
+      returning {
         address
-        billing_state
-        billing_city
-        billing_country
-        website
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-      }
-      campaign {
+        email
+        fax
         id
         name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
-            }
-          }
-          nextToken
-        }
-      }
-      events {
-        items {
-          id
-          label
-          date
-          sender
-          to
-          cc
-          subject
-          body
-          target {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-        }
-        nextToken
+        phone
+        website
       }
     }
   }
 `;
-export const updateTarget = /* GraphQL */ `
-  mutation UpdateTarget(
-    $input: UpdateTargetInput!
-    $condition: ModelTargetConditionInput
-  ) {
-    updateTarget(input: $input, condition: $condition) {
-      id
-      firstname
-      lastname
-      gender
-      title
-      phone
-      fax
-      email
-      sam_status
-      bounce_type
-      isema_eligible
-      iseva_eligible
-      member_status
-      role
-      position
-      first_outbound_done
-      second_outbound_done
-      is_referral
-      to_referral
-      account {
-        id
-        name
-        employees
-        revenue
-        phone
-        fax
-        email
+
+export const updateCompany = gql`
+  mutation UpdateCompany($objects: company_set_input!, $id: Int) {
+    update_company(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
         address
-        billing_state
-        billing_city
-        billing_country
-        website
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-      }
-      campaign {
+        email
+        fax
         id
         name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
-            }
-          }
-          nextToken
-        }
-      }
-      events {
-        items {
-          id
-          label
-          date
-          sender
-          to
-          cc
-          subject
-          body
-          target {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-        }
-        nextToken
+        phone
+        website
       }
     }
   }
 `;
-export const deleteTarget = /* GraphQL */ `
-  mutation DeleteTarget(
-    $input: DeleteTargetInput!
-    $condition: ModelTargetConditionInput
-  ) {
-    deleteTarget(input: $input, condition: $condition) {
-      id
-      firstname
-      lastname
-      gender
-      title
-      phone
-      fax
-      email
-      sam_status
-      bounce_type
-      isema_eligible
-      iseva_eligible
-      member_status
-      role
-      position
-      first_outbound_done
-      second_outbound_done
-      is_referral
-      to_referral
-      account {
+
+export const createClient = gql`
+  mutation insert_client($objects: [client_insert_input!]!) {
+    insert_client(objects: $objects) {
+      returning {
+        company_id
         id
         name
-        employees
-        revenue
-        phone
-        fax
+      }
+    }
+  }
+`;
+
+export const updateClient = gql`
+  mutation UpdateClient($objects: client_set_input!, $id: Int) {
+    update_client(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        company_id
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const createSaileBot = gql`
+  mutation InsertSaileBot($objects: [sailebot_insert_input!]!) {
+    insert_sailebot(objects: $objects) {
+      returning {
+        client_id
         email
+        fullname
+        id
+        name
+        no_targets
+        phone
+        title
+      }
+    }
+  }
+`;
+
+export const updateSaileBot = gql`
+  mutation UpdateSaileBot($objects: sailebot_set_input!, $id: Int) {
+    update_sailebot(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        client_id
+        email
+        fullname
+        id
+        name
+        no_targets
+        phone
+        title
+      }
+    }
+  }
+`;
+
+export const createCampaign = gql`
+  mutation InsertCampaign($objects: [campaign_insert_input!]!) {
+    insert_campaign(objects: $objects) {
+      returning {
+        description
+        id
+        name
+        requirement_id
+      }
+    }
+  }
+`;
+
+export const updateCampaign = gql`
+  mutation UpdateCampaign($objects: campaign_set_input!, $id: Int) {
+    update_campaign(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        description
+        id
+        name
+        requirement_id
+      }
+    }
+  }
+`;
+
+export const createTemplate = gql`
+  mutation InsertTemplate($objects: [template_insert_input!]!) {
+    insert_template(objects: $objects) {
+      returning {
+        body_html_text
+        body_text
+        campaign_id
+        name
+        subject
+      }
+    }
+  }
+`;
+
+export const updateTemplate = gql`
+  mutation UpdateTemplate($objects: template_set_input!, $id: Int) {
+    update_template(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        body_html_text
+        body_text
+        campaign_id
+        name
+        subject
+      }
+    }
+  }
+`;
+
+export const createAccount = gql`
+  mutation InsertAccount($objects: [account_insert_input!]!) {
+    insert_account(objects: $objects) {
+      returning {
         address
-        billing_state
-        billing_city
-        billing_country
+        campaign_id
+        domain
+        email
+        employees
+        fax
+        id
+        name
+        phone
+        revenue
+        state
         website
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-      }
-      campaign {
-        id
-        name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
-            }
-          }
-          nextToken
-        }
-      }
-      events {
-        items {
-          id
-          label
-          date
-          sender
-          to
-          cc
-          subject
-          body
-          target {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-        }
-        nextToken
       }
     }
   }
 `;
-export const createEvent = /* GraphQL */ `
-  mutation CreateEvent(
-    $input: CreateEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    createEvent(input: $input, condition: $condition) {
-      id
-      label
-      date
-      sender
-      to
-      cc
-      subject
-      body
-      target {
-        id
-        firstname
-        lastname
-        gender
-        title
-        phone
-        fax
+
+export const updateAccount = gql`
+  mutation UpdateAccount($objects: account_set_input!, $id: Int) {
+    update_account(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        address
+        campaign_id
+        domain
         email
-        sam_status
-        bounce_type
-        isema_eligible
-        iseva_eligible
-        member_status
-        role
-        position
-        first_outbound_done
-        second_outbound_done
-        is_referral
-        to_referral
-        account {
-          id
-          name
-          employees
-          revenue
-          phone
-          fax
-          email
-          address
-          billing_state
-          billing_city
-          billing_country
-          website
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-        }
-        campaign {
-          id
-          name
-          description
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-          templates {
-            items {
-              id
-              name
-              subject
-              body_text
-              body_html_text
-            }
-            nextToken
-          }
-        }
-        events {
-          items {
-            id
-            label
-            date
-            sender
-            to
-            cc
-            subject
-            body
-            target {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-          }
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const updateEvent = /* GraphQL */ `
-  mutation UpdateEvent(
-    $input: UpdateEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    updateEvent(input: $input, condition: $condition) {
-      id
-      label
-      date
-      sender
-      to
-      cc
-      subject
-      body
-      target {
-        id
-        firstname
-        lastname
-        gender
-        title
-        phone
+        employees
         fax
-        email
-        sam_status
-        bounce_type
-        isema_eligible
-        iseva_eligible
-        member_status
-        role
-        position
-        first_outbound_done
-        second_outbound_done
-        is_referral
-        to_referral
-        account {
-          id
-          name
-          employees
-          revenue
-          phone
-          fax
-          email
-          address
-          billing_state
-          billing_city
-          billing_country
-          website
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-        }
-        campaign {
-          id
-          name
-          description
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-          templates {
-            items {
-              id
-              name
-              subject
-              body_text
-              body_html_text
-            }
-            nextToken
-          }
-        }
-        events {
-          items {
-            id
-            label
-            date
-            sender
-            to
-            cc
-            subject
-            body
-            target {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-          }
-          nextToken
-        }
-      }
-    }
-  }
-`;
-export const deleteEvent = /* GraphQL */ `
-  mutation DeleteEvent(
-    $input: DeleteEventInput!
-    $condition: ModelEventConditionInput
-  ) {
-    deleteEvent(input: $input, condition: $condition) {
-      id
-      label
-      date
-      sender
-      to
-      cc
-      subject
-      body
-      target {
         id
-        firstname
-        lastname
-        gender
-        title
+        name
         phone
-        fax
-        email
-        sam_status
+        revenue
+        state
+        website
+      }
+    }
+  }
+`;
+
+export const createContact = gql`
+  mutation InsertContact($objects: [contact_insert_input!]!) {
+    insert_contact(objects: $objects) {
+      returning {
+        account_id
         bounce_type
-        isema_eligible
-        iseva_eligible
-        member_status
-        role
-        position
+        email
+        fax
         first_outbound_done
-        second_outbound_done
+        firstname
+        gender
+        id
+        is_ema_eligible
+        is_eva_eligible
         is_referral
-        to_referral
-        account {
-          id
-          name
-          employees
-          revenue
-          phone
-          fax
-          email
-          address
-          billing_state
-          billing_city
-          billing_country
-          website
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-        }
-        campaign {
-          id
-          name
-          description
-          targets {
-            items {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-            nextToken
-          }
-          templates {
-            items {
-              id
-              name
-              subject
-              body_text
-              body_html_text
-            }
-            nextToken
-          }
-        }
-        events {
-          items {
-            id
-            label
-            date
-            sender
-            to
-            cc
-            subject
-            body
-            target {
-              id
-              firstname
-              lastname
-              gender
-              title
-              phone
-              fax
-              email
-              sam_status
-              bounce_type
-              isema_eligible
-              iseva_eligible
-              member_status
-              role
-              position
-              first_outbound_done
-              second_outbound_done
-              is_referral
-              to_referral
-            }
-          }
-          nextToken
-        }
+        lastname
+        member_status
+        phone
+        position
+        role
+        sam_status
+        second_outbound_done
+        source
+        title
+        to_followup
       }
     }
   }
 `;
-export const createTemplate = /* GraphQL */ `
-  mutation CreateTemplate(
-    $input: CreateTemplateInput!
-    $condition: ModelTemplateConditionInput
-  ) {
-    createTemplate(input: $input, condition: $condition) {
-      id
-      name
-      subject
-      body_text
-      body_html_text
-      campaigns {
+
+export const updateContact = gql`
+  mutation UpdateContact($objects: contact_set_input!, $id: Int) {
+    update_contact(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        account_id
+        bounce_type
+        email
+        fax
+        first_outbound_done
+        firstname
+        gender
+        id
+        is_ema_eligible
+        is_eva_eligible
+        is_referral
+        lastname
+        member_status
+        phone
+        position
+        role
+        sam_status
+        second_outbound_done
+        source
+        title
+        to_followup
+      }
+    }
+  }
+`;
+
+
+export const createEvent = gql`
+  mutation InsertEvent($objects: [event_insert_input!]!) {
+    insert_event(objects: $objects) {
+      returning {
+        body
+        cc
+        date
+        id
+        label
+        sender
+        subject
+        contact_id
+        to
+      }
+    }
+  }
+`;
+
+export const updateEvent = gql`
+  mutation UpdateEvent($objects: event_set_input!, $id: Int) {
+    update_event(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        body
+        cc
+        date
+        id
+        label
+        sender
+        subject
+        contact_id
+        to
+      }
+    }
+  }
+`;
+
+
+export const createRequirement = gql`
+  mutation InsertRequirement($objects: [requirement_insert_input!]!) {
+    insert_requirement(objects: $objects) {
+      returning {
+        auto_reject
+        city
+        contract_no
+        elasticity
+        function
+        geography
+        id
+        is_duplicate
+        launch_date
+        ldr_notes
+        level
+        max_hits_per_contact
+        name
+        priority
+        sailebot_id
+        size
+        source
+        state
+      }
+    }
+  }
+`;
+
+export const updateRequirement = gql`
+  mutation UpdateRequirement($objects: requirement_set_input!, $id: Int) {
+    update_requirement(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        auto_reject
+        city
+        contract_no
+        elasticity
+        function
+        geography
+        id
+        is_duplicate
+        launch_date
+        ldr_notes
+        level
+        max_hits_per_contact
+        name
+        priority
+        sailebot_id
+        size
+        source
+        state
+      }
+    }
+  }
+`;
+
+export const createSchedule = gql`
+  mutation InsertSchedule($objects: [schedule_insert_input!]!) {
+    insert_schedule(objects: $objects) {
+      returning {
+        campaign_id
+        daily_outbound_limit
         id
         name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
-            }
-          }
-          nextToken
-        }
+        no_targets_per_accounts
       }
     }
   }
 `;
-export const updateTemplate = /* GraphQL */ `
-  mutation UpdateTemplate(
-    $input: UpdateTemplateInput!
-    $condition: ModelTemplateConditionInput
-  ) {
-    updateTemplate(input: $input, condition: $condition) {
-      id
-      name
-      subject
-      body_text
-      body_html_text
-      campaigns {
+
+export const updateSchedule = gql`
+  mutation UpdateSchedule($objects: schedule_set_input!, $id: Int) {
+    update_schedule(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        campaign_id
+        daily_outbound_limit
         id
         name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
-            }
-          }
-          nextToken
-        }
+        no_targets_per_accounts
       }
     }
   }
 `;
-export const deleteTemplate = /* GraphQL */ `
-  mutation DeleteTemplate(
-    $input: DeleteTemplateInput!
-    $condition: ModelTemplateConditionInput
-  ) {
-    deleteTemplate(input: $input, condition: $condition) {
-      id
-      name
-      subject
-      body_text
-      body_html_text
-      campaigns {
+
+
+export const createDomain = gql`
+  mutation InsertDomain($objects: [domain_insert_input!]!) {
+    insert_domain(objects: $objects) {
+      returning {
+        active
+        dns
+        host
         id
+        ip
         name
-        description
-        targets {
-          items {
-            id
-            firstname
-            lastname
-            gender
-            title
-            phone
-            fax
-            email
-            sam_status
-            bounce_type
-            isema_eligible
-            iseva_eligible
-            member_status
-            role
-            position
-            first_outbound_done
-            second_outbound_done
-            is_referral
-            to_referral
-            account {
-              id
-              name
-              employees
-              revenue
-              phone
-              fax
-              email
-              address
-              billing_state
-              billing_city
-              billing_country
-              website
-            }
-            campaign {
-              id
-              name
-              description
-            }
-            events {
-              nextToken
-            }
-          }
-          nextToken
-        }
-        templates {
-          items {
-            id
-            name
-            subject
-            body_text
-            body_html_text
-            campaigns {
-              id
-              name
-              description
-            }
-          }
-          nextToken
-        }
+        provider
+        sailebot_id
+        smtp
       }
     }
   }
 `;
+
+export const updateDomain = gql`
+  mutation UpdateDomain($objects: domain_set_input!, $id: Int) {
+    update_domain(where: {id: {_eq: $id}}, _set: $objects) {
+      returning {
+        active
+        dns
+        host
+        id
+        ip
+        name
+        provider
+        sailebot_id
+        smtp
+      }
+    }
+  }
+`;
+
+

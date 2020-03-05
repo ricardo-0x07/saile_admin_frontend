@@ -36,3 +36,7 @@ awsconfiguration.json
 amplifyconfiguration.json
 amplify-gradle-config.json
 amplifyxc.config
+# extra
+amplify
+src/graphql_old
+src/utils/rest_api.js
