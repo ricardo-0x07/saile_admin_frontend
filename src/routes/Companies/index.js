@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 
 import { CompanyCard } from "./CompanyCard";
 import { listCompanies } from "../../graphql/queries";
+import Title from '../../components/Title';
 
 
 const Companies = (props) => {
@@ -26,16 +27,19 @@ const Companies = (props) => {
         console.log(data.company);
 
         return (
-          <div
-            style={{
-              display: "grid",
-              gridCompanyColumns: "repeat(4, 1fr)",
-              gridGap: 10
-            }}
-          >
-            {data.company.map(x => (
-              <CompanyCard company={x} history={props.history} key={x.id} />
-            ))}
+          <div>
+            <Title>Companies</Title>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridGap: 10
+              }}
+            >
+              {data.company.map(x => (
+                <CompanyCard company={x} history={props.history} key={x.id} />
+              ))}
+            </div>
           </div>
         );
       }}

@@ -3,6 +3,8 @@ import { Query } from "react-apollo";
 
 import { RequirementCard } from "./RequirementCard";
 import { listRequirements } from "../../graphql/queries";
+import Title from '../../components/Title';
+
 
 
 const Requirements = (props) => {
@@ -25,23 +27,27 @@ const Requirements = (props) => {
         console.log(data.requirement);
 
         return (
-          <div
-            style={{
-              display: "grid",
-              gridRequirementColumns: "repeat(4, 1fr)",
-              gridGap: 10
-            }}
-          >
-            {
-              props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
-              data.requirement.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
-                <RequirementCard requirement={x} name={x.name} key={x.id} history={props.history}/>
-              ))
-              :
-              data.requirement.filter(item => item ).map(x => (
-                <RequirementCard requirement={x} name={x.name} key={x.id}  history={props.history} />
-              ))
-            }
+          <div>
+            <Title>Requirements</Title>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridGap: 10
+              }}
+            >
+              
+              {
+                props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
+                data.requirement.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
+                  <RequirementCard requirement={x} name={x.name} key={x.id} history={props.history}/>
+                ))
+                :
+                data.requirement.filter(item => item ).map(x => (
+                  <RequirementCard requirement={x} name={x.name} key={x.id}  history={props.history} />
+                ))
+              }
+            </div>
           </div>
         );
       }}

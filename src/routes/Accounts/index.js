@@ -3,6 +3,7 @@ import { Query } from "react-apollo";
 
 import { AccountCard } from "./AccountCard";
 import { listAccounts } from "../../graphql/queries";
+import Title from '../../components/Title';
 
 
 const Accounts = (props) => {
@@ -25,23 +26,26 @@ const Accounts = (props) => {
         console.log(data.account);
 
         return (
-          <div
-            style={{
-              display: "grid",
-              gridAccountColumns: "repeat(4, 1fr)",
-              gridGap: 10
-            }}
-          >
-            {
-              props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
-              data.account.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
-                <AccountCard account={x} name={x.name} key={x.id} history={props.history}/>
-              ))
-              :
-              data.account.filter(item => item ).map(x => (
-                <AccountCard account={x} name={x.name} key={x.id}  history={props.history} />
-              ))
-            }
+          <div>
+            <Title>Accounts</Title>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gridGap: 10
+              }}
+            >
+              {
+                props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
+                data.account.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
+                  <AccountCard account={x} name={x.name} key={x.id} history={props.history}/>
+                ))
+                :
+                data.account.filter(item => item ).map(x => (
+                  <AccountCard account={x} name={x.name} key={x.id}  history={props.history} />
+                ))
+              }
+            </div>
           </div>
         );
       }}

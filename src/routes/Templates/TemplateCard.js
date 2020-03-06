@@ -10,7 +10,7 @@ interface Props {
   address: string;
 }
 
-export const TemplateCard = ({ template,  campaign,  history }) => {
+export const TemplateCard = ({ template,  history }) => {
   console.log('template: ', template);
   const { name, subject } = template;
   return (

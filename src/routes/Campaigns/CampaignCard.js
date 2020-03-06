@@ -10,7 +10,7 @@ interface Props {
   address: string;
 }
 
-export const CampaignCard = ({ campaign, requirement,  history }) => {
+export const CampaignCard = ({ campaign,  history }) => {
   console.log('campaign: ', campaign);
   const { name,  } = campaign;
   return (

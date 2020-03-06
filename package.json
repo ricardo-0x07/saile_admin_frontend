@@ -21,6 +21,7 @@
     "aws-appsync": "^3.0.2",
     "aws-appsync-react": "^3.0.2",
     "bootstrap": "^4.4.1",
+    "clsx": "^1.1.0",
     "date-fns": "^2.10.0",
     "formik": "^2.1.4",
     "graphql": "^14.6.0",
