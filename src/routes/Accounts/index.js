@@ -1,33 +1,111 @@
 import * as React from "react";
-import { Query } from "react-apollo";
-
+import { Query, Mutation } from "react-apollo";
 import { AccountCard } from "./AccountCard";
-import { listAccounts } from "../../graphql/queries";
 import Title from '../../components/Title';
+import AccountsCSVReader from '../../components/AccountsCSVReader';
+import ContactsCSVReader from '../../components/ContactsCSVReader';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+import { adopt } from 'react-adopt';
+import { listAccounts, listScheduleAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/queries";
+import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
 
+
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 const Accounts = (props) => {
+  const classes = useStyles();
+  const accounts_csv_key_map = {
+    name: 'Account: Account Name',
+    address: 'Account: Billing Street',
+    domain: '',
+    email: '',
+    employees: 'Account: Employees',
+    phone: 'Account: Main Phone',
+    revenue: 'Account: Revenue ($mil)',
+    state  : 'Account: Billing State/Province',
+    website  : 'Account: Website',
+    email_domain: 'Account: Email Domain',
+    NAICS: 'Account: Primary US NAICS Code',
+    city: 'Account: Billing City',
+    country: 'Account: Billing Country',
+    is_scheduled: '',
+    ex_id: 'Account: Account ID',
+  };
+
+  const contacts_csv_key_map = {
+    bounce_type: '',
+    email: 'Email',
+    firstname: 'First Name',
+    gender: 'Gender',
+    is_ema_eligible: 'EMA Eligible?',
+    is_eva_eligible: 'EVA Eligible?',
+    lastname: 'Last Name',
+    member_status: 'Member Status',
+    phone: '',
+    position: '',
+    role: '',
+    sam_status: '',
+    source: '',
+    title: 'Title',
+    ex_id: 'Contact ID',
+    ex_account_id: 'Account ID',
+    ex_member_id: 'Member ID',
+    linkedin: 'LinkedIn URL',
+    city: 'Billing City',
+    state: 'Billing State/Province',
+    country: 'Billing Country',
+  };
+
   console.log('props: ', props);
+  console.log('props.location.state: ', props.location.state);
+  const Composed = adopt({
+    accountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
+    ({ render }) => (
+      <Query query={listAllCampaignAccounts(props.location.state.campaign.id)} >
+        { render }
+      </Query>
+    )
+    :
+    ({ render }) => (
+      <Query query={listAccounts(10) } >
+        { render }
+      </Query>
+    ),
+  })
   return (
-    <Query
-      query={listAccounts(10)}
-    >
-      {({ data, loading }) => {
+    <Composed>
+      {({ accountsQuery: { data, loading } }) => {
         console.log('data: ', data);
+        console.log('loading: ', loading);
         if (
           loading ||
           !data ||
-          !data.account ||
-          !data.account
+          (!data.account && !data.campaign_account )
         ) {
           return null;
         }
 
-        console.log(data.account);
+        console.log('loading: ', loading);
 
         return (
-          <div>
-            <Title>Accounts</Title>
+          <div className={classes.root}>
+            <Title>{props.location.state && props.location.state.campaign  && props.location.state.campaign ? props.location.state.campaign.name : '' } Accounts</Title>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-account', {campaign: props.location.state.campaign})}>Add Account</Button>
+            {
+              props.location.state && props.location.state.campaign && props.location.state.campaign.id && 
+              <>
+                <ContactsCSVReader location={props.location} contacts_csv_key_map={contacts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Contacts'} />
+                <AccountsCSVReader location={props.location} accounts_csv_key_map={accounts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Accounts'} />
+              </>
+            }
             <div
               style={{
                 display: "grid",
@@ -36,9 +114,9 @@ const Accounts = (props) => {
               }}
             >
               {
-                props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
-                data.account.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
-                  <AccountCard account={x} name={x.name} key={x.id} history={props.history}/>
+                props.location.state && props.location.state.campaign  && props.location.state.campaign ?
+                data.campaign_account.map(x => (
+                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history}/>
                 ))
                 :
                 data.account.filter(item => item ).map(x => (
@@ -49,7 +127,7 @@ const Accounts = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Composed>
   );
 };
 

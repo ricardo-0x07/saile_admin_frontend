@@ -28,12 +28,12 @@ export default function DashboardSideBar (props) {
     return (
         <List >
           <div>
-            <ListItem button component={RouterLink} to="/companies"> 
+            {/* <ListItem button component={RouterLink} to="/companies"> 
               <ListItemIcon>
                 <BusinessIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Companies" />
-            </ListItem>
+            </ListItem> */}
             <ListItem button  component={RouterLink} to="/clients">
               <ListItemIcon>
                 <SupervisedUserCircleIcon style={{ color: '#43485a' }}/>
@@ -50,7 +50,7 @@ export default function DashboardSideBar (props) {
               <ListItemIcon>
                 <PeopleIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
-              <ListItemText primary="SaileBots" />
+              <ListItemText primary="Sailebots" />
             </ListItem>
             <ListItem button component={RouterLink} to="/domains">
               <ListItemIcon>

@@ -5,10 +5,21 @@ import gql from "graphql-tag";
 import { ClientCard } from "./ClientCard";
 import { listClients } from "../../graphql/queries";
 import Title from '../../components/Title';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 
 
 const Clients = (props) => {
+  const classes = useStyles();
   console.log('props: ', props);
   return (
     <Query
@@ -29,8 +40,9 @@ const Clients = (props) => {
         console.log(data.client);
 
         return (
-          <div>
+          <div className={classes.root}>
             <Title>Clients</Title>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-client')}>Add Client</Button>
             <div
               style={{
                 display: "grid",
@@ -39,11 +51,6 @@ const Clients = (props) => {
               }}
             >
               {
-                props.location.state && props.location.state.company  && props.location.state.company ?
-                data.client.filter(item => item.company_id === props.location.state.company.id ).map(x => (
-                  <ClientCard client={x} name={x.name} key={x.id} history={props.history}/>
-                ))
-                :
                 data.client.filter(item => item ).map(x => (
                   <ClientCard client={x} name={x.name} key={x.id}  history={props.history}/>
                 ))

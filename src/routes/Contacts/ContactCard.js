@@ -43,8 +43,10 @@ export const ContactCard = ({ contact,  history }) => {
       </CardContent>
       <CardActions>
         <Button size="small" onClick={() => history.push('/manage-contact', {contact})}>Edit</Button>
-        <Button size="small" onClick={() => history.push('/manage-event', {contact})}>Add Event</Button>
-        <Button size="small" onClick={() => history.push('/events-by-contact', {contact})}>View Contact Events</Button>
+        {
+          contact && contact.events && contact.events.length > 0 &&
+          <Button size="small" onClick={() => history.push('/events-by-contact', {contact})}>View Contact Events</Button>
+        }
       </CardActions>
     </Card>
   );

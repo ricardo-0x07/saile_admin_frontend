@@ -4,10 +4,21 @@ import { Query } from "react-apollo";
 import { CampaignCard } from "./CampaignCard";
 import { listCampaigns } from "../../graphql/queries";
 import Title from '../../components/Title';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 
 
 const Campaigns = (props) => {
+  const classes = useStyles();
   console.log('props: ', props);
   return (
     <Query
@@ -28,12 +39,13 @@ const Campaigns = (props) => {
         console.log(data.campaign);
 
         return (
-          <div>
-            <Title>Campaigns</Title>
+          <div className={classes.root}>
+            <Title>{props.location.state && props.location.state.requirement ? props.location.state.requirement.name : ''} Campaigns</Title>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-campaign', {requirement: props.location.state.requirement})}>Add Campaign</Button>
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(1, 1fr)",
+                gridTemplateColumns: "repeat(3, 1fr)",
                 gridGap: 10
               }}
             >

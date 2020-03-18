@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { Formik } from 'formik';
+import { Formik, Form, Field, useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
@@ -15,6 +15,8 @@ import {
     Grid,
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
+import MuiCheckbox from "@material-ui/core/Checkbox";
+
 import gql from "graphql-tag";
 
 import { createClient, updateClient } from "../../graphql/mutations";
@@ -29,12 +31,34 @@ const useStyles = makeStyles(theme => ({
       },
     },
 }));
+export const Checkbox = ({ ...props }) => {
+    const [field] = useField(props.name);
+  
+    return (
+      <MuiCheckbox {...field} checked={field.value} />
+    );
+};
 
 const ManageClientForm = (props) => {
     const classes = useStyles();
     console.log('props: ', props)
     let initialValues = {
         name: '',
+        address: '',
+        state: '',
+        city: '',
+        country: '',
+        NAICS: '',
+        domain: '',
+        email: '',
+        email_domain: '',
+        is_company: false,
+        employees: '',
+        fax: '',
+        phone: '',
+        revenue: '',
+        state  : '',
+        website  : '',
     };
     if ( props.location.state && props.location.state.client) {
         initialValues = props.location.state.client
@@ -55,7 +79,25 @@ const ManageClientForm = (props) => {
                     <Formik
                         initialValues={initialValues}
                         onSubmit={
-                            async ({ name, company_id, id }) => {
+                            async ({
+                                id,
+                                name,
+                                address,
+                                state,
+                                city,
+                                country,
+                                NAICS,
+                                domain,
+                                email,
+                                email_domain,
+                                is_company,
+                                employees,
+                                fax,
+                                phone,
+                                revenue,
+                                website,
+                                company_id,
+                            }) => {
                                 console.log('onSubmit name: ', name)
                                 console.log('onSubmit company_id: ', company_id)
                                 if (id) {
@@ -64,6 +106,21 @@ const ManageClientForm = (props) => {
                                             objects: {
                                                 id,
                                                 name,
+                                                address,
+                                                state,
+                                                city,
+                                                country,
+                                                NAICS,
+                                                domain,
+                                                email,
+                                                email_domain,
+                                                is_company,
+                                                employees,
+                                                fax,
+                                                phone,
+                                                revenue,
+                                                state,
+                                                website,
                                                 company_id,
                                             },
                                             id
@@ -73,10 +130,25 @@ const ManageClientForm = (props) => {
                                 } else {
                                     const response = await mutation({
                                         variables: {
-                                        objects: {
-                                            name,
-                                            company_id,
-                                        }
+                                            objects: {
+                                                name,
+                                                address,
+                                                state,
+                                                city,
+                                                country,
+                                                NAICS,
+                                                domain,
+                                                email,
+                                                email_domain,
+                                                is_company,
+                                                employees,
+                                                fax,
+                                                phone,
+                                                revenue,
+                                                state,
+                                                website,
+                                                company_id,
+                                            }
                                         }
                                     });
                                     console.log('create response: ', response);
@@ -98,7 +170,117 @@ const ManageClientForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.name}
+                                            value={values.name || ''}
+                                        />
+                                        <TextField
+                                            name="address"
+                                            label="Address" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.address || ''}
+                                        />
+                                        <TextField
+                                            name="state"
+                                            label="State" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.state || ''}
+                                        />
+                                        <TextField
+                                            name="city"
+                                            label="City" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.city || ''}
+                                        />
+                                        <TextField
+                                            name="country"
+                                            label="Country" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.country || ''}
+                                        />
+                                        <TextField
+                                            name="NAICS"
+                                            label="NAICS" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.NAICS || ''}
+                                        />
+                                        <TextField
+                                            name="email"
+                                            label="Email" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.email || ''}
+                                        />
+                                        <TextField
+                                            name="email"
+                                            label="Email domain" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.email_domain || ''}
+                                        />
+                                        <TextField
+                                            name="employees"
+                                            label="Employees" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.employees || ''}
+                                        />
+                                        <TextField
+                                            name="phone"
+                                            label="Phone" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.phone || ''}
+                                        />
+                                        <TextField
+                                            name="fax"
+                                            label="Fax" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.fax || ''}
+                                        />
+                                        <TextField
+                                            name="revenue"
+                                            label="Revenue" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.revenue || ''}
+                                        />
+                                        <TextField
+                                            name="website"
+                                            label="Website" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.website || ''}
+                                        />
+                                        <TextField
+                                            name="domain"
+                                            label="Domain" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.domain || ''}
+                                        />
+                                        <FormControlLabel
+                                            label="Is Company?"
+                                            control={
+                                                <Checkbox name="is_company" onChange={handleChange} value={values.is_company} />
+                                            }
                                         />
                                     </FormGroup>
                                 </FormControl>

@@ -2,16 +2,27 @@ import * as React from "react";
 import { Query } from "react-apollo";
 
 import { ContactCard } from "./ContactCard";
-import { listContacts } from "../../graphql/queries";
+import { listContacts, listAccountContacts } from "../../graphql/queries";
 import Title from '../../components/Title';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 
 
 const Contacts = (props) => {
+  const classes = useStyles();
   console.log('props: ', props);
   return (
     <Query
-      query={listContacts(10)}
+      query={props.location.state && props.location.state.account  && props.location.state.account ? listAccountContacts(props.location.state.account.id, 10) :  listContacts(10)}
     >
       {({ data, loading }) => {
         console.log('data: ', data);
@@ -27,8 +38,9 @@ const Contacts = (props) => {
         console.log(data.contact);
 
         return (
-          <div>
-            <Title>Contacts</Title>
+          <div className={classes.root}>
+            <Title>{props.location.state && props.location.state.account  && props.location.state.account ? props.location.state.account.name : '' } Contacts</Title>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-contact', {account: props.location.state.account})}>Add Contact</Button>
             <div
               style={{
                 display: "grid",

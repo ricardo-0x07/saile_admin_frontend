@@ -1,5 +1,6 @@
 import { split } from 'apollo-link';
 import ApolloClient from 'apollo-client';
+// import ApolloClient from 'apollo-boost';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';

@@ -5,6 +5,16 @@ import gql from "graphql-tag";
 import { CompanyCard } from "./CompanyCard";
 import { listCompanies } from "../../graphql/queries";
 import Title from '../../components/Title';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 
 const Companies = (props) => {

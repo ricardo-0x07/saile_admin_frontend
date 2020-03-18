@@ -37,9 +37,23 @@ export const createClient = gql`
   mutation insert_client($objects: [client_insert_input!]!) {
     insert_client(objects: $objects) {
       returning {
-        company_id
+        NAICS
+        address
+        city
+        country
+        created_at
+        domain
+        email
+        email_domain
+        employees
         id
+        is_company
         name
+        phone
+        revenue
+        state
+        updated_at
+        website
       }
     }
   }
@@ -49,9 +63,23 @@ export const updateClient = gql`
   mutation UpdateClient($objects: client_set_input!, $id: Int) {
     update_client(where: {id: {_eq: $id}}, _set: $objects) {
       returning {
-        company_id
+        NAICS
+        address
+        city
+        country
+        created_at
+        domain
+        email
+        email_domain
+        employees
         id
+        is_company
         name
+        phone
+        revenue
+        state
+        updated_at
+        website
       }
     }
   }
@@ -95,6 +123,7 @@ export const createCampaign = gql`
   mutation InsertCampaign($objects: [campaign_insert_input!]!) {
     insert_campaign(objects: $objects) {
       returning {
+        accounts_per_schedule
         description
         id
         name
@@ -108,6 +137,7 @@ export const updateCampaign = gql`
   mutation UpdateCampaign($objects: campaign_set_input!, $id: Int) {
     update_campaign(where: {id: {_eq: $id}}, _set: $objects) {
       returning {
+        accounts_per_schedule
         description
         id
         name
@@ -149,18 +179,62 @@ export const createAccount = gql`
   mutation InsertAccount($objects: [account_insert_input!]!) {
     insert_account(objects: $objects) {
       returning {
+        NAICS
         address
-        campaign_id
+        city
+        country
         domain
         email
+        email_domain
         employees
         fax
         id
+        ex_id
+        is_scheduled
         name
         phone
         revenue
+        schedule_id
         state
         website
+      }
+    }
+  }
+`;
+
+export const createScheduleAccount = gql`
+  mutation InsertScheduleAccount($objects: [schedule_account_insert_input!]!) {
+    insert_schedule_account(objects: $objects) {
+      returning {
+        account_id
+        schedule_id
+        id
+      }
+    }
+  }
+`;
+
+export const createCampaignAccount = gql`
+  mutation InsertCampaignAccount($objects: [campaign_account_insert_input!]!) {
+    insert_campaign_account(objects: $objects) {
+      returning {
+        account_id
+        campaign_id
+        is_scheduled
+        id
+      }
+    }
+  }
+`;
+
+export const updateCampaignAccount = gql`
+  mutation UpdateCampaignAccount($objects: campaign_account_set_input, $id_list: [Int!]!) {
+    update_campaign_account(_set: $objects, where: {id: {_in: $id_list}}) {
+      returning {
+        account_id
+        campaign_id
+        is_scheduled
+        id
       }
     }
   }
@@ -170,16 +244,23 @@ export const updateAccount = gql`
   mutation UpdateAccount($objects: account_set_input!, $id: Int) {
     update_account(where: {id: {_eq: $id}}, _set: $objects) {
       returning {
+        NAICS
         address
         campaign_id
+        city
+        country
         domain
         email
+        email_domain
         employees
         fax
         id
+        ex_id
+        is_scheduled
         name
         phone
         revenue
+        schedule_id
         state
         website
       }
@@ -194,7 +275,6 @@ export const createContact = gql`
         account_id
         bounce_type
         email
-        fax
         first_outbound_done
         firstname
         gender
@@ -345,9 +425,13 @@ export const createSchedule = gql`
       returning {
         campaign_id
         daily_outbound_limit
+        date
+        deploy_date
         id
         name
         no_targets_per_accounts
+        status
+        timezone
       }
     }
   }
@@ -359,9 +443,13 @@ export const updateSchedule = gql`
       returning {
         campaign_id
         daily_outbound_limit
+        date
+        deploy_date
         id
         name
         no_targets_per_accounts
+        status
+        timezone
       }
     }
   }

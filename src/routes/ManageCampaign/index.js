@@ -36,14 +36,15 @@ const ManageCampaignForm = (props) => {
     let initialValues = {
         name: '',
         description: '',
+        accounts_per_schedule: 0,
     };
     if ( props.location.state && props.location.state.campaign) {
         initialValues = props.location.state.campaign
     } else {
-        if ( props.location.state && props.location.state.sailebot && props.location.state.sailebot.id) {
+        if ( props.location.state && props.location.state.requirement && props.location.state.requirement.id) {
             initialValues = {
                 ...initialValues,
-                sailebot_id: props.location.state.sailebot.id
+                requirement_id: props.location.state.requirement.id
             };
         }
     }
@@ -56,9 +57,9 @@ const ManageCampaignForm = (props) => {
                     <Formik
                         initialValues={initialValues}
                         onSubmit={
-                            async ({ name, description, sailebot_id, id }) => {
+                            async ({ name, description, accounts_per_schedule, requirement_id, id }) => {
                                 console.log('onSubmit name: ', name)
-                                console.log('onSubmit sailebot_id: ', sailebot_id)
+                                console.log('onSubmit requirement_id: ', requirement_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -66,7 +67,8 @@ const ManageCampaignForm = (props) => {
                                                 id,
                                                 name,
                                                 description,
-                                                sailebot_id,
+                                                accounts_per_schedule: Number(accounts_per_schedule),
+                                                requirement_id,
                                             },
                                             id
                                         }
@@ -77,7 +79,7 @@ const ManageCampaignForm = (props) => {
                                         variables: {
                                             objects: {
                                                 name,
-                                                sailebot_id,
+                                                accounts_per_schedule: Number(accounts_per_schedule),
                                                 description,
                                             }
                                         }
@@ -86,7 +88,7 @@ const ManageCampaignForm = (props) => {
                                 }
                       
                                 
-                                props.history.push('/campaigns-by-sailebot', {sailebot: props.location.state.sailebot})
+                                props.history.push('/campaigns-by-requirement', {requirement: props.location.state.requirement})
                             }
                         }
                     >
@@ -110,6 +112,14 @@ const ManageCampaignForm = (props) => {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.description}
+                                        />
+                                        <TextField
+                                            name="accounts_per_schedule"
+                                            label="# Acccounts per schedule" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.accounts_per_schedule}
                                         />
                                     </FormGroup>
                                 </FormControl>

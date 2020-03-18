@@ -34,6 +34,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 
 
 import { mainListItems, secondaryListItems } from './components/DashboardSideBar';
+import AppContainer from './AppContainer';
 
 import config from "./aws-exports";
 import Routes from './routes';
@@ -131,11 +132,21 @@ export default function App() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.content}>
-        <Routes />
-      </Paper>
-    </div>
+    <AppContainer>
+      {
+        ({accounts: { account_lists_loading, account_lists_data }, sailebots: { sailebot_lists_loading, sailebot_lists_data }}) => {
+          console.log('sailebot_lists_loading: ', sailebot_lists_loading);
+          console.log('sailebot_lists_data: ', sailebot_lists_data);
+          return (
+            <div className={classes.root}>
+              <Paper className={classes.content}>
+                <Routes />
+              </Paper>
+            </div>
+          );
+        }
+      }
+    </AppContainer>
   );
 }
 

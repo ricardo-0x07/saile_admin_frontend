@@ -213,9 +213,9 @@ export default function Routes() {
                                 <Route
                                     exact
                                     path='/' 
-                                    component={Companies}
+                                    component={Clients}
                                 />
-                                <Route
+                                {/* <Route
                                     exact
                                     path='/companies' 
                                     component={Companies}
@@ -224,7 +224,7 @@ export default function Routes() {
                                     exact
                                     path='/manage-company' 
                                     component={ManageCompany}
-                                />
+                                /> */}
                                 <Route
                                     exact
                                     path='/clients' 
@@ -280,7 +280,7 @@ export default function Routes() {
                                     path='/domains' 
                                     component={Domains}
                                 />
-                                <Route
+                                {/* <Route
                                     exact
                                     path='/clients-by-company' 
                                     component={Clients}
@@ -289,7 +289,7 @@ export default function Routes() {
                                     exact
                                     path='/clients' 
                                     component={Clients}
-                                />
+                                /> */}
                                 <Route
                                     exact
                                     path='/requirements-by-sailebot' 

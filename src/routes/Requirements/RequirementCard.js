@@ -4,6 +4,8 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Moment from 'react-moment';
+
 
 interface Props {
   name: string;
@@ -32,10 +34,15 @@ export const RequirementCard = ({ requirement,  campaign,  history }) => {
     source,
     state,
   } = requirement;
+  console.log('launch_date: ', launch_date)
+  const dateToFormat = '1976-04-19T12:59-0500';
   return (
     <Card>
       <CardContent>
-        <Typography>{name}</Typography>
+        <Typography>Name: {name}</Typography>
+        <Typography>
+          Launch Date: <Moment format="YYYY-MMM-DD" date={launch_date !== null && launch_date }></Moment>
+        </Typography>
       </CardContent>
       <CardActions>
         <Button size="small" onClick={() => history.push('/manage-requirement', {requirement})}>Edit</Button>

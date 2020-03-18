@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { Formik } from 'formik';
+import { Formik, Form, Field, useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
@@ -14,11 +14,45 @@ import {
     Slider,
     Grid,
 } from '@material-ui/core';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+  } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 
 import { createSchedule, updateSchedule } from "../../graphql/mutations";
 
+
+const DatePickerField = ({ field, form, ...other }) => {
+    const currentError = form.errors[field.name];
+  
+    return (
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+            <KeyboardDatePicker
+                clearable
+                disablePast
+                name={field.name}
+                value={field.value}
+                format="ddd/MMM/YYYY"
+                helperText={currentError}
+                label={field.label}
+                error={Boolean(currentError)}
+                onError={error => {
+                // handle as a side effect
+                if (error !== currentError) {
+                    form.setFieldError(field.name, error);
+                }
+                }}
+                // if you are using custom validation schema you probably want to pass `true` as third argument
+                onChange={date => form.setFieldValue(field.name, date, false)}
+                {...other}
+            />
+        </MuiPickersUtilsProvider>
+    );
+};
 const useStyles = makeStyles(theme => ({
     root: {
       '& > *': {
@@ -37,6 +71,9 @@ const ManageScheduleForm = (props) => {
         name: '',
         daily_outbound_limit: '',
         no_targets_per_accounts: '',
+        deploy_date:  new Date() ,
+        status: '',
+        timezone: '',
     };
     if ( props.location.state && props.location.state.schedule) {
         initialValues = props.location.state.schedule
@@ -62,6 +99,9 @@ const ManageScheduleForm = (props) => {
                                     daily_outbound_limit,
                                     no_targets_per_accounts,
                                     campaign_id,
+                                    deploy_date,
+                                    status,
+                                    timezone,
                                     id,
                                 }) => {
                                 console.log('onSubmit name: ', name)
@@ -74,6 +114,10 @@ const ManageScheduleForm = (props) => {
                                                 name,
                                                 daily_outbound_limit: Number(daily_outbound_limit),
                                                 no_targets_per_accounts: Number(no_targets_per_accounts),
+                                                deploy_date,
+                                                status,
+                                                timezone,
+                                                campaign_id,
                                             },
                                             id
                                         }
@@ -86,6 +130,10 @@ const ManageScheduleForm = (props) => {
                                                 name,
                                                 daily_outbound_limit: Number(daily_outbound_limit),
                                                 no_targets_per_accounts: Number(no_targets_per_accounts),
+                                                deploy_date,
+                                                status,
+                                                timezone,
+                                                campaign_id: props.location.state.campaign.id,
                                             }
                                         }
                                     });
@@ -111,8 +159,8 @@ const ManageScheduleForm = (props) => {
                                             value={values.name}
                                         />
                                         <TextField
-                                            name="Daily outbound limit"
-                                            label="Address" 
+                                            name="daily_outbound_limit"
+                                            label="Daily outbound limit" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
@@ -125,6 +173,23 @@ const ManageScheduleForm = (props) => {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.no_targets_per_accounts}
+                                        />
+                                        <Field label="Deploy Date" name="deploy_date" component={DatePickerField} />
+                                        <TextField
+                                            name="status"
+                                            label="Status" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.status}
+                                        />
+                                        <TextField
+                                            name="timezone"
+                                            label="Timezone" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.timezone}
                                         />
                                     </FormGroup>
                                 </FormControl>

@@ -4,10 +4,21 @@ import { Query } from "react-apollo";
 import { DomainCard } from "./DomainCard";
 import { listDomains } from "../../graphql/queries";
 import Title from '../../components/Title';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 
 
 const Domains = (props) => {
+  const classes = useStyles();
   console.log('props: ', props);
   return (
     <Query
@@ -27,8 +38,9 @@ const Domains = (props) => {
         console.log(data.domain);
 
         return (
-          <div>
+          <div className={classes.root}>
             <Title>Domains</Title>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-domain', {sailebot: props.location.state.sailebot})}>Add Domain</Button>
             <div
               style={{
                 display: "grid",

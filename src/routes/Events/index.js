@@ -4,9 +4,20 @@ import { Query } from "react-apollo";
 import { EventCard } from "./EventCard";
 import { listEvents } from "../../graphql/queries";
 import Title from '../../components/Title';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 
 const Events = (props) => {
+  const classes = useStyles();
   console.log('props: ', props);
   return (
     <Query
@@ -26,8 +37,9 @@ const Events = (props) => {
         console.log(data.event);
 
         return (
-          <div>
+          <div className={classes.root}>
             <Title>Events</Title>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-event', {contact: props.location.state.contact})}>Add Event</Button>
             <div
               style={{
                 display: "grid",
