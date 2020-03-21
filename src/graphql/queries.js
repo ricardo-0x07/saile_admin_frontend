@@ -218,7 +218,6 @@ export const GET_ALL_CAMPAIGNS = gql`
                     name
                     phone
                     revenue
-                    schedule_id
                     state
                     website
                 }
@@ -244,7 +243,6 @@ export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false)
                     name
                     phone
                     revenue
-                    schedule_id
                     state
                     website
             }
@@ -301,7 +299,6 @@ export const listCampaigns = (limit) => {
                     name
                     phone
                     revenue
-                    schedule_id
                     state
                     website
                 }
@@ -368,7 +365,6 @@ export const listAccounts = (limit=10, offset=0) => {
                 name
                 phone
                 revenue
-                schedule_id
                 state
                 website
                 account_campaigns {
@@ -419,7 +415,6 @@ export const listScheduleAccounts = (schedule_id, limit=10, offset=0) => {
                     name
                     phone
                     revenue
-                    schedule_id
                     state
                     website
                 }
@@ -449,7 +444,6 @@ export const listAllCampaignAccounts = (campaign_id, limit=10, offset=0) => {
                     name
                     phone
                     revenue
-                    schedule_id
                     state
                     website
                 }

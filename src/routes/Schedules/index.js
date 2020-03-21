@@ -28,7 +28,7 @@ const Schedules = (props) => {
     console.log('schedule: ', schedule);
   }
 
-  const accounts_per_schedule = props.location.state.campaign && props.location.state.campaign.accounts_per_schedule ? props.location.state.campaign.accounts_per_schedule : 100;
+  const accounts_per_schedule = props.location.state && props.location.state.campaign && props.location.state.campaign.accounts_per_schedule ? props.location.state.campaign.accounts_per_schedule : 100;
 
   const Composed = adopt({
     listSchedulesQuery: ({ render }) => (

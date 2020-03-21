@@ -51,13 +51,7 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
 
   const accounts_to_add = accounts_per_schedule - schedule.schedule_accounts.length;
 
-  const campaign_id = campaign.id
   const Composed = adopt({
-    listCampaignAccountsQuery: ({ render }) => (
-      <Query query={listCampaignAccounts(campaign_id, accounts_to_add)} >
-        { render }
-      </Query>
-    ),
     createScheduleAccountMutation: ({ render }) => (
         <Mutation
             mutation={createScheduleAccount}
@@ -76,7 +70,7 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
 
   return (
     <Composed>
-      {({ listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation }) => {
+      {({ createScheduleAccountMutation, updateCampaignAccountMutation }) => {
         return (
           <Card>
             <CardContent>
@@ -88,9 +82,16 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
             <CardActions>
               <Button size="small" onClick={() => history.push('/manage-schedule', {schedule})}>Edit</Button>
               {
-                !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
-                <Button size="small" onClick={() => addScheduleAccounts(schedule, listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation)}>Assign Accounts</Button>
-                : null
+                campaign && 
+                <Query query={listCampaignAccounts(campaign.id, accounts_to_add)} >
+                  {(listCampaignAccountsQuery) => 
+                    (
+                      !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
+                      <Button size="small" onClick={() => addScheduleAccounts(schedule, listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation)}>Assign Accounts</Button>
+                      : null
+                    )
+                  }
+                </Query>
               }
             </CardActions>
           </Card>

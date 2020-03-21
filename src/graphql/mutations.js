@@ -194,7 +194,6 @@ export const createAccount = gql`
         name
         phone
         revenue
-        schedule_id
         state
         website
       }
@@ -260,7 +259,6 @@ export const updateAccount = gql`
         name
         phone
         revenue
-        schedule_id
         state
         website
       }
