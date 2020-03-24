@@ -21,7 +21,7 @@ import {
   } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
-import MuiCheckbox from "@material-ui/core/Checkbox";
+import MuiCheckbox from "@material-ui/core/git";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 
@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export const Checkbox = ({ ...props }) => {
+export const git = ({ ...props }) => {
     const [field] = useField(props.name);
   
     return (
@@ -235,7 +235,7 @@ const ManageRequirementForm = (props) => {
                                         <FormControlLabel
                                             label="Auto Reject?"
                                             control={
-                                                <Checkbox name="auto_reject" onChange={handleChange} value={values.auto_reject} />
+                                                <git name="auto_reject" onChange={handleChange} value={values.auto_reject} />
                                             }
                                         />
                                         <TextField
@@ -265,7 +265,7 @@ const ManageRequirementForm = (props) => {
                                         <FormControlLabel
                                             label="Duplicate?"
                                             control={
-                                                <Checkbox
+                                                <git
                                                     name="is_duplicate"
                                                     onChange={handleChange}
                                                     value={values.is_duplicate}

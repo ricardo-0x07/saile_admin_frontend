@@ -84,7 +84,6 @@ const ManageDomainForm = (props) => {
         active: false,
         dns: '',
         host: '',
-        id: '',
         ip: '',
         name: '',
         provider: '',
@@ -94,15 +93,20 @@ const ManageDomainForm = (props) => {
         smtp_password: '',
     };
     if ( props.location.state && props.location.state.domain) {
+        console.log('props.location.state: ', props.location.state)
+        console.log('initialValues: ', initialValues)
         initialValues = props.location.state.domain
     } else {
-        if ( props.location.state && props.location.state.sailbot && props.location.state.sailbot.id) {
+        console.log('initialValues: ', initialValues)
+        if ( props.location.state && props.location.state.sailebot && props.location.state.sailebot.id) {
+            console.log('initialValues: ', initialValues)
             initialValues = {
                 ...initialValues,
-                sailbot_id: props.location.state.sailbot.id
+                sailebot_id: props.location.state.sailebot.id
             };
         }
     }
+    // console.log('initialValues: ', initialValues)
     return (
         <Mutation
             mutation={props.location.state && props.location.state.domain ? updateDomain : createDomain}
@@ -165,7 +169,7 @@ const ManageDomainForm = (props) => {
                                     });
                                     console.log('create response: ', response);
                                 }
-                                props.history.push('/domains-by-sailbot', {sailbot: props.location.state.sailbot})
+                                props.history.push('/domains-by-sailebot', {sailebot: props.location.state.sailebot})
                             }
                         }
                     >
