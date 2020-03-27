@@ -103,7 +103,7 @@ const ManageCampaignForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.name}
+                                            value={values.name  || ''}
                                         />
                                         <TextField
                                             name="description"
@@ -111,7 +111,7 @@ const ManageCampaignForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.description}
+                                            value={values.description  || ''}
                                         />
                                         <TextField
                                             name="accounts_per_schedule"
@@ -119,7 +119,7 @@ const ManageCampaignForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.accounts_per_schedule}
+                                            value={values.accounts_per_schedule  || ''}
                                         />
                                     </FormGroup>
                                 </FormControl>

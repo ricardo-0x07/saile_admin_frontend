@@ -156,7 +156,7 @@ const ManageScheduleForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.name}
+                                            value={values.name  || ''}
                                         />
                                         <TextField
                                             name="daily_outbound_limit"
@@ -164,7 +164,7 @@ const ManageScheduleForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.daily_outbound_limit}
+                                            value={values.daily_outbound_limit  || ''}
                                         />
                                         <TextField
                                             name="no_targets_per_accounts"
@@ -172,7 +172,7 @@ const ManageScheduleForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.no_targets_per_accounts}
+                                            value={values.no_targets_per_accounts  || ''}
                                         />
                                         <Field label="Deploy Date" name="deploy_date" component={DatePickerField} />
                                         <TextField
@@ -181,7 +181,7 @@ const ManageScheduleForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.status}
+                                            value={values.status  || ''}
                                         />
                                         <TextField
                                             name="timezone"
@@ -189,7 +189,7 @@ const ManageScheduleForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.timezone}
+                                            value={values.timezone  || ''}
                                         />
                                     </FormGroup>
                                 </FormControl>

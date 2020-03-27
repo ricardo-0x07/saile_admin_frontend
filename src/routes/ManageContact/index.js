@@ -84,7 +84,6 @@ const ManageContactForm = (props) => {
         account_id: '',
         bounce_type: '',
         email: '',
-        fax: '',
         first_outbound_done: false,
         firstname: '',
         gender: '',
@@ -125,7 +124,6 @@ const ManageContactForm = (props) => {
                             async ({ 
                                 bounce_type,
                                 email,
-                                fax,
                                 first_outbound_done,
                                 firstname,
                                 gender,
@@ -153,7 +151,6 @@ const ManageContactForm = (props) => {
                                                 id,
                                                 bounce_type,
                                                 email,
-                                                fax,
                                                 first_outbound_done,
                                                 firstname,
                                                 gender,
@@ -182,7 +179,6 @@ const ManageContactForm = (props) => {
                                             objects: {
                                                 bounce_type,
                                                 email,
-                                                fax,
                                                 first_outbound_done,
                                                 firstname,
                                                 gender,
@@ -256,14 +252,7 @@ const ManageContactForm = (props) => {
                                             onChange={handleChange}
                                             value={values.phone === null ? '' : values.phone }
                                         />
-                                        <TextField
-                                            name="fax"
-                                            label="Fax" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.fax === null ? '' : values.fax }
-                                        />
+
                                         <TextField
                                             name="email"
                                             label="Email" 

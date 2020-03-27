@@ -97,6 +97,11 @@ export const createSaileBot = gql`
         no_targets
         phone
         title
+        role
+        company_name
+        signature
+        firstname
+        lastname
       }
     }
   }
@@ -114,6 +119,11 @@ export const updateSaileBot = gql`
         no_targets
         phone
         title
+        role
+        company_name
+        signature
+        firstname
+        lastname
       }
     }
   }
@@ -245,7 +255,6 @@ export const updateAccount = gql`
       returning {
         NAICS
         address
-        campaign_id
         city
         country
         domain
@@ -467,6 +476,8 @@ export const createDomain = gql`
         provider
         sailebot_id
         smtp
+        smtp_login
+        smtp_password
       }
     }
   }

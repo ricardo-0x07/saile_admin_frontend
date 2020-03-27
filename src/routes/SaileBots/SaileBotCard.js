@@ -12,11 +12,11 @@ interface Props {
 
 export const SaileBotCard = ({ sailebot,  history }) => {
   console.log('sailebot: ', sailebot);
-  const {name} = sailebot;
+  const {name, fullname} = sailebot;
   return (
     <Card>
       <CardContent>
-        <Typography>{name}</Typography>
+        <Typography>{fullname || name}</Typography>
       </CardContent>
       <CardActions>
         <Button size="small" onClick={() => history.push('/manage-sailebot', {sailebot})}>Edit</Button>

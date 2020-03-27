@@ -107,7 +107,7 @@ const ManageTemplateForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.name}
+                                            value={values.name  || ''}
                                         />
                                         <TextField
                                             name="subject"
@@ -115,28 +115,28 @@ const ManageTemplateForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.subject}
+                                            value={values.subject  || ''}
                                         />
                                         <TextareaAutosize
                                             name="body_text"
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.body_text}
+                                            value={values.body_text  || ''}
                                             rowsMax={10}
                                             aria-label="body_text"
                                             placeholder="Text"
                                         />
-                                        <TextareaAutosize
+                                        {/* <TextareaAutosize
                                             name="body_html_text"
                                             placeholder="HTML Text" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.body_html_text}
+                                            value={values.body_html_text  || ''}
                                             rowsMax={10}
                                             aria-label="body_html_text"
-                                        />
+                                        /> */}
                                     </FormGroup>
                                 </FormControl>
                                  <Button variant="contained" type='submit'>Submit</Button>

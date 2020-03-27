@@ -90,6 +90,11 @@ export const GET_ALL_SAILEBOTS = gql`
             no_targets
             phone
             title
+            role
+            company_name
+            signature
+            firstname
+            lastname
             requirements {
                 auto_reject
                 city
@@ -138,6 +143,11 @@ export const listSaileBots = (limit) => {
                 no_targets
                 phone
                 title
+                role
+                company_name
+                signature
+                firstname
+                lastname
                 requirements {
                     auto_reject
                     city
@@ -621,6 +631,8 @@ export const listDomains = (limit=10, offset=0) => {
                 provider
                 sailebot_id
                 smtp
+                smtp_login
+                smtp_password
             }
         }
     `;

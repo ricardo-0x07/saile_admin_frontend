@@ -36,6 +36,16 @@ const ManageSaileBotForm = (props) => {
     let initialValues = {
         name: '',
         no_targets: 4,
+        email: '',
+        fullname: '',
+        name: '',
+        phone: '',
+        title: '',
+        role: '',
+        company_name: '',
+        signature: '',
+        firstname: '',
+        lastname: '',
     };
     if ( props.location.state && props.location.state.sailebot) {
         initialValues = props.location.state.sailebot
@@ -56,17 +66,40 @@ const ManageSaileBotForm = (props) => {
                     <Formik
                         initialValues={initialValues}
                         onSubmit={
-                            async ({ name, no_targets, client_id, id }) => {
+                            async ({
+                                client_id,
+                                email,
+                                fullname,
+                                id,
+                                name,
+                                no_targets,
+                                phone,
+                                title,
+                                role,
+                                company_name,
+                                signature,
+                                firstname,
+                                lastname,
+                            }) => {
                                 console.log('onSubmit name: ', name)
                                 console.log('onSubmit client_id: ', client_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
                                             objects: {
+                                                client_id,
+                                                email,
+                                                fullname: `${firstname} ${lastname}`,
                                                 id,
                                                 name,
                                                 no_targets,
-                                                client_id,
+                                                phone,
+                                                title,
+                                                role,
+                                                company_name,
+                                                signature,
+                                                firstname,
+                                                lastname,
                                             },
                                             id
                                         }
@@ -76,9 +109,18 @@ const ManageSaileBotForm = (props) => {
                                     const response = await mutation({
                                         variables: {
                                             objects: {
-                                                name,
                                                 client_id,
+                                                email,
+                                                fullname: `${firstname} ${lastname}`,
+                                                name,
                                                 no_targets,
+                                                phone,
+                                                title,
+                                                role,
+                                                company_name,
+                                                signature,
+                                                firstname,
+                                                lastname,
                                             }
                                         }
                                     });
@@ -96,12 +138,62 @@ const ManageSaileBotForm = (props) => {
                                     <FormLabel component="legend">SaileBot Creation/Update</FormLabel>
                                     <FormGroup aria-label="position" >
                                         <TextField
-                                            name="name"
-                                            label="Name" 
+                                            name="firstname"
+                                            label="First Name" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.name}
+                                            value={values.firstname === null ? '' : values.firstname }
+                                        />
+                                        <TextField
+                                            name="lastname"
+                                            label="Last Name" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.lastname === null ? '' : values.lastname }
+                                        />
+                                        <TextField
+                                            name="email"
+                                            label="Email" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.email === null ? '' : values.email }
+                                        />
+                                        <TextField
+                                            name="title"
+                                            label="Title" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.title === null ? '' : values.title }
+                                        />
+                                        <TextField
+                                            name="role"
+                                            label="Role" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.role === null ? '' : values.role }
+                                        />
+                                        <TextField
+                                            name="company_name"
+                                            label="Company Name" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.company_name === null ? '' : values.company_name }
+                                        />
+                                        <TextareaAutosize
+                                            name="signature"
+                                            placeholder="Signature Text" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.signature === null ? '' : values.signature }
+                                            rowsMax={10}
+                                            aria-label="signature"
                                         />
                                         <TextField
                                             name="no_targets"
@@ -109,7 +201,7 @@ const ManageSaileBotForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.no_targets}
+                                            value={values.no_targets === null ? '' : values.no_targets }
                                         />
                                     </FormGroup>
                                 </FormControl>

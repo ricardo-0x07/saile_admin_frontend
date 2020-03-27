@@ -215,7 +215,7 @@ const ManageAccountForm = (props) => {
                                         value={values.email || ''}
                                     />
                                     <TextField
-                                        name="email"
+                                        name="email_domain"
                                         label="Email domain" 
                                         variant="filled" 
                                         margin="normal" 
