@@ -8,7 +8,6 @@ import {
 
 
 
-import config from "./aws-exports";
 import Routes from './routes';
 
 const drawerWidth = 240;
