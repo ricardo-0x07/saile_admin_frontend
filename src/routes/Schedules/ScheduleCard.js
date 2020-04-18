@@ -6,13 +6,9 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
-import { listSchedules, listCampaignAccounts } from "../../graphql/queries";
+import { listCampaignAccounts } from "../../graphql/queries";
 import { createScheduleAccount, updateCampaignAccount } from "../../graphql/mutations";
 
-interface Props {
-  name: string;
-  address: string;
-}
 
 export const ScheduleCard = ({ schedule,  campaign,  history }) => {
   
