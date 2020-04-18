@@ -14,6 +14,8 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { logger } from 'redux-logger';
 
 const browserHistory = createBrowserHistory();
+
+
 // Create an enhanced history that syncs navigation events with the store
 
 // Apply the middleware to the store
@@ -26,7 +28,10 @@ const store = createStore(
   composeWithDevTools(middleware)
 )
 const history = syncHistoryWithStore(browserHistory, store)
-
+const path = (/#!(\/.*)$/.exec(window.location.hash) || [])[1];
+if (path) {
+    history.replace(path);
+}
 const Root = ({ store }) => (
   <Provider store={store} >
      <App history={history}/>
