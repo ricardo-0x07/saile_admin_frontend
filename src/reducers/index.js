@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import { routerReducer } from 'react-router-redux'
 
 import adminReducer from './admin' 
 

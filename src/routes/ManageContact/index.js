@@ -1,61 +1,26 @@
 // import 'date-fns';
-import React, { useEffect, useReducer } from "react";
-import { Formik, Form, Field, useField } from 'formik';
+import React from "react";
+import { Formik, useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
-    TextareaAutosize,
     Button,
     FormLabel,
     FormControl,
     FormGroup,
     FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
 } from '@material-ui/core';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
-  } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+} from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import MuiCheckbox from "@material-ui/core/Checkbox";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
-
 import { createContact, updateContact } from "../../graphql/mutations";
 
 
 
-const DatePickerField = ({ field, form, ...other }) => {
-    const currentError = form.errors[field.name];
-  
-    return (
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-            <KeyboardDatePicker
-                clearable
-                disablePast
-                name={field.name}
-                value={field.value}
-                format="ddd/MMM/YYYY"
-                helperText={currentError}
-                label={field.label}
-                error={Boolean(currentError)}
-                onError={error => {
-                // handle as a side effect
-                if (error !== currentError) {
-                    form.setFieldError(field.name, error);
-                }
-                }}
-                // if you are using custom validation schema you probably want to pass `true` as third argument
-                onChange={date => form.setFieldValue(field.name, date, false)}
-                {...other}
-            />
-        </MuiPickersUtilsProvider>
-    );
-};
 const useStyles = makeStyles(theme => ({
     root: {
       '& > *': {
@@ -143,7 +108,7 @@ const ManageContactForm = (props) => {
                                 id
                             }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 id,
@@ -171,7 +136,7 @@ const ManageContactForm = (props) => {
                                         }
                                     });
                                 } else {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 bounce_type,

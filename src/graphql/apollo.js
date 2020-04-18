@@ -1,16 +1,13 @@
 import { split } from 'apollo-link';
 import ApolloClient from 'apollo-client';
-// import ApolloClient from 'apollo-boost';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
 import gql from 'graphql-tag';
 
-const graphqlApiUri = 'http://localhost:8080/v1/graphql';
 const graphqlApiUri_remote = 'https://saile-graph-api.net/v1/graphql';
-const graphqlSocketUri = 'wss://saile-graph-api.net/v1/graphql';//'ws://localhost:8080/v1/graphql';
+const graphqlSocketUri = 'wss://saile-graph-api.net/v1/graphql';
 
 
 export const createClient = (secret) => {
@@ -34,7 +31,7 @@ export const createClient = (secret) => {
 
   const link = split(
     ({ query }) => {
-      const { kind, operation }: Definition = getMainDefinition(query);
+      const { kind, operation } = getMainDefinition(query);
       return kind === 'OperationDefinition' && operation === 'subscription';
     },
     webSocketLink,

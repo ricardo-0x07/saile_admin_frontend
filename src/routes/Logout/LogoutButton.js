@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Button from "@material-ui/core/Button";
@@ -17,7 +16,7 @@ class LogoutButton extends Component {
 
   render() {
 
-    const { isClearing } = this.state;
+    // const { isClearing } = this.state;
 
     return (
       <div>

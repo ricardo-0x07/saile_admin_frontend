@@ -1,19 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
-import AWSAppSyncClient from "aws-appsync";
-import { ApolloProvider} from "react-apollo";
-import { getApolloContext } from 'react-apollo';
-import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts';
-import { Router, Route } from 'react-router'
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-// import store from './configure'
 import { createBrowserHistory } from "history";
-import { compose, createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers';
 import { composeWithDevTools } from 'redux-devtools-extension'

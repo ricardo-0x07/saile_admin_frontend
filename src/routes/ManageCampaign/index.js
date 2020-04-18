@@ -1,22 +1,14 @@
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import { Formik } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
-    TextareaAutosize,
     Button,
     FormLabel,
     FormControl,
     FormGroup,
-    FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
-
 import { createCampaign, updateCampaign } from "../../graphql/mutations";
 
 const useStyles = makeStyles(theme => ({
@@ -58,7 +50,7 @@ const ManageCampaignForm = (props) => {
                         onSubmit={
                             async ({ name, description, accounts_per_schedule, requirement_id, id }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 id,
@@ -71,7 +63,7 @@ const ManageCampaignForm = (props) => {
                                         }
                                     });
                                 } else {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 name,

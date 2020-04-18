@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Subscription } from "react-apollo";
-import gql from "graphql-tag";
 import { connect } from 'react-redux';
 import { ClientCard } from "./ClientCard";
 import { listClients } from "../../graphql/subscription";

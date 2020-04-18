@@ -1,29 +1,22 @@
 // import 'date-fns';
-import React, { useEffect, useReducer } from "react";
-import { Formik, Form, Field, useField } from 'formik';
+import React from "react";
+import { Formik, Field, useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
-    TextareaAutosize,
     Button,
     FormLabel,
     FormControl,
     FormGroup,
     FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
 } from '@material-ui/core';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
   } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
 import MuiCheckbox from "@material-ui/core/Checkbox";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
 import { createRequirement, updateRequirement } from "../../graphql/mutations";
 
@@ -133,7 +126,7 @@ const ManageRequirementForm = (props) => {
                                 id
                             }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 id,
@@ -144,7 +137,6 @@ const ManageRequirementForm = (props) => {
                                                 elasticity: Number(elasticity),
                                                 function: function_name,
                                                 geography,
-                                                id,
                                                 is_duplicate,
                                                 launch_date,
                                                 max_hits_per_contact: Number(max_hits_per_contact),
@@ -158,7 +150,7 @@ const ManageRequirementForm = (props) => {
                                         }
                                     });
                                 } else {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 name,

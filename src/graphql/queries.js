@@ -1,25 +1,5 @@
 import gql from 'graphql-tag';
 
-export const listCompanies = (limit) => {
-    return gql`
-        query ListCompanies {
-            company(limit: ${limit}) {
-                address
-                email
-                fax
-                id
-                name
-                phone
-                website
-                clients {
-                    company_id
-                    id
-                    name
-                }
-            }
-        }
-    `;
-}
 export const GET_ALL_CLIENTS =gql`
     query ListClients($limit: Int!, $offset: Int) {
         client(limit: $limit, offset: $offset) {

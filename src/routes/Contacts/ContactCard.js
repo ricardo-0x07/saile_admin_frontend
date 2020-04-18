@@ -5,34 +5,12 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-interface Props {
-  name: string;
-  address: string;
-}
 
 export const ContactCard = ({ contact,  history }) => {
   const {
-    account_id,
-    bounce_type,
     email,
-    fax,
-    first_outbound_done,
     firstname,
-    gender,
-    id,
-    is_ema_eligible,
-    is_eva_eligible,
-    is_referral,
     lastname,
-    member_status,
-    phone,
-    position,
-    role,
-    sam_status,
-    second_outbound_done,
-    source,
-    title,
-    to_followup,
   } = contact;
   return (
     <Card>

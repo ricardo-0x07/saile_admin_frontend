@@ -1,27 +1,20 @@
-import React, { useEffect, useReducer } from "react";
-import { Formik, Form, Field, useField } from 'formik';
+import React from "react";
+import { Formik, Field } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
-    TextareaAutosize,
     Button,
     FormLabel,
     FormControl,
     FormGroup,
-    FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
+
 } from '@material-ui/core';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
   } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
 import { createSchedule, updateSchedule } from "../../graphql/mutations";
 
@@ -106,7 +99,7 @@ const ManageScheduleForm = (props) => {
                                     id,
                                 }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 id,
@@ -123,7 +116,7 @@ const ManageScheduleForm = (props) => {
                                         }
                                     });
                                 } else {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 name,

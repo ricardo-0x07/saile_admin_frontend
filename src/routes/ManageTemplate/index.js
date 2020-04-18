@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import { Formik } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -8,15 +8,8 @@ import {
     FormLabel,
     FormControl,
     FormGroup,
-    FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
-
 import { createTemplate, updateTemplate } from "../../graphql/mutations";
 
 const useStyles = makeStyles(theme => ({
@@ -59,7 +52,7 @@ const ManageTemplateForm = (props) => {
                         onSubmit={
                             async ({ name, subject, body_text, body_html_text, campaign_id, id }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 id,
@@ -73,7 +66,7 @@ const ManageTemplateForm = (props) => {
                                         }
                                     });
                                 } else {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 name,

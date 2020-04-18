@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Subscription, Mutation } from "react-apollo";
+import { Subscription } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
 import AccountsCSVReader from '../../components/AccountsCSVReader';
@@ -7,8 +7,7 @@ import ContactsCSVReader from '../../components/ContactsCSVReader';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import { listAccounts, listScheduleAccounts, listCampaignAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/subscription";
-import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
+import { listAccounts, listCampaignAccounts } from "../../graphql/subscription";
 
 
 

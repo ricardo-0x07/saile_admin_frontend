@@ -1,46 +1,24 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { Container } from 'react-bootstrap'
 import {
     Paper,
-    withStyles,
     makeStyles,
     CssBaseline,
     Drawer,
-    Box,
     AppBar,
     Toolbar,
-    List,
     Typography,
     Divider,
     IconButton,
-    Badge,
-    Grid,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
 import { ApolloProvider} from "react-apollo";
-
 import ManageCampaign from './ManageCampaign'
-import ManageCompany from './ManageCompany'
 import ManageClient from './ManageClient'
 import ManageSaileBot from './ManageSaileBot'
 import ManageDomain from './ManageDomain'
@@ -51,7 +29,6 @@ import ManageRequirement from './ManageRequirement'
 import ManageSchedule from './ManageSchedule'
 import Campaigns from './Campaigns'
 import Requirements from './Requirements'
-import Companies from './Companies'
 import Schedules from './Schedules'
 import Clients from './Clients'
 import SaileBots from './SaileBots'
@@ -62,11 +39,8 @@ import Contacts from './Contacts'
 import Events from './Events'
 import Templates from './Templates'
 import Login from './Login'
-import NotFound from '../components/NotFound'
 import DashboardSideBar from '../components/DashboardSideBar';
-import Title from '../components/Title';
 import { createClient } from '../graphql/apollo';
-import AppContainer from '../AppContainer';
 import LogoutButton from './Logout/LogoutButton';
 import * as actions from '../actions';
 import { ADMIN_SECRET_HEADER_KEY } from '../actions/types'
@@ -153,7 +127,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function Routes(props_) {
+function Routes() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -162,7 +136,7 @@ function Routes(props_) {
     const handleDrawerClose = () => {
       setOpen(false);
     };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     let token = sessionStorage.getItem(ADMIN_SECRET_HEADER_KEY);
     
@@ -410,7 +384,6 @@ function Routes(props_) {
 export default connect(
     state => ({
       admin: state.admin,
-    //   routing: state.routing
     }),
     actions
 )(Routes);

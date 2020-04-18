@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Subscription } from "react-apollo";
 import { SaileBotCard } from "./SaileBotCard";
-import { listSaileBots, GET_ALL_SAILEBOTS } from "../../graphql/subscription";
+import { listSaileBots } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';

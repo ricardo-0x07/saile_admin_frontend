@@ -1,22 +1,16 @@
-import React, { useEffect, useReducer } from "react";
-import { Formik, Form, Field, useField } from 'formik';
+import React from "react";
+import { Formik, useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
 import {
     TextField,
-    TextareaAutosize,
     Button,
     FormLabel,
     FormControl,
     FormGroup,
     FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import MuiCheckbox from "@material-ui/core/Checkbox";
 import { createAccount, createCampaignAccount, updateAccount } from "../../graphql/mutations";
 
@@ -115,7 +109,7 @@ const ManageAccountForm = (props) => {
                                     id,
                                 }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 id,
@@ -163,7 +157,7 @@ const ManageAccountForm = (props) => {
                                         }
                                     });
 
-                                    const response2 = await createCampaignAccountMutation({
+                                    await createCampaignAccountMutation({
                                         variables: {
                                             objects: {
                                                 account_id: response.data.insert_account.returning[0].id,

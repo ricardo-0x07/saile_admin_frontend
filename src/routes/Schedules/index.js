@@ -1,13 +1,12 @@
 import * as React from "react";
-import { Query, Subscription, Mutation } from "react-apollo";
+import { Query, Subscription } from "react-apollo";
 import { adopt } from 'react-adopt';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 
 import { ScheduleCard } from "./ScheduleCard";
 import { listCampaignSchedules } from "../../graphql/subscription";
-import { listSchedules, listCampaignAccounts } from "../../graphql/queries";
-import { createScheduleAccount, updateCampaignAccount } from "../../graphql/mutations";
+import { listSchedules } from "../../graphql/queries";
 import Title from '../../components/Title';
 
 
@@ -18,8 +17,6 @@ const useStyles = makeStyles(theme => ({
     },
   },
 }));
-
-
 
 
 const Schedules = (props) => {

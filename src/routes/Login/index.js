@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import { push } from 'react-router-redux';
 import {Helmet} from 'react-helmet';
 import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux';
-
-
-// import Button from '../Common/Button/Button';
-// import globals from '../../Globals';
 import { verifyLogin } from '../../actions';
 import * as actions from '../../actions';
-// import { getAdminSecret } from '../Services/ApiExplorer/ApiRequest/utils';
 
 const styles = require('./Login.scss');
 const hasuraLogo = require('./Sailebot.png');
@@ -131,33 +125,33 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
     );
   };
 
-  const getCLIAdminSecretErrorMessage = () => {
-    const adminSecret = "getAdminSecret()";
+  // const getCLIAdminSecretErrorMessage = () => {
+  //   const adminSecret = "getAdminSecret()";
 
-    const missingAdminSecretMessage = (
-      <span>
-        Seems like your Hasura GraphQL engine instance has an admin-secret
-        configured.
-        <br />
-        Run console with the admin-secret using:
-        <br />
-        <br />
-        hasura console --admin-secret=&lt;your-admin-secret&gt;
-      </span>
-    );
+  //   const missingAdminSecretMessage = (
+  //     <span>
+  //       Seems like your Hasura GraphQL engine instance has an admin-secret
+  //       configured.
+  //       <br />
+  //       Run console with the admin-secret using:
+  //       <br />
+  //       <br />
+  //       hasura console --admin-secret=&lt;your-admin-secret&gt;
+  //     </span>
+  //   );
 
-    const invalidAdminSecretMessage = (
-      <span>Invalid admin-secret passed from CLI</span>
-    );
+  //   const invalidAdminSecretMessage = (
+  //     <span>Invalid admin-secret passed from CLI</span>
+  //   );
 
-    return (
-      <div
-        className={styles.text_center}
-      >
-        {adminSecret ? invalidAdminSecretMessage : missingAdminSecretMessage}
-      </div>
-    );
-  };
+  //   return (
+  //     <div
+  //       className={styles.text_center}
+  //     >
+  //       {adminSecret ? invalidAdminSecretMessage : missingAdminSecretMessage}
+  //     </div>
+  //   );
+  // };
 
   return (
     <div
@@ -170,9 +164,9 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
         <div
             className={styles.loginCenter}
         >
-          <Helmet title={'Login | ' + 'Hasura'} />
+          <Helmet title={'Login | Hasura'} />
           <div style={{ width: '100%', height: 'auto', paddingBottom: '20px', display: 'flex', alignItemsm:'center', flexDirection:'column'}}>
-            <img src={hasuraLogo} style={{ width: '100px', height: 'auto' }}/>
+            <img alt='logo' src={hasuraLogo} style={{ width: '100px', height: 'auto' }}/>
             <h2>Admin</h2>
           </div>
           <div

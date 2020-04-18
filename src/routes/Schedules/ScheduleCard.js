@@ -28,14 +28,14 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
     })
 
 
-    const schedule_accounts_response = await createScheduleAccountMutation({
+    await createScheduleAccountMutation({
       variables: {
         objects: processed
       }
     });
 
     const schedule_account_ids = campaign_accounts.map( acc => acc.id);
-    const updated_campaign_accounts = await updateCampaignAccountMutation({
+    await updateCampaignAccountMutation({
       variables: {
         objects: {is_scheduled: true},
         id_list: schedule_account_ids

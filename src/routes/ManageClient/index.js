@@ -1,24 +1,16 @@
-import React, { useEffect, useReducer } from "react";
-import { Formik, Form, Field, useField } from 'formik';
+import React from "react";
+import { Formik, useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
-    TextareaAutosize,
     Button,
     FormLabel,
     FormControl,
     FormGroup,
     FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
 import MuiCheckbox from "@material-ui/core/Checkbox";
-
-import gql from "graphql-tag";
-
 import { createClient, updateClient } from "../../graphql/mutations";
 
 const useStyles = makeStyles(theme => ({
@@ -55,7 +47,6 @@ const ManageClientForm = (props) => {
         employees: 0,
         phone: '',
         revenue: '',
-        state  : '',
         website  : '',
     };
     if ( props.location.state && props.location.state.client) {
@@ -96,7 +87,7 @@ const ManageClientForm = (props) => {
                                 company_id,
                             }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 id,
@@ -113,7 +104,6 @@ const ManageClientForm = (props) => {
                                                 employees,
                                                 phone,
                                                 revenue,
-                                                state,
                                                 website,
                                                 company_id,
                                             },
@@ -121,7 +111,7 @@ const ManageClientForm = (props) => {
                                         }
                                     });
                                 } else {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 name,
@@ -137,7 +127,6 @@ const ManageClientForm = (props) => {
                                                 employees,
                                                 phone,
                                                 revenue,
-                                                state,
                                                 website,
                                                 company_id,
                                             }

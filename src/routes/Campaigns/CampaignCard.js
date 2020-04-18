@@ -5,10 +5,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-interface Props {
-  name: string;
-  address: string;
-}
 
 export const CampaignCard = ({ campaign,  history }) => {
   const { name, accounts_per_schedule } = campaign;

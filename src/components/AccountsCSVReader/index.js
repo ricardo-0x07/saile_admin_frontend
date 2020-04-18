@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { CSVReader } from 'react-papaparse'
-import { Query, Mutation } from "react-apollo";
+import { Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 
-import { listAccounts, listScheduleAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/queries";
-import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
+import { createAccount, createCampaignAccount } from "../../graphql/mutations";
 var _ = require('lodash');
 const buttonRef = React.createRef()
 
@@ -46,7 +45,7 @@ export default class CSVReader1 extends Component {
       }
     });
     const campaign_id = this.props.location.state.campaign.id
-    const campaign_accounts_response = await createCampaignAccountMutation({
+    await createCampaignAccountMutation({
       variables: {
         objects: accounts_response.data.insert_account.returning.map(account => {
           return { campaign_id, account_id: account.id }
@@ -58,7 +57,6 @@ export default class CSVReader1 extends Component {
 
 
   render() {
-    const { campaign_id } = this.props
     const Composed = adopt({
       createAccountMutation: ({ render }) => (
           <Mutation mutation={ createAccount } >

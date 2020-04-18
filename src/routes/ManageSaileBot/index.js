@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import { Formik } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -8,14 +8,9 @@ import {
     FormLabel,
     FormControl,
     FormGroup,
-    FormControlLabel,
-    FormHelperText,
-    Switch,
-    Slider,
-    Grid,
+
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
 import { createSaileBot, updateSaileBot } from "../../graphql/mutations";
 
@@ -37,7 +32,6 @@ const ManageSaileBotForm = (props) => {
         no_targets: 4,
         email: '',
         fullname: '',
-        name: '',
         phone: '',
         title: '',
         role: '',
@@ -85,7 +79,7 @@ const ManageSaileBotForm = (props) => {
                                 smtp_password,
                             }) => {
                                 if (id) {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 client_id,
@@ -108,7 +102,7 @@ const ManageSaileBotForm = (props) => {
                                         }
                                     });
                                 } else {
-                                    const response = await mutation({
+                                    await mutation({
                                         variables: {
                                             objects: {
                                                 client_id,

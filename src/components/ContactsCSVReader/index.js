@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { CSVReader } from 'react-papaparse'
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
+import { listAllCampaignAccounts } from "../../graphql/queries";
+import { createContact, } from "../../graphql/mutations";
 
 
-import { listAccounts, listScheduleAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/queries";
-import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
 var _ = require('lodash');
 const buttonRef = React.createRef()
 
@@ -52,7 +52,7 @@ export default class CSVReader1 extends Component {
     processed = _.filter(processed, con => con.email !== null);
     processed = _.filter(processed, con => con.ex_id !== '');
     processed = _.filter(processed, con => con.ex_account_id !== '');
-    const contacts_response = _.chunk(processed, 100).map(async contacts_batch => {
+    await _.chunk(processed, 100).map(async contacts_batch => {
       try {
         let results = await  createContactMutation({
           variables: {

@@ -9,16 +9,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import BusinessIcon from '@material-ui/icons/Business';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-import ContactMailIcon from '@material-ui/icons/ContactMail';
-import DnsIcon from '@material-ui/icons/Dns';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import EventIcon from '@material-ui/icons/Event';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-import ArtTrackIcon from '@material-ui/icons/ArtTrack';
 import List from '@material-ui/core/List';
 import { Link as RouterLink } from 'react-router-dom';
 

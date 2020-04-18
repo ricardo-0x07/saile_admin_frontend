@@ -39,7 +39,6 @@ import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import ManageCampaign from './ManageCampaign'
-import ManageCompany from './ManageCompany'
 import ManageClient from './ManageClient'
 import ManageSaileBot from './ManageSaileBot'
 import ManageDomain from './ManageDomain'
@@ -50,7 +49,6 @@ import ManageRequirement from './ManageRequirement'
 import ManageSchedule from './ManageSchedule'
 import Campaigns from './Campaigns'
 import Requirements from './Requirements'
-import Companies from './Companies'
 import Schedules from './Schedules'
 import Clients from './Clients'
 import SaileBots from './app/sailebots'
@@ -201,14 +199,6 @@ export default function Routes() {
                 <Paper className={classes.content}>
                     <div className={classes.appBarSpacer} />
                         <Container style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                            {/* <Breadcrumbs aria-label="breadcrumb">
-                                <RouterLink color="inherit" to="/" >
-                                    Companies
-                                </RouterLink>
-                                <RouterLink color="inherit" to="/manage-company" >
-                                    Create Company
-                                </RouterLink>
-                            </Breadcrumbs>       */}
 
                             <Switch >
                                 <Route
@@ -216,16 +206,6 @@ export default function Routes() {
                                     path='/' 
                                     component={Clients}
                                 />
-                                {/* <Route
-                                    exact
-                                    path='/companies' 
-                                    component={Companies}
-                                />
-                                <Route
-                                    exact
-                                    path='/app/manage-company' 
-                                    component={ManageCompany}
-                                /> */}
                                 <Route
                                     exact
                                     path='/app/clients' 

@@ -1,14 +1,11 @@
 import React from "react";
-import clsx from 'clsx';
-import { Router, Route, browserHistory } from 'react-router'
+import { Router } from 'react-router'
 import {
   Paper,
   makeStyles,
 } from '@material-ui/core';
-
-
-
 import Routes from './routes';
+
 
 const drawerWidth = 240;
 
@@ -104,15 +101,3 @@ export default function App({history, store}) {
     </div>
   );
 }
-
-const styles = {
-  root: {
-    width: '100%',
-    overflowX: 'visible',
-  },
-  table: {
-    minWidth: 700,
-  },
-};
-
-// export default withStyles(styles)(App);

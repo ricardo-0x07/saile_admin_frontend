@@ -14,26 +14,9 @@ interface Props {
 
 export const RequirementCard = ({ requirement,  campaign,  history }) => {
   const {
-    auto_reject,
-    city,
-    contract_no,
-    elasticity,
-    function: function_name,
-    geography,
-    id,
-    is_duplicate,
     launch_date,
-    ldr_notes,
-    level,
-    max_hits_per_contact,
     name,
-    priority,
-    sailebot_id,
-    size,
-    source,
-    state,
   } = requirement;
-  const dateToFormat = '1976-04-19T12:59-0500';
   return (
     <Card>
       <CardContent>
