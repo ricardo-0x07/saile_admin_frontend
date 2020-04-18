@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const ContactCard = ({ contact,  history }) => {
-  console.log('contact: ', contact);
   const {
     account_id,
     bounce_type,
@@ -42,10 +41,10 @@ export const ContactCard = ({ contact,  history }) => {
         <Typography>{email}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/manage-contact', {contact})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-contact', {contact})}>Edit</Button>
         {
           contact && contact.events && contact.events.length > 0 &&
-          <Button size="small" onClick={() => history.push('/events-by-contact', {contact})}>View Contact Events</Button>
+          <Button size="small" onClick={() => history.push('/app/events-by-contact', {contact})}>View {contact.events.length} Contact Event(s)</Button>
         }
       </CardActions>
     </Card>

@@ -18,13 +18,11 @@ const useStyles = makeStyles(theme => ({
 
 const Events = (props) => {
   const classes = useStyles();
-  console.log('props: ', props);
   return (
     <Query
       query={listEvents(10)}
     >
       {({ data, loading }) => {
-        console.log('data: ', data);
         if (
           loading ||
           !data ||
@@ -34,12 +32,11 @@ const Events = (props) => {
           return null;
         }
 
-        console.log(data.event);
 
         return (
           <div className={classes.root}>
             <Title>Events</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-event', {contact: props.location.state.contact})}>Add Event</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-event', {contact: props.location.state.contact})}>Add Event</Button>
             <div
               style={{
                 display: "grid",

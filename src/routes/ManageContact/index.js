@@ -79,7 +79,6 @@ const ManageContactForm = (props) => {
     const classes = useStyles();
 
     
-    console.log('props: ', props)
     let initialValues = {
         account_id: '',
         bounce_type: '',
@@ -143,7 +142,6 @@ const ManageContactForm = (props) => {
                                 account_id,
                                 id
                             }) => {
-                                console.log('onSubmit account_id: ', account_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -172,7 +170,6 @@ const ManageContactForm = (props) => {
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -199,14 +196,12 @@ const ManageContactForm = (props) => {
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
-                                props.history.push('/contacts-by-account', {account: props.location.state.account})
+                                props.history.push('/app/contacts-by-account', {account: props.location.state.account})
                             }
                         }
                     >
                         {({ values, handleChange, handleSubmit }) => {
-                            console.log('values: ', values);
                             return (
                             <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
                                 <FormControl component="fieldset">

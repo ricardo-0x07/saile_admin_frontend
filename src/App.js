@@ -1,40 +1,12 @@
 import React from "react";
 import clsx from 'clsx';
+import { Router, Route, browserHistory } from 'react-router'
 import {
   Paper,
-  withStyles,
   makeStyles,
-  CssBaseline,
-  Drawer,
-  Box,
-  AppBar,
-  Toolbar,
-  List,
-  Typography,
-  Divider,
-  IconButton,
-  Badge,
-  Container,
-  Grid,
-  Link,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 
 
-import { mainListItems, secondaryListItems } from './components/DashboardSideBar';
-import AppContainer from './AppContainer';
 
 import config from "./aws-exports";
 import Routes from './routes';
@@ -120,33 +92,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function App() {
+export default function App({history, store}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <AppContainer>
-      {
-        ({accounts: { account_lists_loading, account_lists_data }, sailebots: { sailebot_lists_loading, sailebot_lists_data }}) => {
-          console.log('sailebot_lists_loading: ', sailebot_lists_loading);
-          console.log('sailebot_lists_data: ', sailebot_lists_data);
-          return (
-            <div className={classes.root}>
-              <Paper className={classes.content}>
-                <Routes />
-              </Paper>
-            </div>
-          );
-        }
-      }
-    </AppContainer>
+    <div className={classes.root}>
+      <Paper className={classes.content}>
+        <Router history={history} store={store}>
+          <Routes />
+        </Router>
+      </Paper>
+    </div>
   );
 }
 

@@ -79,7 +79,6 @@ const ManageDomainForm = (props) => {
     const classes = useStyles();
 
     
-    console.log('props: ', props)
     let initialValues = {
         active: false,
         dns: '',
@@ -93,20 +92,15 @@ const ManageDomainForm = (props) => {
         smtp_password: '',
     };
     if ( props.location.state && props.location.state.domain) {
-        console.log('props.location.state: ', props.location.state)
-        console.log('initialValues: ', initialValues)
         initialValues = props.location.state.domain
     } else {
-        console.log('initialValues: ', initialValues)
         if ( props.location.state && props.location.state.sailebot && props.location.state.sailebot.id) {
-            console.log('initialValues: ', initialValues)
             initialValues = {
                 ...initialValues,
                 sailebot_id: props.location.state.sailebot.id
             };
         }
     }
-    // console.log('initialValues: ', initialValues)
     return (
         <Mutation
             mutation={props.location.state && props.location.state.domain ? updateDomain : createDomain}
@@ -129,7 +123,6 @@ const ManageDomainForm = (props) => {
                                 sailebot_id,
                                 id
                             }) => {
-                                console.log('onSubmit sailebot_id: ', sailebot_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -149,7 +142,6 @@ const ManageDomainForm = (props) => {
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -167,14 +159,12 @@ const ManageDomainForm = (props) => {
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
-                                props.history.push('/domains-by-sailebot', {sailebot: props.location.state.sailebot})
+                                props.history.push('/app/domains-by-sailebot', {sailebot: props.location.state.sailebot})
                             }
                         }
                     >
                         {({ values, handleChange, handleSubmit }) => {
-                            console.log('values: ', values);
                             return (
                             <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
                                 <FormControl component="fieldset">

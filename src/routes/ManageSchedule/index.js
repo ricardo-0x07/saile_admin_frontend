@@ -33,7 +33,7 @@ const DatePickerField = ({ field, form, ...other }) => {
         <MuiPickersUtilsProvider utils={MomentUtils}>
             <KeyboardDatePicker
                 clearable
-                disablePast
+                // disablePast
                 name={field.name}
                 value={field.value}
                 format="ddd/MMM/YYYY"
@@ -66,7 +66,6 @@ const useStyles = makeStyles(theme => ({
 
 const ManageScheduleForm = (props) => {
     const classes = useStyles();
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         daily_outbound_limit: '',
@@ -74,6 +73,7 @@ const ManageScheduleForm = (props) => {
         deploy_date:  new Date() ,
         status: '',
         timezone: '',
+        accounts_per_schedule: null
     };
     if ( props.location.state && props.location.state.schedule) {
         initialValues = props.location.state.schedule
@@ -102,10 +102,9 @@ const ManageScheduleForm = (props) => {
                                     deploy_date,
                                     status,
                                     timezone,
+                                    accounts_per_schedule,
                                     id,
                                 }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit campaign_id: ', campaign_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -117,12 +116,12 @@ const ManageScheduleForm = (props) => {
                                                 deploy_date,
                                                 status,
                                                 timezone,
+                                                accounts_per_schedule,
                                                 campaign_id,
                                             },
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -133,15 +132,15 @@ const ManageScheduleForm = (props) => {
                                                 deploy_date,
                                                 status,
                                                 timezone,
+                                                accounts_per_schedule,
                                                 campaign_id: props.location.state.campaign.id,
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
                       
                                 
-                                props.history.push('/schedules-by-campaign', {campaign: props.location.state.campaign})
+                                props.history.push('/app/schedules-by-campaign', {campaign: props.location.state.campaign})
                             }
                         }
                     >
@@ -167,8 +166,16 @@ const ManageScheduleForm = (props) => {
                                             value={values.daily_outbound_limit  || ''}
                                         />
                                         <TextField
+                                            name="accounts_per_schedule"
+                                            label="Number of Accounts/schedule" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.accounts_per_schedule  || ''}
+                                        />
+                                        <TextField
                                             name="no_targets_per_accounts"
-                                            label="No targets/accounts" 
+                                            label="Number of targets/accounts" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}

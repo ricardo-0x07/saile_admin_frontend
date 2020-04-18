@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
 
 const ManageSaileBotForm = (props) => {
     const classes = useStyles();
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         no_targets: 4,
@@ -46,7 +45,9 @@ const ManageSaileBotForm = (props) => {
         signature: '',
         firstname: '',
         lastname: '',
-    };
+        smtp_login: '',
+        smtp_password: '',
+};
     if ( props.location.state && props.location.state.sailebot) {
         initialValues = props.location.state.sailebot
     } else {
@@ -80,9 +81,9 @@ const ManageSaileBotForm = (props) => {
                                 signature,
                                 firstname,
                                 lastname,
+                                smtp_login,
+                                smtp_password,
                             }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit client_id: ', client_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -100,11 +101,12 @@ const ManageSaileBotForm = (props) => {
                                                 signature,
                                                 firstname,
                                                 lastname,
+                                                smtp_login,
+                                                smtp_password,
                                             },
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -121,10 +123,11 @@ const ManageSaileBotForm = (props) => {
                                                 signature,
                                                 firstname,
                                                 lastname,
+                                                smtp_login,
+                                                smtp_password,
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
                       
                                 
@@ -194,6 +197,22 @@ const ManageSaileBotForm = (props) => {
                                             value={values.signature === null ? '' : values.signature }
                                             rowsMax={10}
                                             aria-label="signature"
+                                        />
+                                        <TextField
+                                            name="smtp_login"
+                                            label="Gmail sailebot email address" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.smtp_login === null ? '' : values.smtp_login }
+                                        />
+                                        <TextField
+                                            name="smtp_password"
+                                            label="Gmail smtp application password" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.smtp_password === null ? '' : values.smtp_password }
                                         />
                                         <TextField
                                             name="no_targets"

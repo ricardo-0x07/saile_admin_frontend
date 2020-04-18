@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Subscription } from "react-apollo";
 import gql from "graphql-tag";
-
+import { connect } from 'react-redux';
 import { ClientCard } from "./ClientCard";
-import { listClients } from "../../graphql/queries";
+import { listClients } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,14 +20,11 @@ const useStyles = makeStyles(theme => ({
 
 const Clients = (props) => {
   const classes = useStyles();
-  console.log('props: ', props);
   return (
-    <Query
-      query={listClients(10)}
-      // variables={{ limit: 10 }}
+    <Subscription
+    subscription={listClients(10)}
     >
       {({ data, loading }) => {
-        console.log('data: ', data);
         if (
           loading ||
           !data ||
@@ -37,12 +34,11 @@ const Clients = (props) => {
           return null;
         }
 
-        console.log(data.client);
 
         return (
           <div className={classes.root}>
             <Title>Clients</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-client')}>Add Client</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-client')}>Add Client</Button>
             <div
               style={{
                 display: "grid",
@@ -59,8 +55,15 @@ const Clients = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Subscription>
   );
 };
 
-export default Clients
+// export default Clients
+
+export default connect(
+  state => ({
+    admin: state.admin,
+    routing: state.routing
+  })
+)(Clients);

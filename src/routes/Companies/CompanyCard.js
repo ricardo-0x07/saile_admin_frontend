@@ -19,9 +19,9 @@ export const CompanyCard = ({ company, history }: Props) => {
         <Typography>{address}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/manage-company', {company})}>Edit</Button>
-        <Button size="small" onClick={() => history.push('/manage-client', {company})}>Add Client</Button>
-        <Button size="small" onClick={() => history.push('/clients-by-company', {company})}>View Clients</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-company', {company})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-client', {company})}>Add Client</Button>
+        <Button size="small" onClick={() => history.push('/app/clients-by-company', {company})}>View Clients</Button>
       </CardActions>
     </Card>
   );

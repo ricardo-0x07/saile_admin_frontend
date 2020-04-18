@@ -1,1 +1,1 @@
-aws s3 sync build/ s3://sailestackfrontend-20200226141313-hostingbucket-saileui --exclude ".DS_Store/*" --cache-control "max-age=120000" --delete
+aws s3 sync build/ s3://saile-ui-hostingbucket --exclude ".DS_Store/*" --cache-control "max-age=120000" --delete

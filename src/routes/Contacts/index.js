@@ -1,11 +1,13 @@
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Subscription } from "react-apollo";
 
 import { ContactCard } from "./ContactCard";
-import { listContacts, listAccountContacts } from "../../graphql/queries";
+import { listContacts, listAccountContacts } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
+import { adopt } from 'react-adopt';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,13 +21,23 @@ const useStyles = makeStyles(theme => ({
 
 const Contacts = (props) => {
   const classes = useStyles();
-  console.log('props: ', props);
+  const Composed = adopt({
+    contactsSubscription: props.location.state && props.location.state.account && props.location.state.account.id ?
+    ({ render }) => (
+      <Subscription subscription={listAccountContacts(props.location.state.account.id)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Subscription subscription={listContacts(10) } >
+        { render }
+      </Subscription>
+    ),
+  })
   return (
-    <Query
-      query={props.location.state && props.location.state.account  && props.location.state.account ? listAccountContacts(props.location.state.account.id, 10) :  listContacts(10)}
-    >
-      {({ data, loading }) => {
-        console.log('data: ', data);
+    <Composed>
+      {({ contactsSubscription: {data, loading} }) => {
         if (
           loading ||
           !data ||
@@ -35,12 +47,10 @@ const Contacts = (props) => {
           return null;
         }
 
-        console.log(data.contact);
-
         return (
           <div className={classes.root}>
             <Title>{props.location.state && props.location.state.account  && props.location.state.account ? props.location.state.account.name : '' } Contacts</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-contact', {account: props.location.state.account})}>Add Contact</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-contact', {account: props.location.state.account})}>Add Contact</Button>
             <div
               style={{
                 display: "grid",
@@ -62,7 +72,7 @@ const Contacts = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Composed>
   );
 };
 

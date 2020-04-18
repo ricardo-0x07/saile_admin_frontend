@@ -20,7 +20,6 @@ const useStyles = makeStyles(theme => ({
 
 const ManageTemplateForm = (props) => {
     const classes = useStyles();
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         subject: '',
@@ -47,8 +46,6 @@ const ManageTemplateForm = (props) => {
                         initialValues={initialValues}
                         onSubmit={
                             async ({ name, subject, body_text, body_html_text, campaign_id, id }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit campaign_id: ', campaign_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -63,7 +60,6 @@ const ManageTemplateForm = (props) => {
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -76,11 +72,10 @@ const ManageTemplateForm = (props) => {
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
                       
                                 
-                                props.history.push('/templates-by-campaign', {campaign: props.location.state.campaign})
+                                props.history.push('/app/templates-by-campaign', {campaign: props.location.state.campaign})
                             }
                         }
                     >

@@ -15,11 +15,10 @@ interface Props {
 }
 
 export const ScheduleCard = ({ schedule,  campaign,  history }) => {
-  console.log('schedule: ', schedule)
-  console.log('campaign: ', campaign)
   
   const { name, no_targets_per_accounts, daily_outbound_limit } = schedule;
-  const accounts_per_schedule = campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
+  const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
+  // const accounts_per_schedule = campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
   const addScheduleAccounts = async (schedule, listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation) => {
     const campaign_accounts = listCampaignAccountsQuery.data && listCampaignAccountsQuery.data.campaign_account ? listCampaignAccountsQuery.data.campaign_account : []
@@ -48,8 +47,8 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
     });
 
   }
-
-  const accounts_to_add = accounts_per_schedule - schedule.schedule_accounts.length;
+  const no_schedule_accounts = schedule.schedule_accounts ? schedule.schedule_accounts.length : 0
+  const accounts_to_add = accounts_per_schedule - no_schedule_accounts;
 
   const Composed = adopt({
     createScheduleAccountMutation: ({ render }) => (
@@ -80,14 +79,19 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => history.push('/manage-schedule', {schedule})}>Edit</Button>
+              <Button size="small" onClick={() => history.push('/app/manage-schedule', {schedule})}>Edit</Button>
+              <Button size="small" onClick={() => history.push('/app/accounts-by-schedule', {schedule})}>View Schedule Accounts</Button>
               {
                 campaign && 
                 <Query query={listCampaignAccounts(campaign.id, accounts_to_add)} >
                   {(listCampaignAccountsQuery) => 
                     (
                       !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
-                      <Button size="small" onClick={() => addScheduleAccounts(schedule, listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation)}>Assign Accounts</Button>
+                      <Button size="small" onClick={() => {
+                        if (!listCampaignAccountsQuery.loading) {
+                          addScheduleAccounts(schedule, listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation)
+                        }
+                      }}>Assign Accounts</Button>
                       : null
                     )
                   }

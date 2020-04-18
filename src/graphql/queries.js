@@ -95,6 +95,8 @@ export const GET_ALL_SAILEBOTS = gql`
             signature
             firstname
             lastname
+            smtp_login
+            smtp_password
             requirements {
                 auto_reject
                 city
@@ -148,6 +150,8 @@ export const listSaileBots = (limit) => {
                 signature
                 firstname
                 lastname
+                smtp_login
+                smtp_password
                 requirements {
                     auto_reject
                     city
@@ -238,7 +242,7 @@ export const GET_ALL_CAMPAIGNS = gql`
 export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false) => {
     return gql`
     query ListCampaignAccounts {
-        campaign_account(limit:${limit}, offset: 0, where: {is_scheduled: {_eq: ${is_scheduled}}, campaign_id: {_eq: ${campaign_id}}}) {
+        campaign_account(limit:${limit}, offset: 0, where: {campaign_id: {_eq: ${campaign_id}}}) {
             account {
                     NAICS
                     city
@@ -318,6 +322,21 @@ export const listCampaigns = (limit) => {
 `;
 }
 
+export const listCampaignTemplates = (campaign_id) => {
+    return gql`
+        query ListCampaignTemplates {
+            template(where: {campaign_id: {_eq: ${campaign_id}}}) {
+                body_html_text
+                body_text
+                campaign_id
+                id
+                name
+                subject
+            }
+        }
+    `;
+}
+
 export const listTemplates = (limit) => {
     return gql`
         query ListTemplates {
@@ -346,16 +365,35 @@ export const listSchedules = (limit=10, offset=0, account_limit=10, account_offs
                 no_targets_per_accounts
                 status
                 timezone
-                schedule_accounts {
-                    id
-                    account_id
-                    schedule_id
-                }
             }
         }
     `;
 }
 
+export const listCampaignSchedules = (campaign_id) => {
+    return gql`
+    query listCampaignSchedules {
+        schedule(where: {campaign_id: {_eq: ${campaign_id}}}) {
+            campaign_id
+            date
+            daily_outbound_limit
+            created_at
+            deploy_date
+            id
+            name
+            no_targets_per_accounts
+            status
+            timezone
+            updated_at
+            schedule_accounts {
+                id
+                account_id
+                schedule_id
+            }
+      }
+    }
+  `;
+  }
 export const listAccounts = (limit=10, offset=0) => {
     return gql`
         query ListAccounts {
@@ -436,10 +474,10 @@ export const listScheduleAccounts = (schedule_id, limit=10, offset=0) => {
     `;
 }
 
-export const listAllCampaignAccounts = (campaign_id, limit=10, offset=0) => {
+export const listAllCampaignAccounts = (campaign_id) => {
     return gql`
         query ListAllCampaignAccounts {
-            campaign_account(where: {campaign_id: {_eq: ${campaign_id}}}, limit: ${limit}, offset: ${offset}) {
+            campaign_account(where: {campaign_id: {_eq: ${campaign_id}}}) {
                 account {
                     NAICS
                     city

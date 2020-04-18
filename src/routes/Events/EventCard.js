@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const EventCard = ({ event,  history }) => {
-  console.log('event: ', event);
   const {
     sender,
     to,
@@ -31,7 +30,7 @@ export const EventCard = ({ event,  history }) => {
         <Typography>{subject}</Typography>
       </CardContent>
       <CardActions>
-        {/* <Button size="small" onClick={() => history.push('/manage-event', {event})}>Edit</Button> */}
+        {/* <Button size="small" onClick={() => history.push('/app/manage-event', {event})}>Edit</Button> */}
       </CardActions>
     </Card>
   );

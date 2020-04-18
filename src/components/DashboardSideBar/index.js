@@ -24,82 +24,75 @@ import { Link as RouterLink } from 'react-router-dom';
 
 
 export default function DashboardSideBar (props) {
-    console.log('DashboardSideBar props: ', props)
     return (
         <List >
           <div>
-            {/* <ListItem button component={RouterLink} to="/companies"> 
-              <ListItemIcon>
-                <BusinessIcon style={{ color: '#43485a' }}/>
-              </ListItemIcon>
-              <ListItemText primary="Companies" />
-            </ListItem> */}
-            <ListItem button  component={RouterLink} to="/clients">
+            <ListItem button  component={RouterLink} to="/app/clients">
               <ListItemIcon>
                 <SupervisedUserCircleIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Clients" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/contacts">
-              <ListItemIcon>
-                <ContactMailIcon style={{ color: '#43485a' }}/>
-              </ListItemIcon>
-              <ListItemText primary="Contacts" />
-            </ListItem>
-            <ListItem button  component={RouterLink} to="/sailebots">
+            <ListItem button  component={RouterLink} to="/app/sailebots">
               <ListItemIcon>
                 <PeopleIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Sailebots" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/domains">
+            {/* <ListItem button  component={RouterLink} to="/app/contacts">
               <ListItemIcon>
-                <DnsIcon style={{ color: '#43485a' }}/>
+                <ContactMailIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
-              <ListItemText primary="Domains" />
+              <ListItemText primary="Contacts" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/requirements">
+            <ListItem button  component={RouterLink} to="/app/requirements">
               <ListItemIcon>
                 <SettingsApplicationsIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Requirements" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/accounts">
+            <ListItem button component={RouterLink} to="/app/domains">
+              <ListItemIcon>
+                <DnsIcon style={{ color: '#43485a' }}/>
+              </ListItemIcon>
+              <ListItemText primary="Domains" />
+            </ListItem>
+            <ListItem button  component={RouterLink} to="/app/accounts">
               <ListItemIcon>
                 <AccountTreeIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Accounts" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/campaigns">
+            <ListItem button  component={RouterLink} to="/app/campaigns">
               <ListItemIcon>
                 <LayersIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Campaigns" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/campaigns">
+            <ListItem button  component={RouterLink} to="/app/campaigns">
               <ListItemIcon>
                 <LoyaltyIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Campaigns" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/events">
+            <ListItem button  component={RouterLink} to="/app/events">
               <ListItemIcon>
                 <EventIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Events" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/schedules">
+            <ListItem button  component={RouterLink} to="/app/schedules">
               <ListItemIcon>
                 <ScheduleIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Schedules" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/templates">
+            <ListItem button  component={RouterLink} to="/app/templates">
               <ListItemIcon>
                 <ArtTrackIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Templates" />
-            </ListItem>
+            </ListItem> */}
           </div>
         </List>
     );

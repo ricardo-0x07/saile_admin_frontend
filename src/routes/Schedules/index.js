@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Query, Mutation } from "react-apollo";
+import { Query, Subscription, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 
 import { ScheduleCard } from "./ScheduleCard";
+import { listCampaignSchedules } from "../../graphql/subscription";
 import { listSchedules, listCampaignAccounts } from "../../graphql/queries";
 import { createScheduleAccount, updateCampaignAccount } from "../../graphql/mutations";
 import Title from '../../components/Title';
@@ -23,16 +24,19 @@ const useStyles = makeStyles(theme => ({
 
 const Schedules = (props) => {
   const classes = useStyles();
-  console.log('props: ', props);
-  const addScheduleAccounts = (schedule) => {
-    console.log('schedule: ', schedule);
-  }
+
 
   const accounts_per_schedule = props.location.state && props.location.state.campaign && props.location.state.campaign.accounts_per_schedule ? props.location.state.campaign.accounts_per_schedule : 100;
-
   const Composed = adopt({
-    listSchedulesQuery: ({ render }) => (
-      <Query query={listSchedules(10)} >
+    listSchedulesQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
+    ({ render }) => (
+      <Subscription subscription={listCampaignSchedules(props.location.state.campaign.id)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Query query={listSchedules(10) } >
         { render }
       </Query>
     ),
@@ -42,7 +46,6 @@ const Schedules = (props) => {
   return (
     <Composed>
       {({ listSchedulesQuery: { data, loading } }) => {
-        console.log('data: ', data);
         if (
           loading ||
           !data ||
@@ -52,12 +55,11 @@ const Schedules = (props) => {
           return null;
         }
 
-        console.log(data.schedule);
 
         return (
           <div className={classes.root}>
             <Title>Schedules</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-schedule', {campaign: props.location.state.campaign})}>Add Schedule</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-schedule', {campaign: props.location.state.campaign})}>Add Schedule</Button>
             <div
               style={{
                 display: "grid",

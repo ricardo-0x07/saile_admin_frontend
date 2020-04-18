@@ -41,7 +41,6 @@ export const Checkbox = ({ ...props }) => {
 
 const ManageClientForm = (props) => {
     const classes = useStyles();
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         address: '',
@@ -53,8 +52,7 @@ const ManageClientForm = (props) => {
         email: '',
         email_domain: '',
         is_company: false,
-        employees: '',
-        fax: '',
+        employees: 0,
         phone: '',
         revenue: '',
         state  : '',
@@ -92,14 +90,11 @@ const ManageClientForm = (props) => {
                                 email_domain,
                                 is_company,
                                 employees,
-                                fax,
                                 phone,
                                 revenue,
                                 website,
                                 company_id,
                             }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit company_id: ', company_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -116,7 +111,6 @@ const ManageClientForm = (props) => {
                                                 email_domain,
                                                 is_company,
                                                 employees,
-                                                fax,
                                                 phone,
                                                 revenue,
                                                 state,
@@ -126,7 +120,6 @@ const ManageClientForm = (props) => {
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -142,7 +135,6 @@ const ManageClientForm = (props) => {
                                                 email_domain,
                                                 is_company,
                                                 employees,
-                                                fax,
                                                 phone,
                                                 revenue,
                                                 state,
@@ -151,7 +143,6 @@ const ManageClientForm = (props) => {
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
                       
                                 
@@ -221,7 +212,7 @@ const ManageClientForm = (props) => {
                                             value={values.email || ''}
                                         />
                                         <TextField
-                                            name="email"
+                                            name="email_domain"
                                             label="Email domain" 
                                             variant="filled" 
                                             margin="normal" 
@@ -234,7 +225,7 @@ const ManageClientForm = (props) => {
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
-                                            value={values.employees || ''}
+                                            value={values.employees || 0}
                                         />
                                         <TextField
                                             name="phone"
@@ -243,14 +234,6 @@ const ManageClientForm = (props) => {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.phone || ''}
-                                        />
-                                        <TextField
-                                            name="fax"
-                                            label="Fax" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.fax || ''}
                                         />
                                         <TextField
                                             name="revenue"

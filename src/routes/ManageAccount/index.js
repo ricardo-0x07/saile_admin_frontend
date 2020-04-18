@@ -40,7 +40,6 @@ export const Checkbox = ({ ...props }) => {
 
 const ManageAccountForm = (props) => {
     const classes = useStyles();
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         address: '',
@@ -115,8 +114,6 @@ const ManageAccountForm = (props) => {
                                     campaign_id,
                                     id,
                                 }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit campaign_id: ', campaign_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -142,7 +139,6 @@ const ManageAccountForm = (props) => {
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -166,7 +162,6 @@ const ManageAccountForm = (props) => {
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
 
                                     const response2 = await createCampaignAccountMutation({
                                         variables: {
@@ -176,12 +171,11 @@ const ManageAccountForm = (props) => {
                                             }
                                         }
                                     });
-                                    console.log('createCampaignAccountMutation response2: ', response2);
 
                                 }
                       
                                 
-                                props.history.push('/accounts-by-campaign', {campaign: props.location.state.campaign})
+                                props.history.push('/app/accounts-by-campaign', {campaign: props.location.state.campaign})
                             }
                         }
                     >

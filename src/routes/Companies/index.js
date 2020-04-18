@@ -24,7 +24,6 @@ const Companies = (props) => {
       // variables={{ limit: 10 }}
     >
       {({ data, loading }) => {
-        console.log('data: ', data);
         if (
           loading ||
           !data ||
@@ -34,7 +33,6 @@ const Companies = (props) => {
           return null;
         }
 
-        console.log(data.company);
 
         return (
           <div>

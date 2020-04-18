@@ -3,22 +3,15 @@ import { CSVReader } from 'react-papaparse'
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 
+
 import { listAccounts, listScheduleAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/queries";
 import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
-
+var _ = require('lodash');
 const buttonRef = React.createRef()
 
 export default class CSVReader1 extends Component {
 
   onFileLoad = (data) => {
-    console.log('--------------------------------------------------')
-    console.log(data)
-    // this.props.getCSVData(data);
-    if (this.props.label === 'Accounts') {
-      
-    } else {
-      
-    }
     console.log('--------------------------------------------------')
   }
 
@@ -35,33 +28,42 @@ export default class CSVReader1 extends Component {
   
   getContactCSVData = async (data, createContactMutation, campaign_accounts_data) => {
 
-    console.log('data: ', data);
     let contacts = data.map(contact => {
-      // console.log('contact.data: ', contact.data);
 
       return Object.entries(this.props.contacts_csv_key_map).reduce((acc, [key, value]) => {
         acc[key] = contact.data[value];
         return acc
       }, {})
     })
-    console.log('contacts: ', contacts);
-    console.log('campaign_accounts_data: ', campaign_accounts_data);
-    const processed = campaign_accounts_data.account.reduce( ( acc, account ) => {
-      const batch = contacts.filter(contact => contact.ex_account_id === account.ex_id).map(con => {
-        con['account_id'] = account.id;
+    let processed = campaign_accounts_data.campaign_account.reduce( ( acc, account ) => {
+      const batch = contacts.filter(contact => contact.ex_account_id === account.account.ex_id).map(con => {
+        con['account_id'] = account.account.id;
         return con
       })
       return [...acc, ...batch]
     }, [])
-    console.log('processed: ', processed);
-
-
-    const contacts_response = await createContactMutation({
-      variables: {
-        objects: processed
+    processed = _.uniq(processed, 'ex_id');
+    processed = _.uniq(processed, 'ex_member_id');
+    processed = _.filter(processed, con => con.account_id !== '');
+    processed = _.filter(processed, con => con.account_id !== null);
+    processed = _.filter(processed, con => con.account_id !== undefined);
+    processed = _.filter(processed, con => con.email !== undefined);
+    processed = _.filter(processed, con => con.email !== '');
+    processed = _.filter(processed, con => con.email !== null);
+    processed = _.filter(processed, con => con.ex_id !== '');
+    processed = _.filter(processed, con => con.ex_account_id !== '');
+    const contacts_response = _.chunk(processed, 100).map(async contacts_batch => {
+      try {
+        let results = await  createContactMutation({
+          variables: {
+            objects: contacts_batch
+          }
+        });
+        return results
+      } catch (error) {
+        return {contacts_batch, error}
       }
-    });
-    console.log('contacts_response: ', contacts_response);
+    });     
   }
 
   render() {
@@ -87,8 +89,9 @@ export default class CSVReader1 extends Component {
               <CSVReader
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
-                  console.log('this.props.label: ', this.props.label);
-                  this.getContactCSVData(loaded_data, createContactMutation, data) 
+                  if (!loading) {
+                    this.getContactCSVData(loaded_data, createContactMutation, data)                     
+                  }
                 }}
                 onError={this.onError}
                 noClick

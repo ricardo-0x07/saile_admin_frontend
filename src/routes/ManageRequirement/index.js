@@ -79,7 +79,6 @@ const ManageRequirementForm = (props) => {
     const classes = useStyles();
 
     
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         auto_reject: false,
@@ -133,8 +132,6 @@ const ManageRequirementForm = (props) => {
                                 sailebot_id,
                                 id
                             }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit sailebot_id: ', sailebot_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -160,7 +157,6 @@ const ManageRequirementForm = (props) => {
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -183,20 +179,14 @@ const ManageRequirementForm = (props) => {
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
-                                props.history.push('/requirements-by-sailebot', {sailebot: props.location.state.sailebot})
+                                props.history.push('/app/requirements-by-sailebot', {sailebot: props.location.state.sailebot})
                             }
                         }
                     >
                         {({ values, handleChange, handleSubmit }) => {
-                            console.log('values: ', values);
                             return (
                             <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
-                                {/* <FormControl component="fieldset">
-                                    <FormLabel component="legend">Requirement Creation/Update</FormLabel>
-                                    <FormGroup aria-label="position" row></FormGroup>
-                                </FormControl> */}
                                 <FormControl component="fieldset">
                                     <FormLabel component="legend">Requirement Creation/Update</FormLabel>
                                     <FormGroup aria-label="position" >

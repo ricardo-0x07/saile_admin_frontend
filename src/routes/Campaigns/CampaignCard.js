@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const CampaignCard = ({ campaign,  history }) => {
-  console.log('campaign: ', campaign);
   const { name, accounts_per_schedule } = campaign;
   return (
     <Card>
@@ -21,15 +20,15 @@ export const CampaignCard = ({ campaign,  history }) => {
       </CardContent>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button size="small" onClick={() => history.push('/manage-campaign', {campaign})}>Edit</Button>
-          <Button size="small" onClick={() => history.push('/manage-template', {campaign})}>Add Template</Button>
-          <Button size="small" onClick={() => history.push('/manage-schedule', {campaign})}>Add Schedule</Button>
-          <Button size="small" onClick={() => history.push('/manage-account', {campaign})}>Add Account</Button>
+          <Button size="small" onClick={() => history.push('/app/manage-campaign', {campaign})}>Edit</Button>
+          <Button size="small" onClick={() => history.push('/app/manage-template', {campaign})}>Add Template</Button>
+          <Button size="small" onClick={() => history.push('/app/manage-schedule', {campaign})}>Add Schedule</Button>
+          <Button size="small" onClick={() => history.push('/app/manage-account', {campaign})}>Add Account</Button>
         </CardActions>
         <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button size="small" onClick={() => history.push('/templates-by-campaign', {campaign})}>View Templates</Button>
-          <Button size="small" onClick={() => history.push('/schedules-by-campaign', {campaign})}>View Schedules</Button>
-          <Button size="small" onClick={() => history.push('/accounts-by-campaign', {campaign})}>View Accounts</Button>
+          <Button size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign})}>View Templates</Button>
+          <Button size="small" onClick={() => history.push('/app/schedules-by-campaign', {campaign})}>View Schedules</Button>
+          <Button size="small" onClick={() => history.push('/app/accounts-by-campaign', {campaign})}>View Accounts</Button>
         </CardActions>
       </div>
     </Card>

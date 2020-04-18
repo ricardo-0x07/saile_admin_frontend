@@ -1,11 +1,12 @@
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Subscription } from "react-apollo";
 
 import { CampaignCard } from "./CampaignCard";
-import { listCampaigns } from "../../graphql/queries";
+import { listCampaigns, listRequirementCampaigns } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
+import { adopt } from 'react-adopt';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,14 +20,23 @@ const useStyles = makeStyles(theme => ({
 
 const Campaigns = (props) => {
   const classes = useStyles();
-  console.log('props: ', props);
+  const Composed = adopt({
+    campaignsSubscription: props.location.state && props.location.state.requirement && props.location.state.requirement.id ?
+    ({ render }) => (
+      <Subscription subscription={listRequirementCampaigns(props.location.state.requirement.id)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Subscription subscription={listCampaigns(10) } >
+        { render }
+      </Subscription>
+    ),
+  })
   return (
-    <Query
-      query={listCampaigns(10)}
-      // variables={{ limit: 10 }}
-    >
-      {({ data, loading }) => {
-        console.log('data: ', data);
+    <Composed>
+      {({ campaignsSubscription: {data, loading} }) => {
         if (
           loading ||
           !data ||
@@ -36,12 +46,11 @@ const Campaigns = (props) => {
           return null;
         }
 
-        console.log(data.campaign);
 
         return (
           <div className={classes.root}>
             <Title>{props.location.state && props.location.state.requirement ? props.location.state.requirement.name : ''} Campaigns</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-campaign', {requirement: props.location.state.requirement})}>Add Campaign</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-campaign', {requirement: props.location.state.requirement})}>Add Campaign</Button>
             <div
               style={{
                 display: "grid",
@@ -63,7 +72,7 @@ const Campaigns = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Composed>
   );
 };
 

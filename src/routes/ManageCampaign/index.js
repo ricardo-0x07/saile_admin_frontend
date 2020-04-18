@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
 
 const ManageCampaignForm = (props) => {
     const classes = useStyles();
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         description: '',
@@ -58,8 +57,6 @@ const ManageCampaignForm = (props) => {
                         initialValues={initialValues}
                         onSubmit={
                             async ({ name, description, accounts_per_schedule, requirement_id, id }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit requirement_id: ', requirement_id)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -73,7 +70,6 @@ const ManageCampaignForm = (props) => {
                                             id
                                         }
                                     });
-                                    console.log('update response: ', response);
                                 } else {
                                     const response = await mutation({
                                         variables: {
@@ -81,14 +77,14 @@ const ManageCampaignForm = (props) => {
                                                 name,
                                                 accounts_per_schedule: Number(accounts_per_schedule),
                                                 description,
+                                                requirement_id,
                                             }
                                         }
                                     });
-                                    console.log('create response: ', response);
                                 }
                       
                                 
-                                props.history.push('/campaigns-by-requirement', {requirement: props.location.state.requirement})
+                                props.history.push('/app/campaigns-by-requirement', {requirement: props.location.state.requirement})
                             }
                         }
                     >

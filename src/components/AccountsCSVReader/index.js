@@ -5,21 +5,17 @@ import { adopt } from 'react-adopt';
 
 import { listAccounts, listScheduleAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/queries";
 import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
-
+var _ = require('lodash');
 const buttonRef = React.createRef()
 
 export default class CSVReader1 extends Component {
 
   onFileLoad = (data) => {
-    console.log('--------------------------------------------------')
-    console.log(data)
-    // this.props.getCSVData(data);
     if (this.props.label === 'Accounts') {
       
     } else {
       
     }
-    console.log('--------------------------------------------------')
   }
 
   onError = (err, file, inputElem, reason) => {
@@ -35,24 +31,20 @@ export default class CSVReader1 extends Component {
   
   getAccountCSVData = async (data, createAccountMutation, createCampaignAccountMutation) => {
 
-    console.log('data: ', data);
-    const accounts = data.map(account => {
-      console.log('account.data: ', account.data);
+    let accounts = data.map(account => {
 
       return Object.entries(this.props.accounts_csv_key_map).reduce((acc, [key, value]) => {
-        console.log('key: ', key);
-        console.log('value: ', value);
         acc[key] = account.data[value];
         return acc
       }, {})
     });
-    console.log('accounts: ', accounts);
+    accounts = _.uniqBy(accounts, 'ex_id');
+    accounts = _.uniqBy(accounts, 'name');
     const accounts_response = await createAccountMutation({
       variables: {
         objects: accounts
       }
     });
-    console.log('accounts_response: ', accounts_response);
     const campaign_id = this.props.location.state.campaign.id
     const campaign_accounts_response = await createCampaignAccountMutation({
       variables: {
@@ -61,7 +53,6 @@ export default class CSVReader1 extends Component {
         })
       }
     });
-    console.log('campaign_accounts_response: ', campaign_accounts_response);
     
   }
 
@@ -89,7 +80,6 @@ export default class CSVReader1 extends Component {
               <CSVReader
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
-                  console.log('this.props.label: ', this.props.label);
                   this.getAccountCSVData(loaded_data, createAccountMutation, createCampaignAccountMutation)
                 }}
                 onError={this.onError}

@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import clsx from 'clsx';
 
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import { connect } from 'react-redux';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { Container } from 'react-bootstrap'
@@ -36,7 +37,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import { ApolloProvider} from "react-apollo";
 
 import ManageCampaign from './ManageCampaign'
 import ManageCompany from './ManageCompany'
@@ -56,12 +57,19 @@ import Clients from './Clients'
 import SaileBots from './SaileBots'
 import Domains from './Domains'
 import Accounts from './Accounts'
+import ScheduleAccounts from './ScheduleAccounts'
 import Contacts from './Contacts'
 import Events from './Events'
 import Templates from './Templates'
+import Login from './Login'
 import NotFound from '../components/NotFound'
 import DashboardSideBar from '../components/DashboardSideBar';
 import Title from '../components/Title';
+import { createClient } from '../graphql/apollo';
+import AppContainer from '../AppContainer';
+import LogoutButton from './Logout/LogoutButton';
+import * as actions from '../actions';
+import { ADMIN_SECRET_HEADER_KEY } from '../actions/types'
 
 const drawerWidth = 240;
 
@@ -145,7 +153,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function Routes() {
+function Routes(props_) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -155,31 +163,45 @@ export default function Routes() {
       setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  
-  
-    return (
-        <div className={classes.root}>
-            <BrowserRouter >
+
+    let token = sessionStorage.getItem(ADMIN_SECRET_HEADER_KEY);
+    
+    const PrivateRoute = ({ component: Component, ...rest }) => (
+        <Route
+          {...rest}
+          render={props => token // your auth mechanism goes here
+            ? <Component {...props} />
+            : <Redirect to={{ pathname: '/auth' }} />}
+        />
+    );    
+    function AuthLayout() {
+      return (
+        <div>
+          <Route path="/auth/login" exact component={Login} />
+          <Redirect from="/auth" to="/auth/login" exact />
+        </div>
+      );
+    }
+
+    const AppLayout = (propss) => {
+        return (
+            <div className={classes.root}>
                 <CssBaseline />
                 <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)} style={{ background: '#43485a' }}>
                     <Toolbar className={classes.toolbar}>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Saile.AI Dashboard
-                    </Typography>
-                    {/* <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                        <NotificationsIcon />
-                        </Badge>
-                    </IconButton> */}
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                            Saile.AI Dashboard
+                        </Typography>
+                        <LogoutButton />
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -199,188 +221,196 @@ export default function Routes() {
                 </Drawer>
                 <Paper className={classes.content}>
                     <div className={classes.appBarSpacer} />
-                        <Container style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                            {/* <Breadcrumbs aria-label="breadcrumb">
-                                <RouterLink color="inherit" to="/" >
-                                    Companies
-                                </RouterLink>
-                                <RouterLink color="inherit" to="/manage-company" >
-                                    Create Company
-                                </RouterLink>
-                            </Breadcrumbs>       */}
-
-                            <Switch >
-                                <Route
-                                    exact
-                                    path='/' 
-                                    component={Clients}
-                                />
-                                {/* <Route
-                                    exact
-                                    path='/companies' 
-                                    component={Companies}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-company' 
-                                    component={ManageCompany}
-                                /> */}
-                                <Route
-                                    exact
-                                    path='/clients' 
-                                    component={Clients}
-                                />
-                                <Route
-                                    exact
-                                    path='/accounts-by-campaign' 
-                                    component={Accounts}
-                                />
-                                <Route
-                                    exact
-                                    path='/accounts' 
-                                    component={Accounts}
-                                />
-                                <Route
-                                    exact
-                                    path='/contacts-by-account' 
-                                    component={Contacts}
-                                />
-                                <Route
-                                    exact
-                                    path='/contacts' 
-                                    component={Contacts}
-                                />
-                                <Route
-                                    exact
-                                    path='/events-by-contact' 
-                                    component={Events}
-                                />
-                                <Route
-                                    exact
-                                    path='/events' 
-                                    component={Events}
-                                />
-                                <Route
-                                    exact
-                                    path='/sailebots' 
-                                    component={SaileBots}
-                                />
-                                <Route
-                                    exact
-                                    path='/sailebots-by-client' 
-                                    component={SaileBots}
-                                />
-                                <Route
-                                    exact
-                                    path='/domains-by-sailebot' 
-                                    component={Domains}
-                                />
-                                <Route
-                                    exact
-                                    path='/domains' 
-                                    component={Domains}
-                                />
-                                {/* <Route
-                                    exact
-                                    path='/clients-by-company' 
-                                    component={Clients}
-                                />
-                                <Route
-                                    exact
-                                    path='/clients' 
-                                    component={Clients}
-                                /> */}
-                                <Route
-                                    exact
-                                    path='/requirements-by-sailebot' 
-                                    component={Requirements}
-                                />
-                                <Route
-                                    exact
-                                    path='/requirements' 
-                                    component={Requirements}
-                                />
-                                <Route
-                                    exact
-                                    path='/campaigns-by-requirement' 
-                                    component={Campaigns}
-                                />
-                                <Route
-                                    exact
-                                    path='/campaigns' 
-                                    component={Campaigns}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-client' 
-                                    component={ManageClient}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-sailebot' 
-                                    component={ManageSaileBot}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-domain' 
-                                    component={ManageDomain}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-requirement' 
-                                    component={ManageRequirement}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-campaign' 
-                                    component={ManageCampaign}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-account' 
-                                    component={ManageAccount}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-contact' 
-                                    component={ManageContact}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-schedule' 
-                                    component={ManageSchedule}
-                                />
-                                <Route
-                                    exact
-                                    path='/templates-by-campaign' 
-                                    component={Templates}
-                                />
-                                <Route
-                                    exact
-                                    path='/templates' 
-                                    component={Templates}
-                                />
-                                <Route
-                                    exact
-                                    path='/schedules-by-campaign' 
-                                    component={Schedules}
-                                />
-                                <Route
-                                    exact
-                                    path='/schedules' 
-                                    component={Schedules}
-                                />
-                                <Route
-                                    exact
-                                    path='/manage-template' 
-                                    component={ManageTemplate}
-                                />
-                                <Route component={NotFound}/>
-                                <Route path='/404' component={NotFound}/>
-                            </Switch>
-                        </Container>                
+                    <Container >
+                        <Route
+                            exact
+                            path='/app' 
+                            component={Clients}
+                        />
+                        <Route
+                            exact
+                            path='/app/clients' 
+                            component={Clients}
+                        />
+                        <Route
+                            exact
+                            path='/app/accounts-by-schedule' 
+                            component={ScheduleAccounts}
+                        />
+                        <Route
+                            exact
+                            path='/app/accounts-by-campaign' 
+                            component={Accounts}
+                        />
+                        <Route
+                            exact
+                            path='/app/accounts' 
+                            component={Accounts}
+                        />
+                        <Route
+                            exact
+                            path='/app/contacts-by-account' 
+                            component={Contacts}
+                        />
+                        <Route
+                            exact
+                            path='/app/contacts' 
+                            component={Contacts}
+                        />
+                        <Route
+                            exact
+                            path='/app/events-by-contact' 
+                            component={Events}
+                        />
+                        <Route
+                            exact
+                            path='/app/events' 
+                            component={Events}
+                        />
+                        <Route
+                            exact
+                            path='/app/sailebots' 
+                            component={SaileBots}
+                        />
+                        <Route
+                            exact
+                            path='/app/sailebots-by-client' 
+                            component={SaileBots}
+                        />
+                        <Route
+                            exact
+                            path='/app/domains-by-sailebot' 
+                            component={Domains}
+                        />
+                        <Route
+                            exact
+                            path='/app/domains' 
+                            component={Domains}
+                        />
+                        {/* <Route
+                            exact
+                            path='/app/clients-by-company' 
+                            component={Clients}
+                        />
+                        <Route
+                            exact
+                            path='/app/clients' 
+                            component={Clients}
+                        /> */}
+                        <Route
+                            exact
+                            path='/app/requirements-by-sailebot' 
+                            component={Requirements}
+                        />
+                        <Route
+                            exact
+                            path='/app/requirements' 
+                            component={Requirements}
+                        />
+                        <Route
+                            exact
+                            path='/app/campaigns-by-requirement' 
+                            component={Campaigns}
+                        />
+                        <Route
+                            exact
+                            path='/app/campaigns' 
+                            component={Campaigns}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-client' 
+                            component={ManageClient}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-sailebot' 
+                            component={ManageSaileBot}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-domain' 
+                            component={ManageDomain}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-requirement' 
+                            component={ManageRequirement}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-campaign' 
+                            component={ManageCampaign}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-account' 
+                            component={ManageAccount}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-contact' 
+                            component={ManageContact}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-schedule' 
+                            component={ManageSchedule}
+                        />
+                        <Route
+                            exact
+                            path='/app/templates-by-campaign' 
+                            component={Templates}
+                        />
+                        <Route
+                            exact
+                            path='/app/templates' 
+                            component={Templates}
+                        />
+                        <Route
+                            exact
+                            path='/app/schedules-by-campaign' 
+                            component={Schedules}
+                        />
+                        <Route
+                            exact
+                            path='/app/schedules' 
+                            component={Schedules}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-template' 
+                            component={ManageTemplate}
+                        />
+                        {/* <Route path='/app/404' component={NotFound}/> */}
+                    </Container>                
                 </Paper>
-            </BrowserRouter>
-        </div>
+            </div>
+        );
+    }  
+    function WrappedAppLayout() {
+        let token = sessionStorage.getItem(ADMIN_SECRET_HEADER_KEY);
+        const client = createClient(token)
+        return  (
+            <ApolloProvider client={client}>
+                <AppLayout client={client}/>
+            </ApolloProvider>
+        )
+    }  
+    return (
+        
+        <Paper >
+            <Route path="/auth" component={AuthLayout} />
+            <PrivateRoute path="/app" component={WrappedAppLayout} />
+            {/* <Route path="*" component={NotFound} /> */}
+        </Paper>
     );
 }
+
+export default connect(
+    state => ({
+      admin: state.admin,
+    //   routing: state.routing
+    }),
+    actions
+)(Routes);

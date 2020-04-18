@@ -35,10 +35,6 @@ const ManageTemplateForm = (props) => {
                         }}
                         onSubmit={
                             async ({ name, subject, body_text, body_html_text }) => {
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit subject: ', subject)
-                                console.log('onSubmit body_text: ', body_text)
-                                console.log('onSubmit body_html_text: ', body_html_text)
                                 const response = await createTemplate({
                                     variables: {
                                       input: {
@@ -50,7 +46,6 @@ const ManageTemplateForm = (props) => {
                                     }
                                 });
                       
-                                console.log(response);
                             }
                         }
                     >

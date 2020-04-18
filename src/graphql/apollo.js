@@ -9,61 +9,67 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import gql from 'graphql-tag';
 
 const graphqlApiUri = 'http://localhost:8080/v1/graphql';
-const graphqlSocketUri = 'ws://localhost:8080/v1/graphql';
-const hasuraReqHeaders = {
-  'content-type': 'application/json',
-  //'x-hasura-admin-secret': 'jkasvbdhbjaasdkahbsd'
-};
+const graphqlApiUri_remote = 'https://saile-graph-api.net/v1/graphql';
+const graphqlSocketUri = 'wss://saile-graph-api.net/v1/graphql';//'ws://localhost:8080/v1/graphql';
 
-const httpLink = new HttpLink({
-  uri: graphqlApiUri, 
-  headers: hasuraReqHeaders
-});
 
-const webSocketLink = new WebSocketLink(
-  new SubscriptionClient(graphqlSocketUri, {
-    reconnect: true,
-    connectionParams: { headers: hasuraReqHeaders }
-  }
-));
+export const createClient = (secret) => {
+  const hasuraReqHeaders = {
+    'content-type': 'application/json',
+    'x-hasura-admin-secret': secret
+  };
 
-const link = split(
-  ({ query }) => {
-    const { kind, operation }: Definition = getMainDefinition(query);
-    return kind === 'OperationDefinition' && operation === 'subscription';
-  },
-  webSocketLink,
-  httpLink
-);
-const typeDefs = gql`
-  extend type Query {
-    progress: Int!
-  }
+  const httpLink = new HttpLink({
+    uri: graphqlApiUri_remote, 
+    headers: hasuraReqHeaders
+  });
 
-  extend type Mutation {
-    updateProgress(progress: Int!): [Launch]
-  }
-`;
-const cache = new InMemoryCache();
-export const client = new ApolloClient({
-  link,
-  cache,
-  typeDefs,
-  resolvers: {}
-});
+  const webSocketLink = new WebSocketLink({
+    uri: graphqlSocketUri, 
+    options: {
+      reconnect: true,
+      connectionParams: { headers: hasuraReqHeaders }
+    }}
+  );
 
-cache.writeData({
-  data: {
-    progress: null,
-    progressMessage: 'Click the Aegis to initialise the app',
-    visibilityFilter: 'SHOW_ALL',
-    networkStatus: {
-      __typename: 'NetworkStatus',
-      isConnected: false,
+  const link = split(
+    ({ query }) => {
+      const { kind, operation }: Definition = getMainDefinition(query);
+      return kind === 'OperationDefinition' && operation === 'subscription';
     },
-  },
-});
+    webSocketLink,
+    httpLink
+  );
+  const typeDefs = gql`
+    extend type Query {
+      progress: Int!
+    }
 
-type Definition = { kind: string; operation?: string; };
+    extend type Mutation {
+      updateProgress(progress: Int!): [Launch]
+    }
+  `;
+  const cache = new InMemoryCache();
+  const client = new ApolloClient({
+    link,
+    cache,
+    typeDefs,
+    resolvers: {}
+  });
 
-export type Client = typeof client;
+  cache.writeData({
+    data: {
+      progress: null,
+      progressMessage: 'Click the Aegis to initialise the app',
+      visibilityFilter: 'SHOW_ALL',
+      networkStatus: {
+        __typename: 'NetworkStatus',
+        isConnected: false,
+      },
+    },
+  });
+  return client;
+}
+// type Definition = { kind: string; operation?: string; };
+
+// export type Client = typeof client;

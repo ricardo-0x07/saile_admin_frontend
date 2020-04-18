@@ -13,7 +13,6 @@ interface Props {
 }
 
 export const RequirementCard = ({ requirement,  campaign,  history }) => {
-  console.log('requirement: ', requirement);
   const {
     auto_reject,
     city,
@@ -34,7 +33,6 @@ export const RequirementCard = ({ requirement,  campaign,  history }) => {
     source,
     state,
   } = requirement;
-  console.log('launch_date: ', launch_date)
   const dateToFormat = '1976-04-19T12:59-0500';
   return (
     <Card>
@@ -45,9 +43,9 @@ export const RequirementCard = ({ requirement,  campaign,  history }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/manage-requirement', {requirement})}>Edit</Button>
-        <Button size="small" onClick={() => history.push('/manage-campaign', {requirement})}>Add Campaign</Button>
-        <Button size="small" onClick={() => history.push('/campaigns-by-requirement', {requirement})}>View Campaigns</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-requirement', {requirement})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-campaign', {requirement})}>Add Campaign</Button>
+        <Button size="small" onClick={() => history.push('/app/campaigns-by-requirement', {requirement})}>View Campaigns</Button>
       </CardActions>
     </Card>
   );

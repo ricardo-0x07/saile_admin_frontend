@@ -1,12 +1,13 @@
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Subscription } from "react-apollo";
 
 import { TemplateCard } from "./TemplateCard";
-import { listTemplates } from "../../graphql/queries";
+import { listTemplates, listCampaignTemplates } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
-
+import { adopt } from 'react-adopt';
+// import { Subscription } from "urql";
 const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
@@ -20,13 +21,23 @@ const useStyles = makeStyles(theme => ({
 
 const Templates = (props) => {
   const classes = useStyles();
-  console.log('props: ', props);
+  const Composed = adopt({
+    templatesQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
+    ({ render }) => (
+      <Subscription subscription={listCampaignTemplates(props.location.state.campaign.id)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Subscription subscription={listTemplates(10) } >
+        { render }
+      </Subscription>
+    ),
+  })
   return (
-    <Query
-      query={listTemplates(10)}
-    >
-      {({ data, loading }) => {
-        console.log('data: ', data);
+    <Composed>
+      {({ templatesQuery: { data, loading} }) => {
         if (
           loading ||
           !data ||
@@ -36,12 +47,11 @@ const Templates = (props) => {
           return null;
         }
 
-        console.log(data.template);
 
         return (
           <div className={classes.root}>
             <Title>Templates</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-template', {campaign: props.location.state.campaign})}>Add Template</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-template', {campaign: props.location.state.campaign})}>Add Template</Button>
             <div
               style={{
                 display: "grid",
@@ -64,7 +74,7 @@ const Templates = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Composed>
   );
 };
 

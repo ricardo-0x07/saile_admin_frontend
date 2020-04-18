@@ -1,26 +1,10 @@
 {
-	"hosting": {
-		"S3AndCloudFront": {
-			"service": "S3AndCloudFront",
-			"providerPlugin": "awscloudformation"
-		}
-	},
-	"api": {
-		"saileAPI": {
-			"service": "AppSync",
+	"auth": {
+		"sailestackfrontend38241172": {
+			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "API_KEY",
-						"apiKeyConfig": {
-							"description": "api_key",
-							"apiKeyExpirationDays": "65"
-						}
-					}
-				}
-			}
+			"dependsOn": [],
+			"customAuth": false
 		}
 	}
 }

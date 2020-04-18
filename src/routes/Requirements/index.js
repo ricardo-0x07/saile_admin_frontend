@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Subscription } from "react-apollo";
 
 import { RequirementCard } from "./RequirementCard";
-import { listRequirements } from "../../graphql/queries";
+import { listRequirements } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,13 +20,11 @@ const useStyles = makeStyles(theme => ({
 
 const Requirements = (props) => {
   const classes = useStyles();
-  console.log('props: ', props);
   return (
-    <Query
-      query={listRequirements(10)}
+    <Subscription
+     subscription={listRequirements(10)}
     >
       {({ data, loading }) => {
-        console.log('data: ', data);
         if (
           loading ||
           !data ||
@@ -36,12 +34,11 @@ const Requirements = (props) => {
           return null;
         }
 
-        console.log(data.requirement);
 
         return (
           <div className={classes.root}>
             <Title>{props.location.state && props.location.state.sailebot  && props.location.state.sailebot ? props.location.state.sailebot.name : '' } Requirements</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-requirement', {sailebot: props.location.state.sailebot})}>Add Requirement</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-requirement', {sailebot: props.location.state.sailebot})}>Add Requirement</Button>
             <div
               style={{
                 display: "grid",
@@ -64,7 +61,7 @@ const Requirements = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Subscription>
   );
 };
 

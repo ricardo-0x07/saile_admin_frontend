@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const DomainCard = ({ domain,  history }) => {
-  console.log('domain: ', domain);
   const {
     active,
     dns,
@@ -33,7 +32,7 @@ export const DomainCard = ({ domain,  history }) => {
         <Typography>{smtp_login}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/manage-domain', {domain})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-domain', {domain})}>Edit</Button>
       </CardActions>
     </Card>
   );

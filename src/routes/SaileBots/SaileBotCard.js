@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const SaileBotCard = ({ sailebot,  history }) => {
-  console.log('sailebot: ', sailebot);
   const {name, fullname} = sailebot;
   return (
     <Card>
@@ -19,11 +18,11 @@ export const SaileBotCard = ({ sailebot,  history }) => {
         <Typography>{fullname || name}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/manage-sailebot', {sailebot})}>Edit</Button>
-        <Button size="small" onClick={() => history.push('/manage-requirement', {sailebot})}>Add Requirement</Button>
-        <Button size="small" onClick={() => history.push('/manage-domain', {sailebot})}>Add Domain</Button>
-        <Button size="small" onClick={() => history.push('/requirements-by-sailebot', {sailebot})}>View Requirements</Button>
-        <Button size="small" onClick={() => history.push('/domains-by-sailebot', {sailebot})}>View Domains</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-sailebot', {sailebot})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-requirement', {sailebot})}>Add Requirement</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-domain', {sailebot})}>Add Domain</Button>
+        <Button size="small" onClick={() => history.push('/app/requirements-by-sailebot', {sailebot})}>View Requirements</Button>
+        <Button size="small" onClick={() => history.push('/app/domains-by-sailebot', {sailebot})}>View Domains</Button>
       </CardActions>
     </Card>
   );

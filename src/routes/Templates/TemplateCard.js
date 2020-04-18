@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const TemplateCard = ({ template,  history }) => {
-  console.log('template: ', template);
   const { name, subject } = template;
   return (
     <Card>
@@ -20,7 +19,7 @@ export const TemplateCard = ({ template,  history }) => {
         <Typography>{subject}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/manage-template', {template})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-template', {template})}>Edit</Button>
       </CardActions>
     </Card>
   );

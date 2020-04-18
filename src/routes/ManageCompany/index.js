@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
 
 const ManageCompanyForm = (props) => {
     const classes = useStyles();
-    console.log('props: ', props)
     let initialValues = {
         name: '',
         address: '',
@@ -53,11 +52,6 @@ const ManageCompanyForm = (props) => {
                         initialValues={initialValues}
                         onSubmit={
                             async ({ name, address, email, website, id }) => {
-                                console.log('onSubmit id: ', id)
-                                console.log('onSubmit name: ', name)
-                                console.log('onSubmit address: ', address)
-                                console.log('onSubmit email: ', email)
-                                console.log('onSubmit website: ', website)
                                 if (id) {
                                     const response = await mutation({
                                         variables: {
@@ -71,7 +65,6 @@ const ManageCompanyForm = (props) => {
                                             id
                                         }
                                     });  
-                                    console.log(response);  
                                     
                                 } else {
                                     const response = await mutation({
@@ -84,7 +77,6 @@ const ManageCompanyForm = (props) => {
                                             }
                                         }
                                     });  
-                                    console.log(response);  
                                 }
                                 props.history.push('/')
                             }

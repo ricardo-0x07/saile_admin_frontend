@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const ClientCard = ({ client,  history }: Props) => {
-  console.log('client: ', client);
   const {name} = client;
   return (
     <Card>
@@ -19,9 +18,9 @@ export const ClientCard = ({ client,  history }: Props) => {
         <Typography>{name}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/manage-client', {client})}>Edit</Button>
-        <Button size="small" onClick={() => history.push('/manage-sailebot', {client})}>Add SaileBot</Button>
-        <Button size="small" onClick={() => history.push('/sailebots-by-client', {client})}>View SaileBots</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-client', {client})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-sailebot', {client})}>Add SaileBot</Button>
+        <Button size="small" onClick={() => history.push('/app/sailebots-by-client', {client})}>View SaileBots</Button>
       </CardActions>
     </Card>
   );

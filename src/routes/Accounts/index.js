@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Query, Mutation } from "react-apollo";
+import { Subscription, Mutation } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
 import AccountsCSVReader from '../../components/AccountsCSVReader';
@@ -7,7 +7,7 @@ import ContactsCSVReader from '../../components/ContactsCSVReader';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import { listAccounts, listScheduleAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/queries";
+import { listAccounts, listScheduleAccounts, listCampaignAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/subscription";
 import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
 
 
@@ -25,8 +25,6 @@ const Accounts = (props) => {
   const accounts_csv_key_map = {
     name: 'Account: Account Name',
     address: 'Account: Billing Street',
-    domain: '',
-    email: '',
     employees: 'Account: Employees',
     phone: 'Account: Main Phone',
     revenue: 'Account: Revenue ($mil)',
@@ -36,7 +34,6 @@ const Accounts = (props) => {
     NAICS: 'Account: Primary US NAICS Code',
     city: 'Account: Billing City',
     country: 'Account: Billing Country',
-    is_scheduled: '',
     ex_id: 'Account: Account ID',
   };
 
@@ -51,7 +48,7 @@ const Accounts = (props) => {
     member_status: 'Member Status',
     phone: '',
     position: '',
-    role: '',
+    role: 'Role',
     sam_status: '',
     source: '',
     title: 'Title',
@@ -64,27 +61,23 @@ const Accounts = (props) => {
     country: 'Billing Country',
   };
 
-  console.log('props: ', props);
-  console.log('props.location.state: ', props.location.state);
   const Composed = adopt({
     accountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
-      <Query query={listAllCampaignAccounts(props.location.state.campaign.id)} >
+      <Subscription subscription={listCampaignAccounts(props.location.state.campaign.id, 100)} >
         { render }
-      </Query>
+      </Subscription>
     )
     :
     ({ render }) => (
-      <Query query={listAccounts(10) } >
+      <Subscription subscription={listAccounts(10) } >
         { render }
-      </Query>
+      </Subscription>
     ),
   })
   return (
     <Composed>
       {({ accountsQuery: { data, loading } }) => {
-        console.log('data: ', data);
-        console.log('loading: ', loading);
         if (
           loading ||
           !data ||
@@ -93,12 +86,10 @@ const Accounts = (props) => {
           return null;
         }
 
-        console.log('loading: ', loading);
-
         return (
           <div className={classes.root}>
             <Title>{props.location.state && props.location.state.campaign  && props.location.state.campaign ? props.location.state.campaign.name : '' } Accounts</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/manage-account', {campaign: props.location.state.campaign})}>Add Account</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-account', {campaign: props.location.state.campaign})}>Add Account</Button>
             {
               props.location.state && props.location.state.campaign && props.location.state.campaign.id && 
               <>
