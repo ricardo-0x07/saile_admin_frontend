@@ -10,11 +10,6 @@ import {
     FormGroup,
     FormControlLabel,
 } from '@material-ui/core';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
 import MuiCheckbox from "@material-ui/core/Checkbox";
 import { Mutation } from "react-apollo";
 import { createContact, updateContact } from "../../graphql/mutations";

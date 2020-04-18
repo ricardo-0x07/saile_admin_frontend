@@ -7,11 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import Moment from 'react-moment';
 
 
-interface Props {
-  name: string;
-  address: string;
-}
-
 export const RequirementCard = ({ requirement,  campaign,  history }) => {
   const {
     launch_date,

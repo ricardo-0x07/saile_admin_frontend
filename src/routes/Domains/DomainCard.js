@@ -5,24 +5,12 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-interface Props {
-  name: string;
-  address: string;
-}
 
 export const DomainCard = ({ domain,  history }) => {
   const {
-    active,
-    dns,
-    host,
-    id,
-    ip,
     name,
     provider,
-    sailebot_id,
-    smtp,
     smtp_login,
-    smtp_password,
   } = domain;
   return (
     <Card>

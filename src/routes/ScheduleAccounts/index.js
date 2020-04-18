@@ -1,14 +1,10 @@
 import * as React from "react";
-import { Subscription, Mutation } from "react-apollo";
+import { Subscription } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
-import AccountsCSVReader from '../../components/AccountsCSVReader';
-import ContactsCSVReader from '../../components/ContactsCSVReader';
-import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import { listAccounts, listScheduleAccounts, listCampaignAccounts, listAllCampaignAccounts, getAccountByExtrenalId, get_accounts_by_campaign_id } from "../../graphql/subscription";
-import { createAccount, createCampaignAccount, updateAccount, createContact, updateContact, } from "../../graphql/mutations";
+import { listAccounts, listScheduleAccounts } from "../../graphql/subscription";
 
 
 
@@ -22,47 +18,6 @@ const useStyles = makeStyles(theme => ({
 
 const Accounts = (props) => {
   const classes = useStyles();
-  const accounts_csv_key_map = {
-    name: 'Account: Account Name',
-    address: 'Account: Billing Street',
-    domain: '',
-    email: '',
-    employees: 'Account: Employees',
-    phone: 'Account: Main Phone',
-    revenue: 'Account: Revenue ($mil)',
-    state  : 'Account: Billing State/Province',
-    website  : 'Account: Website',
-    email_domain: 'Account: Email Domain',
-    NAICS: 'Account: Primary US NAICS Code',
-    city: 'Account: Billing City',
-    country: 'Account: Billing Country',
-    is_scheduled: '',
-    ex_id: 'Account: Account ID',
-  };
-
-  const contacts_csv_key_map = {
-    bounce_type: '',
-    email: 'Email',
-    firstname: 'First Name',
-    gender: 'Gender',
-    is_ema_eligible: 'EMA Eligible?',
-    is_eva_eligible: 'EVA Eligible?',
-    lastname: 'Last Name',
-    member_status: 'Member Status',
-    phone: '',
-    position: '',
-    role: '',
-    sam_status: '',
-    source: '',
-    title: 'Title',
-    ex_id: 'Contact ID',
-    ex_account_id: 'Account ID',
-    ex_member_id: 'Member ID',
-    linkedin: 'LinkedIn URL',
-    city: 'Billing City',
-    state: 'Billing State/Province',
-    country: 'Billing Country',
-  };
 
   const Composed = adopt({
     accountsScubsciption: props.location.state && props.location.state.schedule && props.location.state.schedule.id ?
