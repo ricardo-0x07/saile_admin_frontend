@@ -18,8 +18,8 @@ build:
   stage: build
   script:
     - npm -g install npm --silent
-    - npm install
-    - npm run-script build
+    - yarn
+    - yarn build
 test:
   stage: test
   script:
@@ -28,10 +28,10 @@ deploy:
   stage: deploy
   script:
     - npm -g install npm --silent
-    - npm install
-    - npm run-script build
+    - yarn
+    - yarn build
     - apt-get update
     - apt-get -y install python
     - apt-get install -y python-pip
     - pip install awscli
-    - npm run-script deploy
+    - yarn deploy
