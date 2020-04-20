@@ -162,7 +162,7 @@ function Routes() {
       );
     }
 
-    const AppLayout = (propss) => {
+    const AppLayout = () => {
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -386,7 +386,7 @@ function Routes() {
             {/* Confirmation */}
             <Route path="/auth" component={AuthLayout} />
             <PrivateRoute path="/app" component={WrappedAppLayout} />
-            <Redirect from="/" to="/app" exact />
+            {/* <Redirect from="/" to="/app" exact /> */}
             {/* <Route path="*" component={NotFound} /> */}
         </Paper>
     );

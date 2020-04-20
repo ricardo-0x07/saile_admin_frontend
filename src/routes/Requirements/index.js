@@ -50,7 +50,7 @@ const Requirements = (props) => {
               {
                 props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
                 data.requirement.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
-                  <RequirementCard requirement={x} name={x.name} key={x.id} history={props.history}/>
+                  <RequirementCard requirement={x} name={x.name} key={x.id} history={props.history} sailebot={props.location.state.sailebot}/>
                 ))
                 :
                 data.requirement.filter(item => item ).map(x => (

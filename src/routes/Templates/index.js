@@ -63,7 +63,7 @@ const Templates = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 data.template.filter(item => item.campaign_id === props.location.state.campaign.id ).map(x => (
-                  <TemplateCard template={x} name={x.name} key={x.id} history={props.history}/>
+                  <TemplateCard template={x} name={x.name} key={x.id} history={props.history} campaign={props.location.state.campaign}/>
                 ))
                 :
                 data.template.filter(item => item ).map(x => (

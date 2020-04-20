@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 
-export const AccountCard = ({ account,  campaign,  history }) => {
+export const AccountCard = ({ account,  schedule,  history }) => {
   const { name, address, email } = account;
   return (
     <Card>
@@ -16,7 +16,7 @@ export const AccountCard = ({ account,  campaign,  history }) => {
         <Typography>{email}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/app/manage-account', {account})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-account', {account, schedule})}>Edit</Button>
         <Button size="small" onClick={() => history.push('/app/manage-contact', {account})}>Add Contact</Button>
         <Button size="small" onClick={() => history.push('/app/contacts-by-account', {account})}>View Contacts</Button>
       </CardActions>

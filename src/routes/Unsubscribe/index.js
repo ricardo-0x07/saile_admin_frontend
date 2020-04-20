@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Unscubscribe(props) {
   const classes = useStyles();
-  console.log('props: ', props);
+  // console.log('props: ', props);
+  // props.history.push(props.match.url)
   const { company, contactEmail, contactId, token } = props.match.params
   const jwt_client = createJWTClient(token)
   const id = Number(contactId)
@@ -55,8 +56,8 @@ export default function Unscubscribe(props) {
     <ApolloProvider client={jwt_client}>
       <Composed>
         {({ contactQuery: {data, loading}, contactMutation }) => {
-          if (!loading) {
-          }
+          console.log('loading: ', loading);
+          console.log('data: ', data);
           return (
             <Container component="main" maxWidth="md" style={{ height: '100vh' }}>
               <CssBaseline />

@@ -168,8 +168,12 @@ const ManageAccountForm = (props) => {
 
                                 }
                       
+                                if (props.location.state.campaign) {
+                                    props.history.push('/app/accounts-by-campaign', {campaign: props.location.state.campaign})
+                                } else if (props.location.state.schedule) {
+                                    props.history.push('/app/accounts-by-schedule', {schedule: props.location.state.schedule})
+                                }
                                 
-                                props.history.push('/app/accounts-by-campaign', {campaign: props.location.state.campaign})
                             }
                         }
                     >

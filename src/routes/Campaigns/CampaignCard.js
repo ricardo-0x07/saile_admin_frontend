@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 
-export const CampaignCard = ({ campaign,  history }) => {
+export const CampaignCard = ({ campaign, requirement,  history }) => {
   const { name, accounts_per_schedule } = campaign;
   return (
     <Card>
@@ -16,7 +16,7 @@ export const CampaignCard = ({ campaign,  history }) => {
       </CardContent>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button size="small" onClick={() => history.push('/app/manage-campaign', {campaign})}>Edit</Button>
+          <Button size="small" onClick={() => history.push('/app/manage-campaign', {campaign, requirement})}>Edit</Button>
           <Button size="small" onClick={() => history.push('/app/manage-template', {campaign})}>Add Template</Button>
           <Button size="small" onClick={() => history.push('/app/manage-schedule', {campaign})}>Add Schedule</Button>
           <Button size="small" onClick={() => history.push('/app/manage-account', {campaign})}>Add Account</Button>

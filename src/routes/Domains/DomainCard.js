@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 
-export const DomainCard = ({ domain,  history }) => {
+export const DomainCard = ({ domain, sailebot,  history }) => {
   const {
     name,
     provider,
@@ -20,7 +20,7 @@ export const DomainCard = ({ domain,  history }) => {
         <Typography>{smtp_login}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/app/manage-domain', {domain})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-domain', {domain, sailebot})}>Edit</Button>
       </CardActions>
     </Card>
   );

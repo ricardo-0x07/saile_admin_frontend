@@ -59,7 +59,7 @@ const Accounts = (props) => {
               {
                 props.location.state && props.location.state.schedule  && props.location.state.schedule ?
                 data.schedule_account.map(x => (
-                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history}/>
+                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history} schedule={props.location.state.schedule}/>
                 ))
                 :
                 data.account.filter(item => item ).map(x => (

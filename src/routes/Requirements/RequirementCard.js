@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Moment from 'react-moment';
 
 
-export const RequirementCard = ({ requirement,  campaign,  history }) => {
+export const RequirementCard = ({ requirement,  campaign, sailebot,  history }) => {
   const {
     launch_date,
     name,
@@ -21,7 +21,7 @@ export const RequirementCard = ({ requirement,  campaign,  history }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/app/manage-requirement', {requirement})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-requirement', {requirement, sailebot})}>Edit</Button>
         <Button size="small" onClick={() => history.push('/app/manage-campaign', {requirement})}>Add Campaign</Button>
         <Button size="small" onClick={() => history.push('/app/campaigns-by-requirement', {requirement})}>View Campaigns</Button>
       </CardActions>

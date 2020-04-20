@@ -48,7 +48,7 @@ const Domains = (props) => {
               {
                 props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
                 data.domain.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
-                  <DomainCard domain={x} name={x.name} key={x.id} history={props.history}/>
+                  <DomainCard domain={x} name={x.name} key={x.id} history={props.history} sailebot={props.location.state.sailebot}/>
                 ))
                 :
                 data.domain.filter(item => item ).map(x => (

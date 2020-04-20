@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 
-export const TemplateCard = ({ template,  history }) => {
+export const TemplateCard = ({ template, campaign,  history }) => {
   const { name, subject } = template;
   return (
     <Card>
@@ -15,7 +15,7 @@ export const TemplateCard = ({ template,  history }) => {
         <Typography>{subject}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/app/manage-template', {template})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-template', {template, campaign})}>Edit</Button>
       </CardActions>
     </Card>
   );

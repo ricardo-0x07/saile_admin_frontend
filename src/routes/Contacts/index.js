@@ -61,7 +61,7 @@ const Contacts = (props) => {
               {
                 props.location.state && props.location.state.account  && props.location.state.account ?
                 data.contact.filter(item => item.account_id === props.location.state.account.id ).map(x => (
-                  <ContactCard contact={x} name={x.name} key={x.id} history={props.history}/>
+                  <ContactCard contact={x} name={x.name} key={x.id} history={props.history} account={props.location.state.account}/>
                 ))
                 :
                 data.contact.filter(item => item ).map(x => (

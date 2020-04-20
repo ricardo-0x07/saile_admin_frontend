@@ -16,7 +16,7 @@ export const AccountCard = ({ account,  campaign,  history }) => {
         <Typography>{email}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/app/manage-account', {account})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-account', {account, campaign})}>Edit</Button>
         <Button size="small" onClick={() => history.push('/app/manage-contact', {account})}>Add Contact</Button>
         <Button size="small" onClick={() => history.push('/app/contacts-by-account', {account})}>View Contacts</Button>
       </CardActions>

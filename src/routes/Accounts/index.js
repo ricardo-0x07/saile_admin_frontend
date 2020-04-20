@@ -106,7 +106,7 @@ const Accounts = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 data.campaign_account.map(x => (
-                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history}/>
+                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history} campaign={props.location.state.campaign} />
                 ))
                 :
                 data.account.filter(item => item ).map(x => (

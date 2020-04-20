@@ -47,7 +47,7 @@ const Events = (props) => {
               {
                 props.location.state && props.location.state.contact  && props.location.state.contact ?
                 data.event.filter(item => item.contact_id === props.location.state.contact.id ).map(x => (
-                  <EventCard event={x} name={x.name} key={x.id} history={props.history}/>
+                  <EventCard event={x} name={x.name} key={x.id} history={props.history} contact={props.location.state.contact}/>
                 ))
                 :
                 data.event.filter(item => item ).map(x => (

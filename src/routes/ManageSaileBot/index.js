@@ -125,7 +125,7 @@ const ManageSaileBotForm = (props) => {
                                 }
                       
                                 
-                                props.history.push('/')
+                                props.history.push('/app/sailebots-by-client', {client: props.location.state.client})
                             }
                         }
                     >

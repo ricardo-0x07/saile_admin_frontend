@@ -50,7 +50,7 @@ const SaileBots = (props) => {
               {
                 props.location.state && props.location.state.client  && props.location.state.client ?
                 data.sailebot.filter(item => item.client_id === props.location.state.client.id ).map(x => (
-                  <SaileBotCard sailebot={x} name={x.name} key={x.id} history={props.history}/>
+                  <SaileBotCard sailebot={x} name={x.name} key={x.id} history={props.history} client={props.location.state.client}/>
                 ))
                 :
                 data.sailebot.filter(item => item ).map(x => (

@@ -75,7 +75,7 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => history.push('/app/manage-schedule', {schedule})}>Edit</Button>
+              <Button size="small" onClick={() => history.push('/app/manage-schedule', {schedule, campaign})}>Edit</Button>
               <Button size="small" onClick={() => history.push('/app/accounts-by-schedule', {schedule})}>View Schedule Accounts</Button>
               {
                 campaign && 
