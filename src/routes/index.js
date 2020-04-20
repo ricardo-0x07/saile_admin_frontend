@@ -40,10 +40,15 @@ import Events from './Events'
 import Templates from './Templates'
 import Login from './Login'
 import DashboardSideBar from '../components/DashboardSideBar';
-import { createClient } from '../graphql/apollo';
+import { createClient,  } from '../graphql/apollo';
 import LogoutButton from './Logout/LogoutButton';
 import * as actions from '../actions';
 import { ADMIN_SECRET_HEADER_KEY } from '../actions/types'
+// import NotFound from '../components/NotFound';
+import Unsubscribe from './Unsubscribe';
+import Confirmation from './Unsubscribe/confirmation';
+import { Link } from 'react-router-dom';
+
 
 const drawerWidth = 240;
 
@@ -175,6 +180,7 @@ function Routes() {
                         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                             Saile.AI Dashboard
                         </Typography>
+                        <Link to={`/unsubscribe/saile.ai/clivercadogan@gmail.com/${41046}/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsiYW5vbnltb3VzIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6ImFub255bW91cyJ9fQ.yWVXeBrOfRVsBnAmMiieQ3fFlASac9gZyET9gWSl9Eo`}>Unscribscribe</Link>
                         <LogoutButton />
                     </Toolbar>
                 </AppBar>
@@ -374,8 +380,12 @@ function Routes() {
     return (
         
         <Paper >
+            <Route path={`/unsubscribe/:company/:contactEmail/:contactId/:token`} component={Unsubscribe} />
+            <Route path={`/confirm-unsubscription`} component={Confirmation} />
+            {/* Confirmation */}
             <Route path="/auth" component={AuthLayout} />
             <PrivateRoute path="/app" component={WrappedAppLayout} />
+            <Redirect from="/" to="/app" exact />
             {/* <Route path="*" component={NotFound} /> */}
         </Paper>
     );

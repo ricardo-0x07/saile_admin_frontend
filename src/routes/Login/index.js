@@ -6,7 +6,7 @@ import { verifyLogin } from '../../actions';
 import * as actions from '../../actions';
 
 const styles = require('./Login.scss');
-const hasuraLogo = require('./Sailebot.png');
+const logo = require('./Sailebot.png');
 
 const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
   // request state
@@ -166,7 +166,7 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
         >
           <Helmet title={'Login | Hasura'} />
           <div style={{ width: '100%', height: 'auto', paddingBottom: '20px', display: 'flex', alignItemsm:'center', flexDirection:'column'}}>
-            <img alt='logo' src={hasuraLogo} style={{ width: '100px', height: 'auto' }}/>
+            <img alt='logo' src={logo} style={{ width: '100px', height: 'auto' }}/>
             <h2>Admin</h2>
           </div>
           <div

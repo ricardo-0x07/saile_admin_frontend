@@ -150,7 +150,13 @@ export const createContact = gql`
 export const updateContact = gql`
   mutation UpdateContact($objects: contact_set_input!, $id: Int) {
     update_contact(where: {id: {_eq: $id}}, _set: $objects) {
-      affected_rows
+      returning {
+        email
+        firstname
+        lastname
+        id
+        unsubscribed
+      }
     }
   }
 `;

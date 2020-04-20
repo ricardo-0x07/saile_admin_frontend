@@ -67,6 +67,64 @@ export const createClient = (secret) => {
   });
   return client;
 }
+
+export const createJWTClient = (token) => {
+  const hasuraReqHeaders = {
+    'content-type': 'application/json',
+    'authorization': token ? `Bearer ${token}` : ""
+  };
+
+  const httpLink = new HttpLink({
+    uri: graphqlApiUri_remote, 
+    headers: hasuraReqHeaders
+  });
+
+  const webSocketLink = new WebSocketLink({
+    uri: graphqlSocketUri, 
+    options: {
+      reconnect: true,
+      connectionParams: { headers: hasuraReqHeaders }
+    }}
+  );
+
+  const link = split(
+    ({ query }) => {
+      const { kind, operation } = getMainDefinition(query);
+      return kind === 'OperationDefinition' && operation === 'subscription';
+    },
+    webSocketLink,
+    httpLink
+  );
+  const typeDefs = gql`
+    extend type Query {
+      progress: Int!
+    }
+
+    extend type Mutation {
+      updateProgress(progress: Int!): [Launch]
+    }
+  `;
+  const cache = new InMemoryCache();
+  const client = new ApolloClient({
+    link,
+    cache,
+    typeDefs,
+    resolvers: {}
+  });
+
+  cache.writeData({
+    data: {
+      progress: null,
+      progressMessage: 'Click the Aegis to initialise the app',
+      visibilityFilter: 'SHOW_ALL',
+      networkStatus: {
+        __typename: 'NetworkStatus',
+        isConnected: false,
+      },
+    },
+  });
+  return client;
+}
 // type Definition = { kind: string; operation?: string; };
 
 // export type Client = typeof client;

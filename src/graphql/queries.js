@@ -545,6 +545,35 @@ export const listContacts = (limit=10, offset=0, event_limit=10, event_offset=0)
     `;
 }
 
+export const getContactById = (id) => {
+    return gql`
+        query GetContactById {
+            contact(where: {id: {_eq: ${id}}}) {
+                account_id
+                bounce_type
+                email
+                first_outbound_done
+                firstname
+                gender
+                id
+                is_ema_eligible
+                is_eva_eligible
+                is_referral
+                lastname
+                member_status
+                phone
+                position
+                role
+                sam_status
+                second_outbound_done
+                source
+                title
+                to_followup
+            }
+        }
+    `;
+}
+
 export const listAccountContacts = (account_id, limit=10, offset=0, event_limit=10, event_offset=0) => {
     return gql`
         query ListAccountContacts {
