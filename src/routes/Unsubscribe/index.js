@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Unscubscribe(props) {
   const classes = useStyles();
-  // console.log('props: ', props);
+  console.log('props: ', props);
   // props.history.push(props.match.url)
   const { company, contactEmail, contactId, token } = props.match.params
   const jwt_client = createJWTClient(token)

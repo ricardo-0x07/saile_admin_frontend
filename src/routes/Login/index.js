@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { verifyLogin } from '../../actions';
 import * as actions from '../../actions';
 
+import background from './SS.png';
 const styles = require('./Login.scss');
 const logo = require('./Sailebot.png');
 
@@ -78,7 +79,7 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
     };
 
     return (
-      <form className="form-horizontal" onSubmit={onSubmit}>
+      <form className="form-horizontal" onSubmit={onSubmit} >
         <div
             className={styles.input_addon_group + ' ' + styles.padd_top}
         >
@@ -156,6 +157,8 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
   return (
     <div
         className={styles.mainWrapper + ' container-fluid'}
+        // style={{ backgroundImage: `url(${require("./SS.png")})`}}
+        style={{ backgroundImage: `url(${background})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}
     >
       <div
         className={styles.container + ' containerx'}
@@ -166,8 +169,8 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
         >
           <Helmet title={'Login | Hasura'} />
           <div style={{ width: '100%', height: 'auto', paddingBottom: '20px', display: 'flex', alignItemsm:'center', flexDirection:'column'}}>
-            <img alt='logo' src={logo} style={{ width: '100px', height: 'auto' }}/>
-            <h2>Admin</h2>
+            {/* <img alt='logo' src={logo} style={{ width: '100px', height: 'auto' }}/>
+            <h2>Admin</h2> */}
           </div>
           <div
             className={styles.loginWrapper}

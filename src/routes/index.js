@@ -58,6 +58,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
+    backgroundColor: '#1a45b3'
   },
   toolbarIcon: {
     display: 'flex',
@@ -178,7 +179,7 @@ function Routes() {
                             <MenuIcon />
                         </IconButton>
                         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                            Saile.AI Dashboard
+                            Sailestack
                         </Typography>
                         {/* Testing unscubsciption */}
                         {/* <Link to={`/unsubscribe/saile.ai/clivercadogan@gmail.com/${41046}/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsiYW5vbnltb3VzIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6ImFub255bW91cyJ9fQ.yWVXeBrOfRVsBnAmMiieQ3fFlASac9gZyET9gWSl9Eo`}>Unscribscribe</Link> */}
@@ -381,12 +382,12 @@ function Routes() {
     return (
         
         <Paper >
-            <Route path={`/unsubscribe/:company/:contactEmail/:contactId/:token`} component={Unsubscribe} />
-            <Route path={`/confirm-unsubscription`} component={Confirmation} />
+            <Route exact path={`/unsubscribe/:company/:contactEmail/:contactId/:token`} component={Unsubscribe} />
+            <Route exact path={`/confirm-unsubscription`} component={Confirmation} />
             {/* Confirmation */}
             <Route path="/auth" component={AuthLayout} />
             <PrivateRoute path="/app" component={WrappedAppLayout} />
-            {/* <Redirect from="/" to="/app" exact /> */}
+            <Redirect from="*" to="/app" />
             {/* <Route path="*" component={NotFound} /> */}
         </Paper>
     );
