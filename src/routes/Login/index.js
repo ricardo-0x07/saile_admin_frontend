@@ -7,7 +7,7 @@ import * as actions from '../../actions';
 
 import background from './SS.png';
 const styles = require('./Login.scss');
-const logo = require('./Sailebot.png');
+// const logo = require('./Sailebot.png');
 
 const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
   // request state
