@@ -167,7 +167,7 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
         <div
             className={styles.loginCenter}
         >
-          <Helmet title={'Login | Hasura'} />
+          <Helmet title={'Login | Sailestack'} />
           <div style={{ width: '100%', height: 'auto', paddingBottom: '20px', display: 'flex', alignItemsm:'center', flexDirection:'column'}}>
             {/* <img alt='logo' src={logo} style={{ width: '100px', height: 'auto' }}/>
             <h2>Admin</h2> */}
