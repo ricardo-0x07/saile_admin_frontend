@@ -135,7 +135,7 @@ const ManageClientForm = (props) => {
                                 }
                       
                                 
-                                props.history.push('/')
+                                props.history.push('/app')
                             }
                         }
                     >

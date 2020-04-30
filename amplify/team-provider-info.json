@@ -10,11 +10,6 @@
             "StackName": "amplify-sailestackfrontend-dev-21226",
             "StackId": "arn:aws:cloudformation:us-west-2:555490171138:stack/amplify-sailestackfrontend-dev-21226/16e59460-7ee0-11ea-9566-0a021606f2c4",
             "AmplifyAppId": "d180xfy052btog"
-        },
-        "categories": {
-            "auth": {
-                "sailestackfrontend38241172": {}
-            }
         }
     }
 }

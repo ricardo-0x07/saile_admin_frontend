@@ -113,6 +113,32 @@ export const GET_ALL_SAILEBOTS = gql`
         }
     }
 `;
+
+
+export const listClientSaileBots = (client_id) => {
+    return gql`
+        subscription ListClientSaileBots {
+            sailebot(where: {client_id: {_eq: ${client_id}}}) {
+                client_id
+                email
+                fullname
+                id
+                name
+                no_targets
+                phone
+                title
+                role
+                company_name
+                signature
+                firstname
+                lastname
+                smtp_login
+                smtp_password
+            }
+        }
+    `;
+}
+
 export const listSaileBots = (limit) => {
     return gql`
         subscription ListSaileBots {
@@ -132,39 +158,6 @@ export const listSaileBots = (limit) => {
                 lastname
                 smtp_login
                 smtp_password
-                requirements {
-                    auto_reject
-                    city
-                    contract_no
-                    elasticity
-                    function
-                    geography
-                    id
-                    is_duplicate
-                    launch_date
-                    ldr_notes
-                    level
-                    max_hits_per_contact
-                    name
-                    priority
-                    sailebot_id
-                    size
-                    source
-                    state
-                }
-                domains {
-                    active
-                    dns
-                    host
-                    id
-                    ip
-                    name
-                    provider
-                    sailebot_id
-                    smtp
-                    smtp_login
-                    smtp_password
-                }
             }
         }
     `;
@@ -639,6 +632,110 @@ export const listAccountContacts = (account_id, limit=10, offset=0, event_limit=
                     subject
                     contact_id
                     to
+                }
+            }
+        }
+    `;
+}
+
+export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
+    return gql`
+        subscription SailebotEventCountByLabel {
+            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}}}}}, label: {_eq: "${label_query}"}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+export const clientEventCountByLabel = (client_id, label_query) => {
+    return gql`
+        subscription ClientEventCountByLabel {
+            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}}}}, label: {_eq: "${label_query}"}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+export const sailebotEventCount = (sailebot_id) => {
+    return gql`
+        subscription ClientEventCount {
+            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}}}}}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+export const clientEventCount = (client_id) => {
+    return gql`
+        subscription SailebotEventCount {
+            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}}}}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
                 }
             }
         }

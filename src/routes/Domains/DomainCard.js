@@ -4,9 +4,18 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 export const DomainCard = ({ domain, sailebot,  history }) => {
+  const classes = useStyles();
   const {
     name,
     provider,
@@ -19,8 +28,8 @@ export const DomainCard = ({ domain, sailebot,  history }) => {
         <Typography>{provider}</Typography>
         <Typography>{smtp_login}</Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small" onClick={() => history.push('/app/manage-domain', {domain, sailebot})}>Edit</Button>
+      <CardActions className={classes.root}>
+        <Button variant="contained" size="small" onClick={() => history.push('/app/manage-domain', {domain, sailebot})}>Edit</Button>
       </CardActions>
     </Card>
   );

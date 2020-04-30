@@ -5,8 +5,8 @@ import { CampaignCard } from "./CampaignCard";
 import { listCampaigns, listRequirementCampaigns } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
-import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {

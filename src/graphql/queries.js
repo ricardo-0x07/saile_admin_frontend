@@ -249,6 +249,36 @@ export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false)
 `;
 }
 
+export const listAvailableCampaignAccounts = (campaign_id, limit=100, is_scheduled=false, is_delisted=false) => {
+    return gql`
+    query ListAvailableCampaignAccounts {
+        campaign_account(limit:${limit}, offset: 0, where: {campaign_id: {_eq: ${campaign_id}}, is_scheduled: {_eq: ${is_scheduled}}, is_delisted: {_eq: ${is_delisted}}}) {
+            account {
+                    NAICS
+                    city
+                    domain
+                    email
+                    email_domain
+                    employees
+                    ex_id
+                    fax
+                    id
+                    is_scheduled
+                    name
+                    phone
+                    revenue
+                    state
+                    website
+            }
+            account_id
+            campaign_id
+            id
+            is_scheduled
+        }
+    }
+`;
+}
+
 export const listCampaigns = (limit) => {
     return gql`
     query ListCampaigns {

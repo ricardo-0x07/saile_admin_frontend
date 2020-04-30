@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
-import { listCampaignAccounts } from "../../graphql/queries";
+import { listAvailableCampaignAccounts } from "../../graphql/queries";
 import { createScheduleAccount, updateCampaignAccount } from "../../graphql/mutations";
 
 
@@ -79,7 +79,7 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
               <Button size="small" onClick={() => history.push('/app/accounts-by-schedule', {schedule})}>View Schedule Accounts</Button>
               {
                 campaign && 
-                <Query query={listCampaignAccounts(campaign.id, accounts_to_add)} >
+                <Query query={listAvailableCampaignAccounts(campaign.id, accounts_to_add, false, false)} >
                   {(listCampaignAccountsQuery) => 
                     (
                       !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
