@@ -34,6 +34,11 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
         { render }
       </Subscription>
     ),
+    neutralEventCountQuery: ({ render }) => (
+      <Subscription subscription={sailebotEventCountByLabel(sailebot.id, "sent_neutral_outbound")} >
+        { render }
+      </Subscription>
+    ),
     sailebotEventCountQuery: ({ render }) => (
       <Subscription subscription={sailebotEventCount(sailebot.id)} >
         { render }
@@ -43,7 +48,7 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
 
   return (
     <Composed>
-      {({ actionableEventCountQuery, referralEventCountQuery, sailebotEventCountQuery }) => {
+      {({ actionableEventCountQuery, referralEventCountQuery, sailebotEventCountQuery, neutralEventCountQuery }) => {
         // if (
         //   loading ||
         //   !data
@@ -82,6 +87,12 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
                   actionableEventCountQuery.data.event_aggregate &&
                   actionableEventCountQuery.data.event_aggregate.aggregate &&
                   <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-sailebot', {sailebot, events: actionableEventCountQuery.data.event_aggregate.nodes })}>Actionable Events: <br/> {actionableEventCountQuery.data.event_aggregate.aggregate.count}</Button>
+                }
+                {
+                  neutralEventCountQuery.data && 
+                  neutralEventCountQuery.data.event_aggregate &&
+                  neutralEventCountQuery.data.event_aggregate.aggregate &&
+                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-sailebot', {sailebot, events: neutralEventCountQuery.data.event_aggregate.nodes })}>Neutral Events: <br/> {neutralEventCountQuery.data.event_aggregate.aggregate.count}</Button>
                 }
               </CardActions>
             </div>

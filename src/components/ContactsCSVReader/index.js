@@ -3,7 +3,7 @@ import { CSVReader } from 'react-papaparse'
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 import { listAllCampaignAccounts } from "../../graphql/queries";
-import { createContact, } from "../../graphql/mutations";
+import { createContact, createCampaignContact, } from "../../graphql/mutations";
 
 
 var _ = require('lodash');
@@ -26,7 +26,7 @@ export default class CSVReader1 extends Component {
     }
   }
   
-  getContactCSVData = async (data, createContactMutation, campaign_accounts_data) => {
+  getContactCSVData = async (data, createContactMutation, createCampaignContactMutation, campaign_accounts_data) => {
 
     let contacts = data.map(contact => {
 
@@ -52,6 +52,7 @@ export default class CSVReader1 extends Component {
     processed = _.filter(processed, con => con.email !== null);
     processed = _.filter(processed, con => con.ex_id !== '');
     processed = _.filter(processed, con => con.ex_account_id !== '');
+    const { campaign_id } = this.props
     await _.chunk(processed, 100).map(async contacts_batch => {
       try {
         let results = await  createContactMutation({
@@ -59,11 +60,22 @@ export default class CSVReader1 extends Component {
             objects: contacts_batch
           }
         });
+        await createCampaignContactMutation({
+          variables: {
+            objects: results.data.insert_contact.returning.map( contact => {
+              return { campaign_id, account_id: contact.account_id, contact_id: contact.id }
+            })
+          }
+        });                        
         return results
       } catch (error) {
+        console.log('createContactMutation error: ', error)
         return {contacts_batch, error}
       }
     });     
+
+    // const campaign_id = this.props.location.state.campaign.id
+
   }
 
   render() {
@@ -79,10 +91,15 @@ export default class CSVReader1 extends Component {
           { render }
         </Mutation> 
       ),
+      createCampaignContactMutation: ({ render }) => (
+        <Mutation mutation={ createCampaignContact } >
+          { render }
+        </Mutation> 
+      ),
     })
     return (
       <Composed>
-        {({ accountsQuery: { data, loading }, createContactMutation }) => {
+        {({ accountsQuery: { data, loading }, createContactMutation, createCampaignContactMutation }) => {
           return (
             <>
               <h5>{this.props.label ? this.props.label : ''} Bulk Upload</h5>
@@ -90,7 +107,7 @@ export default class CSVReader1 extends Component {
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
                   if (!loading) {
-                    this.getContactCSVData(loaded_data, createContactMutation, data)                     
+                    this.getContactCSVData(loaded_data, createContactMutation, createCampaignContactMutation, data)                     
                   }
                 }}
                 onError={this.onError}

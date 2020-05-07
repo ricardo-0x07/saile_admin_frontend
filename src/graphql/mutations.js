@@ -121,6 +121,16 @@ export const createCampaignAccount = gql`
   }
 `;
 
+export const createCampaignContact = gql`
+  mutation InsertCampaignContact($objects: [campaign_contact_insert_input!]!) {
+    insert_campaign_contact(objects: $objects, on_conflict: {constraint: campaign_contact_campaign_id_contact_id_key, update_columns: [campaign_id, account_id, contact_id]}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
 export const updateCampaignAccount = gql`
   mutation UpdateCampaignAccount($objects: campaign_account_set_input, $id_list: [Int!]!) {
     update_campaign_account(_set: $objects, where: {id: {_in: $id_list}}) {
@@ -142,6 +152,7 @@ export const createContact = gql`
     insert_contact(objects: $objects, on_conflict: {constraint: contact_ex_id_key, update_columns: [bounce_type, city, country, created_at, email, firstname, gender, is_ema_eligible, is_eva_eligible, is_referral, lastname, linkedin, member_status, phone, position, role, sam_status, source, state, title, updated_at]}) {
       returning {
         id
+        account_id
       }
     }
   }
