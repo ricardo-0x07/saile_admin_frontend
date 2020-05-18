@@ -782,6 +782,8 @@ export const listRequirements = (limit=10, offset=0, campaign_limit=10, campaign
                 size
                 source
                 state
+                job_levels
+                titles
                 campaigns(limit: ${campaign_limit}, offset: ${campaign_offset}) {
                     description
                     id

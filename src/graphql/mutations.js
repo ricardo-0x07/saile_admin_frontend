@@ -93,7 +93,7 @@ export const updateTemplate = gql`
 
 export const createAccount = gql`
   mutation InsertAccount($objects: [account_insert_input!]!) {
-    insert_account(objects: $objects, on_conflict: {constraint: account_ex_id_key, update_columns: [NAICS, address, country, email_domain, employees, fax, name, phone, revenue, state, website, city]}) {
+    insert_account(objects: $objects, on_conflict: {constraint: account_name_email_domain_key, update_columns: [NAICS, address, country, email_domain, employees, fax, name, phone, revenue, state, website, city]}) {
       returning {
         id
       }

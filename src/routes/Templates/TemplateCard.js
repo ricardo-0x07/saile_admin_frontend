@@ -15,7 +15,7 @@ export const TemplateCard = ({ template, campaign,  history }) => {
         <Typography>{subject}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => history.push('/app/manage-template', {template, campaign})}>Edit</Button>
+        <Button size="small" onClick={() => history.push('/app/manage-template', {template, campaign})}>Preview</Button>
       </CardActions>
     </Card>
   );

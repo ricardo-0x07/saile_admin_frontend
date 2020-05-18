@@ -1,7 +1,6 @@
 // import 'date-fns';
 import React from "react";
 import { Formik, Field, useField } from 'formik';
-import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
     Button,
@@ -14,12 +13,14 @@ import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
   } from '@material-ui/pickers';
+import { makeStyles } from '@material-ui/core/styles';
 import MomentUtils from '@date-io/moment';
 import MuiCheckbox from "@material-ui/core/Checkbox";
 import { Mutation } from "react-apollo";
 
 import { createRequirement, updateRequirement } from "../../graphql/mutations";
-
+import MultipleSelect from './MultipleSelect'
+import ChipInput from 'material-ui-chip-input'
 
 
 const DatePickerField = ({ field, form, ...other }) => {
@@ -60,6 +61,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
 export const Checkbox = ({ ...props }) => {
     const [field] = useField(props.name);
   
@@ -71,7 +73,7 @@ export const Checkbox = ({ ...props }) => {
 const ManageRequirementForm = (props) => {
     const classes = useStyles();
 
-    
+    console.log('props: ', props)
     let initialValues = {
         name: '',
         auto_reject: false,
@@ -87,9 +89,12 @@ const ManageRequirementForm = (props) => {
         size: '',
         source: '',
         state: '',
+        job_levels: [],
+        titles: []
     };
     if ( props.location.state && props.location.state.requirement) {
-        initialValues = props.location.state.requirement
+        const { job_levels, titles, ...rest } = props.location.state.requirement
+        initialValues = { job_levels: job_levels.replace('{', '').replace('}','').split(','), titles: titles.replace('{', '').replace('}', '').split(','), ...rest}
     } else {
         if ( props.location.state && props.location.state.sailebot && props.location.state.sailebot.id) {
             initialValues = {
@@ -122,6 +127,8 @@ const ManageRequirementForm = (props) => {
                                 size,
                                 source,
                                 state,
+                                job_levels,
+                                titles,
                                 sailebot_id,
                                 id
                             }) => {
@@ -144,6 +151,8 @@ const ManageRequirementForm = (props) => {
                                                 size: Number(size),
                                                 source,
                                                 state,
+                                                job_levels: `{${job_levels.toString()}}`,
+                                                titles: `{${titles.toString()}}`,
                                                 sailebot_id,
                                             },
                                             id
@@ -167,6 +176,8 @@ const ManageRequirementForm = (props) => {
                                                 priority,
                                                 source,
                                                 state,
+                                                job_levels: `{${job_levels.toString()}}`,
+                                                titles: `{${titles.toString()}}`,
                                                 sailebot_id,
                                             }
                                         }
@@ -177,6 +188,8 @@ const ManageRequirementForm = (props) => {
                         }
                     >
                         {({ values, handleChange, handleSubmit }) => {
+                            console.log('values: ', values)
+                            console.log('values.titles: ', values.titles)
                             return (
                             <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
                                 <FormControl component="fieldset">
@@ -213,6 +226,32 @@ const ManageRequirementForm = (props) => {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.elasticity === null ? '' : values.elasticity }
+                                        />
+                                        <MultipleSelect name="job_levels" onChange={handleChange} value={Boolean(values.job_levels) ? values.job_levels : []}/>
+                                        <FormControlLabel
+                                            label="Job Titles"
+                                            labelPlacement='start'
+                                            control={
+                                                <ChipInput
+                                                    style={{ width: '100%' }}
+                                                    value={Boolean(values.titles) ? values.titles : []}
+                                                    onAdd={(chips) => {
+                                                        console.log('onAdd chips: ', chips)
+                                                        console.log('onDelete typeof chips: ', typeof chips)
+                                                        const titles = Boolean(values.titles) ? values.titles : []
+                                                        titles.push(chips)
+                                                        handleChange({target:{value: titles, name: 'titles'}})
+                                                    }}
+                                                    onDelete={(chips, index) => {
+                                                        console.log('onDelete chips: ', chips)
+                                                        console.log('onDelete typeof chips: ', typeof chips)
+                                                        console.log('onDelete index: ', index)
+                                                        const titles = Boolean(values.titles) ? values.titles : []
+                                                        titles.splice(index, 1)
+                                                        handleChange({target:{value: titles, name: 'titles'}})
+                                                    }}
+                                                />
+                                            }
                                         />
                                         <FormControlLabel
                                             label="Auto Reject?"

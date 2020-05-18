@@ -34,10 +34,10 @@ const Requirements = (props) => {
           return null;
         }
 
-
+        console.log('data: ', data)
         return (
           <div className={classes.root}>
-            <Title>{props.location.state && props.location.state.sailebot  && props.location.state.sailebot ? props.location.state.sailebot.name : '' } Requirements</Title>
+            <Title>{props.location.state && props.location.state.sailebot  && props.location.state.sailebot ? props.location.state.sailebot.fullname : '' } Requirements</Title>
             <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-requirement', {sailebot: props.location.state.sailebot})}>Add Requirement</Button>
             <div
               style={{
@@ -50,11 +50,11 @@ const Requirements = (props) => {
               {
                 props.location.state && props.location.state.sailebot  && props.location.state.sailebot ?
                 data.requirement.filter(item => item.sailebot_id === props.location.state.sailebot.id ).map(x => (
-                  <RequirementCard requirement={x} name={x.name} key={x.id} history={props.history} sailebot={props.location.state.sailebot}/>
+                  <RequirementCard requirement={x} name={x.fullname} key={x.id} history={props.history} sailebot={props.location.state.sailebot}/>
                 ))
                 :
                 data.requirement.filter(item => item ).map(x => (
-                  <RequirementCard requirement={x} name={x.name} key={x.id}  history={props.history} />
+                  <RequirementCard requirement={x} name={x.fullname} key={x.id}  history={props.history} />
                 ))
               }
             </div>
