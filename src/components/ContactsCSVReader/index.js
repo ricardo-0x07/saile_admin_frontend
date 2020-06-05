@@ -53,7 +53,7 @@ export default class CSVReader1 extends Component {
     processed = _.filter(processed, con => con.ex_id !== '');
     processed = _.filter(processed, con => con.ex_account_id !== '');
     const { campaign_id } = this.props
-    await _.chunk(processed, 100).map(async contacts_batch => {
+    await _.chunk(processed, 2).map(async contacts_batch => {
       try {
         let results = await  createContactMutation({
           variables: {

@@ -149,7 +149,7 @@ export const updateAccount = gql`
 
 export const createContact = gql`
   mutation InsertContact( $objects: [contact_insert_input!]! ) {
-    insert_contact(objects: $objects, on_conflict: {constraint: contact_ex_id_key, update_columns: [bounce_type, city, country, created_at, email, firstname, gender, is_ema_eligible, is_eva_eligible, is_referral, lastname, linkedin, member_status, phone, position, role, sam_status, source, state, title, updated_at]}) {
+    insert_contact(objects: $objects, on_conflict: {constraint: contact_email_key, update_columns: [bounce_type, city, country, created_at, email, firstname, gender, is_ema_eligible, is_eva_eligible, is_referral, lastname, linkedin, member_status, phone, position, role, sam_status, source, state, title, updated_at]}) {
       returning {
         id
         account_id
@@ -242,6 +242,30 @@ export const createDomain = gql`
 export const updateDomain = gql`
   mutation UpdateDomain($objects: domain_set_input!, $id: Int) {
     update_domain(where: {id: {_eq: $id}}, _set: $objects) {
+      affected_rows
+    }
+  }
+`;
+
+export const deleteCampaignAccount = gql`
+  mutation DeleteCampaignContacts( $account_id: Int, $campaign_id: Int) {
+    delete_event(where: {contact: {contact_campaigns: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}}}}) {
+      affected_rows
+    }
+  }
+`;
+
+export const deleteCampaignContacts = gql`
+  mutation DeleteCampaignContacts( $account_id: Int, $campaign_id: Int) {
+    delete_event(where: {contact: {contact_campaigns: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}}}}) {
+      affected_rows
+    }
+  }
+`;
+
+export const deleteCampaignAccountContactEvents = gql`
+  mutation DeleteCampaignAccountContactEvents( $account_id: Int, $campaign_id: Int) {
+    delete_event(where: {contact: {contact_campaigns: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}}}}) {
       affected_rows
     }
   }

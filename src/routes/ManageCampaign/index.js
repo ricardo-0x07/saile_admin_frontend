@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik } from 'formik';
+import { Formik, useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
@@ -7,9 +7,12 @@ import {
     FormLabel,
     FormControl,
     FormGroup,
+    FormControlLabel,
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
 import { createCampaign, updateCampaign } from "../../graphql/mutations";
+import Switch from '@material-ui/core/Switch';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,12 +25,24 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+export const Checkbox = ({ ...props }) => {
+    const [field] = useField(props.name);
+  
+    return (
+      <Switch {...field} checked={field.value} />
+    );
+};
+
 const ManageCampaignForm = (props) => {
     const classes = useStyles();
     let initialValues = {
         name: '',
         description: '',
         accounts_per_schedule: 0,
+        run_status: false,
+        is_running: false,
+        to_run: false,
+        status_message: '',
     };
     if ( props.location.state && props.location.state.campaign) {
         initialValues = props.location.state.campaign
@@ -48,7 +63,7 @@ const ManageCampaignForm = (props) => {
                     <Formik
                         initialValues={initialValues}
                         onSubmit={
-                            async ({ name, description, accounts_per_schedule, requirement_id, id }) => {
+                            async ({ name, description, accounts_per_schedule, run_status, is_running, to_run, status_message, requirement_id, id }) => {
                                 if (id) {
                                     await mutation({
                                         variables: {
@@ -58,6 +73,10 @@ const ManageCampaignForm = (props) => {
                                                 description,
                                                 accounts_per_schedule: Number(accounts_per_schedule),
                                                 requirement_id,
+                                                run_status,
+                                                is_running,
+                                                to_run,
+                                                status_message,
                                             },
                                             id
                                         }
@@ -70,6 +89,10 @@ const ManageCampaignForm = (props) => {
                                                 accounts_per_schedule: Number(accounts_per_schedule),
                                                 description,
                                                 requirement_id,
+                                                run_status,
+                                                is_running,
+                                                to_run,
+                                                status_message,
                                             }
                                         }
                                     });
@@ -108,6 +131,12 @@ const ManageCampaignForm = (props) => {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.accounts_per_schedule  || ''}
+                                        />
+                                        <FormControlLabel
+                                            label="Run Status"
+                                            control={
+                                                <Checkbox name="run_status" onChange={handleChange} value={values.run_status} />
+                                            }
                                         />
                                     </FormGroup>
                                 </FormControl>

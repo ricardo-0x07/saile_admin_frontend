@@ -170,6 +170,10 @@ export const GET_ALL_CAMPAIGNS = gql`
             id
             name
             requirement_id
+            run_status
+            is_running
+            to_run
+            status_message
             schedules {
                 campaign_id
                 daily_outbound_limit
@@ -220,6 +224,7 @@ export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false)
                     NAICS
                     city
                     domain
+                    address
                     email
                     email_domain
                     employees
@@ -251,6 +256,10 @@ export const listCampaigns = (limit) => {
             id
             name
             requirement_id
+            run_status
+            is_running
+            to_run
+            status_message
             schedules {
                 campaign_id
                 daily_outbound_limit
@@ -304,6 +313,10 @@ export const listRequirementCampaigns = (requirement_id) => {
             id
             name
             requirement_id
+            run_status
+            is_running
+            to_run
+            status_message
             schedules {
                 campaign_id
                 daily_outbound_limit
@@ -485,6 +498,7 @@ export const listScheduleAccounts = (schedule_id, limit=10, offset=0) => {
                 account {
                     NAICS
                     city
+                    address
                     domain
                     email
                     email_domain
@@ -515,6 +529,7 @@ export const listAllCampaignAccounts = (campaign_id) => {
                     NAICS
                     city
                     domain
+                    address
                     email
                     email_domain
                     employees
@@ -759,6 +774,25 @@ export const listEvents = (limit=10, offset=0) => {
         }
     `;
 }
+
+export const listContactEvents = (contact_id, limit=10, offset=0, event_limit=10, event_offset=0) => {
+    return gql`
+        subscription ListContactEvents {
+            event(where: {contact_id: {_eq: ${contact_id}}}, limit: ${limit}, offset: ${offset}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                contact_id
+                to
+            }
+        }
+    `;
+}
+
 
 export const listRequirements = (limit=10, offset=0, campaign_limit=10, campaign_offset=0) => {
     return gql`

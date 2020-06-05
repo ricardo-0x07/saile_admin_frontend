@@ -1,26 +1,30 @@
-import * as React from "react";
+import React from "react";
 import { Subscription } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
 import AccountsCSVReader from '../../components/AccountsCSVReader';
 import ContactsCSVReader from '../../components/ContactsCSVReader';
+// import IntegrationReactSelect from "./AccountsSelect";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
 import { listAccounts, listCampaignAccounts } from "../../graphql/subscription";
 
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
-      margin: theme.spacing(1),
+      margin: theme.spacing(2),
     },
   },
 }));
 
 const Accounts = (props) => {
   const classes = useStyles();
+  // const handleSelectChange= async (item) => {
+  //   console.log('item: ', item)
+  // }
+
   const accounts_csv_key_map = {
     name: 'Account: Account Name',
     address: 'Account: Billing Street',
@@ -77,6 +81,9 @@ const Accounts = (props) => {
   return (
     <Composed>
       {({ accountsQuery: { data, loading } }) => {
+        console.log('data: ', data)
+        console.log('loading: ', loading)
+
         if (
           loading ||
           !data ||
@@ -84,16 +91,28 @@ const Accounts = (props) => {
         ) {
           return null;
         }
-
         return (
           <div className={classes.root}>
             <Title>{props.location.state && props.location.state.campaign  && props.location.state.campaign ? props.location.state.campaign.name : '' } Accounts</Title>
             <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-account', {campaign: props.location.state.campaign})}>Add Account</Button>
             {
+              // props.location.state && props.location.state.campaign && props.location.state.campaign.id
+              // && 
+              
+              // <IntegrationReactSelect
+              //       placeholder='Search Accounts to add'
+              //       name='aselectedAccounts'
+              //       handleSelectChange={handleSelectChange}
+              //       variant="outlined"
+              //       campaign_id={props.location.state.campaign.id}
+              //       sailebot={props.location.state.sailebot}
+              // />  
+            }            
+            {
               props.location.state && props.location.state.campaign && props.location.state.campaign.id && 
               <>
-                <ContactsCSVReader location={props.location} contacts_csv_key_map={contacts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Contacts'} />
-                <AccountsCSVReader location={props.location} accounts_csv_key_map={accounts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Accounts'} />
+                <ContactsCSVReader location={props.location} contacts_csv_key_map={contacts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Contacts'} sailebot={props.location.state.sailebot}/>
+                <AccountsCSVReader location={props.location} accounts_csv_key_map={accounts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Accounts'} sailebot={props.location.state.sailebot}/>
               </>
             }
             <div

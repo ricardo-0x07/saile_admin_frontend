@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Query } from "react-apollo";
+import { Subscription } from "react-apollo";
 
 import { EventCard } from "./EventCard";
-import { listEvents } from "../../graphql/queries";
+import { listEvents, listContactEvents } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
+import { adopt } from 'react-adopt';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,11 +18,23 @@ const useStyles = makeStyles(theme => ({
 
 const Events = (props) => {
   const classes = useStyles();
+  const Composed = adopt({
+    eventsSubscription: props.location.state && props.location.state.contact && props.location.state.contact.id ?
+    ({ render }) => (
+      <Subscription subscription={listContactEvents(props.location.state.contact.id)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Subscription subscription={listEvents(10) } >
+        { render }
+      </Subscription>
+    ),
+  })
   return (
-    <Query
-      query={listEvents(10)}
-    >
-      {({ data, loading }) => {
+    <Composed>
+      {({ eventsSubscription: {data, loading} }) => {
         if (
           loading ||
           !data ||
@@ -56,7 +69,7 @@ const Events = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Composed>
   );
 };
 

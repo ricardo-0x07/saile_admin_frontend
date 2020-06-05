@@ -249,6 +249,57 @@ export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false)
 `;
 }
 
+export const nonCampaignAccounts = (campaign_id) => {
+    return gql`
+    query SearchAccounts {
+        account(where: {campaign_accounts: {campaign_id: {_neq: ${campaign_id}}}}) {
+            address
+            city
+            country
+            domain
+            email
+            email_domain
+            employees
+            id
+            name
+            revenue
+            state
+            website
+            phone
+            logo
+            fax
+            ex_id
+        }
+    }
+`;
+}
+
+export const searchAccounts = (search_term, campaign_id, client_id) => {
+    console.log('search_term: ', search_term)
+    return gql`
+    query SearchAccounts {
+        account(where: {name: {_ilike: "%${search_term}%"}, campaign_accounts: {campaign_id: {_neq: ${campaign_id}}, campaign: {requirement: {sailebot: {client_id: {_neq: ${client_id}}}}}} }) {
+            address
+            city
+            country
+            domain
+            email
+            email_domain
+            employees
+            id
+            name
+            revenue
+            state
+            website
+            phone
+            logo
+            fax
+            ex_id
+        }
+    }
+`;
+}
+
 export const listAvailableCampaignAccounts = (campaign_id, limit=100, is_scheduled=false, is_delisted=false) => {
     return gql`
     query ListAvailableCampaignAccounts {
@@ -524,12 +575,34 @@ export const getAccountByExtrenalId = (ex_id) => {
     `;
 }
 
-export const get_accounts_by_campaign_id = (campaign_id=5) => {
+export const getAccountBy_account_name_email_domain_key = (name, email_domain) => {
+    return gql`
+        query GetAccountByExtrenalId {
+            account(where: {name: {_eq: ${name}, email_domain: {_eq: ${email_domain}}}) {
+                id
+            }
+        }
+    `;
+}
+
+export const getAccountsByCampaignId = (campaign_id) => {
     return gql`
         query GetAccountsByCampaignId {
-            account(where: {account_campaigns: {campaign_id: {_eq: 5}}}) {
+            account(where: {account_campaigns: {campaign_id: {_eq: ${campaign_id}}}}) {
                 id
                 ex_id
+            }
+        }
+    `;
+}
+
+export const getClientCampaignAccounts = (client_id) => {
+    return gql`
+        query GetClientCampaignAccounts {
+            campaign_account(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}) {
+                id
+                campaign_id
+                account_id
             }
         }
     `;

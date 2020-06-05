@@ -94,7 +94,7 @@ const ManageRequirementForm = (props) => {
     };
     if ( props.location.state && props.location.state.requirement) {
         const { job_levels, titles, ...rest } = props.location.state.requirement
-        initialValues = { job_levels: job_levels.replace('{', '').replace('}','').split(','), titles: titles.replace('{', '').replace('}', '').split(','), ...rest}
+        initialValues = { job_levels: job_levels !== null ? job_levels.replace('{', '').replace('}','').split(',') : '', titles: titles !== null ? titles.replace('{', '').replace('}', '').split(',') : '', ...rest}
     } else {
         if ( props.location.state && props.location.state.sailebot && props.location.state.sailebot.id) {
             initialValues = {

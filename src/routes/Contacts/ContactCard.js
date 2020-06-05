@@ -9,14 +9,22 @@ import Typography from "@material-ui/core/Typography";
 export const ContactCard = ({ contact, account,  history }) => {
   const {
     email,
+    title,
     firstname,
     lastname,
+    management_level,
+    job_function,
+    email_status,
   } = contact;
   return (
     <Card>
       <CardContent>
-        <Typography>{firstname} {lastname}</Typography>
-        <Typography>{email}</Typography>
+        <Typography>Name: {firstname} {lastname}</Typography>
+        <Typography>Email: {email}</Typography>
+        <Typography>Title: {title}</Typography>
+        <Typography>Level: {management_level || ''}</Typography>
+        <Typography>Function: {job_function || ''}</Typography>
+        <Typography>Email Status: {email_status || ''}</Typography>
       </CardContent>
       <CardActions>
         <Button size="small" onClick={() => history.push('/app/manage-contact', {contact, account})}>Edit</Button>

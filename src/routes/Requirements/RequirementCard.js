@@ -31,8 +31,8 @@ export const RequirementCard = ({ requirement,  campaign, sailebot,  history }) 
       </CardContent>
       <CardActions className={classes.root}>
         <Button variant="contained" size="small" onClick={() => history.push('/app/manage-requirement', {requirement, sailebot})}>Edit</Button>
-        <Button variant="contained" size="small" onClick={() => history.push('/app/manage-campaign', {requirement})}>Add Campaign</Button>
-        <Button variant="contained" size="small" onClick={() => history.push('/app/campaigns-by-requirement', {requirement})}>View Campaigns</Button>
+        <Button variant="contained" size="small" onClick={() => history.push('/app/manage-campaign', {requirement, sailebot})}>Add Campaign</Button>
+        <Button variant="contained" size="small" onClick={() => history.push('/app/campaigns-by-requirement', {requirement, sailebot})}>View Campaigns</Button>
       </CardActions>
     </Card>
   );

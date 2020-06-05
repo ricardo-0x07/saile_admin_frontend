@@ -1,7 +1,7 @@
 
 import React from 'react';
 import clsx from 'clsx';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Container } from 'react-bootstrap'
 import {
@@ -392,7 +392,8 @@ function Routes() {
     }  
     return (
         
-        <Paper >
+        <Switch >
+
             <Route exact path={`/unsubscribe/:company/:contactEmail/:contactId/:token`} component={Unsubscribe} />
             <Route exact path={`/confirm-unsubscription`} component={Confirmation} />
             {/* Confirmation */}
@@ -400,7 +401,7 @@ function Routes() {
             <PrivateRoute path="/app" component={WrappedAppLayout} />
             <Redirect from="*" to="/app" />
             {/* <Route path="*" component={NotFound} /> */}
-        </Paper>
+        </Switch>
     );
 }
 

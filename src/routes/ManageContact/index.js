@@ -193,7 +193,7 @@ const ManageContactForm = (props) => {
                                         />
                                         <TextField
                                             name="title"
-                                            label="State" 
+                                            label="Title" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
