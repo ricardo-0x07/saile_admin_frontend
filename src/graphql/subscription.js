@@ -656,7 +656,7 @@ export const listAccountContacts = (account_id, limit=10, offset=0, event_limit=
 export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
     return gql`
         subscription SailebotEventCountByLabel {
-            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}}}}}, label: {_eq: "${label_query}"}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}, label: {_eq: "${label_query}"}}) {
                 aggregate {
                 count(columns: label)
                 }
@@ -682,7 +682,7 @@ export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
 export const clientEventCountByLabel = (client_id, label_query) => {
     return gql`
         subscription ClientEventCountByLabel {
-            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}}}}, label: {_eq: "${label_query}"}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}}) {
                 aggregate {
                 count(columns: label)
                 }
@@ -708,7 +708,7 @@ export const clientEventCountByLabel = (client_id, label_query) => {
 export const sailebotEventCount = (sailebot_id) => {
     return gql`
         subscription ClientEventCount {
-            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}}}}}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}}) {
                 aggregate {
                 count(columns: label)
                 }
@@ -734,7 +734,7 @@ export const sailebotEventCount = (sailebot_id) => {
 export const clientEventCount = (client_id) => {
     return gql`
         subscription SailebotEventCount {
-            event_aggregate(where: {contact: {account: {schedule_accounts: {schedule: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}}}}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}) {
                 aggregate {
                 count(columns: label)
                 }

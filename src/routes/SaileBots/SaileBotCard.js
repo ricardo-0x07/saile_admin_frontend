@@ -55,7 +55,6 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
         // ) {
         //   return null;
         // }
-        console.log('actionableEventCountQuery: ', actionableEventCountQuery);
         return (
           <Card>
             <CardContent>
