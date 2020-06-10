@@ -4,9 +4,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Query, Mutation } from "react-apollo";
+import { Subscription, Mutation } from "react-apollo";
+
 import { adopt } from 'react-adopt';
-import { listAvailableCampaignAccounts } from "../../graphql/queries";
+import { listAvailableCampaignAccounts, listShallowScheduleAccounts } from "../../graphql/subscription";
 import { createScheduleAccount, updateCampaignAccount } from "../../graphql/mutations";
 
 
@@ -16,11 +17,12 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
   // const accounts_per_schedule = campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
-  const addScheduleAccounts = async (schedule, listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation) => {
-    const campaign_accounts = listCampaignAccountsQuery.data && listCampaignAccountsQuery.data.campaign_account ? listCampaignAccountsQuery.data.campaign_account : []
+  const addScheduleAccounts = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
+    const campaign_accounts = listCampaignAccountsSubscription.data && listCampaignAccountsSubscription.data.campaign_account ? listCampaignAccountsSubscription.data.campaign_account : []
+    const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
     const schedule_id = schedule.id
     
-    const processed = campaign_accounts.map( ( account ) => {
+    const processed = campaign_accounts.filter(acc => !schedule_accounts.includes(acc.account_id) ).splice(0,accounts_to_add).map( ( account ) => {
       return {
         account_id: account.account_id,
         schedule_id
@@ -60,6 +62,18 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
         >
             {render}
         </Mutation> 
+    )
+  })
+  const ComposedAddAccount = adopt({
+    listCampaignAccountsSubscription: ({ render }) => (
+      <Subscription subscription={listAvailableCampaignAccounts(campaign.id, false)} >
+        {render}
+      </Subscription> 
+    ),
+    listShallowScheduleAccountsSubscription: ({ render }) => (
+      <Subscription subscription={listShallowScheduleAccounts(campaign.id)} >
+        {render}
+      </Subscription> 
     ),
   })
 
@@ -79,19 +93,19 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
               <Button size="small" onClick={() => history.push('/app/accounts-by-schedule', {schedule})}>View Schedule Accounts</Button>
               {
                 campaign && 
-                <Query query={listAvailableCampaignAccounts(campaign.id, accounts_to_add, false, false)} >
-                  {(listCampaignAccountsQuery) => 
+                <ComposedAddAccount >
+                  {({ listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription }) => 
                     (
                       !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
                       <Button size="small" onClick={() => {
-                        if (!listCampaignAccountsQuery.loading) {
-                          addScheduleAccounts(schedule, listCampaignAccountsQuery, createScheduleAccountMutation, updateCampaignAccountMutation)
+                        if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
+                          addScheduleAccounts(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
                         }
                       }}>Assign Accounts</Button>
                       : null
                     )
                   }
-                </Query>
+                </ComposedAddAccount>
               }
             </CardActions>
           </Card>

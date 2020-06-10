@@ -516,6 +516,20 @@ export const listScheduleAccounts = (schedule_id, limit=10, offset=0) => {
                 account_id
                 id
                 schedule_id
+                campaign_id
+            }
+        }
+    `;
+}
+
+export const listShallowScheduleAccounts = (campaign_id) => {
+    return gql`
+        subscription ListShallowScheduleAccounts {
+            schedule_account(where: {campaign_id: {_eq: ${campaign_id}}}) {
+                account_id
+                id
+                schedule_id
+                campaign_id
             }
         }
     `;
@@ -775,6 +789,18 @@ export const listEvents = (limit=10, offset=0) => {
     `;
 }
 
+export const listAvailableCampaignAccounts = (campaign_id, is_delisted=false) => {
+    return gql`
+    subscription ListAvailableCampaignAccounts {
+        campaign_account(where: {campaign_id: {_eq: ${campaign_id}}, is_delisted: {_eq: ${is_delisted}}}) {
+            account_id
+            campaign_id
+            id
+            is_scheduled
+        }
+    }
+`;
+}
 export const listContactEvents = (contact_id, limit=10, offset=0, event_limit=10, event_offset=0) => {
     return gql`
         subscription ListContactEvents {
