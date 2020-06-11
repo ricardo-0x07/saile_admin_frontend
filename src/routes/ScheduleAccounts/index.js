@@ -3,6 +3,7 @@ import { Subscription } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 import { adopt } from 'react-adopt';
 import { listAccounts, listScheduleAccounts } from "../../graphql/subscription";
 
@@ -18,11 +19,12 @@ const useStyles = makeStyles(theme => ({
 
 const Accounts = (props) => {
   const classes = useStyles();
+  const limit = 10
 
   const Composed = adopt({
     accountsScubsciption: props.location.state && props.location.state.schedule && props.location.state.schedule.id ?
     ({ render }) => (
-      <Subscription subscription={listScheduleAccounts(props.location.state.schedule.id, 100)} >
+      <Subscription subscription={listScheduleAccounts(props.location.state.schedule.id, limit, (page-1) * limit)} >
         { render }
       </Subscription>
     )
@@ -33,6 +35,13 @@ const Accounts = (props) => {
       </Subscription>
     ),
   })
+
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    // value = value * limit;
+    setPage(value);
+  };
+
   return (
     <Composed>
       {({ accountsScubsciption: { data, loading } }) => {
@@ -66,6 +75,9 @@ const Accounts = (props) => {
                   <AccountCard account={x} name={x.name} key={x.id}  history={props.history} />
                 ))
               }
+            </div>
+            <div className={classes.root}>
+              <Pagination count={limit} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
             </div>
           </div>
         );

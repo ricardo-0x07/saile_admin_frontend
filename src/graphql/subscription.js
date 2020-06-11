@@ -494,7 +494,7 @@ export const listAccounts = (limit=10, offset=0) => {
 export const listScheduleAccounts = (schedule_id, limit=10, offset=0) => {
     return gql`
         subscription ListScheduleAccounts {
-            schedule_account(where: {schedule_id: {_eq: ${schedule_id}}}, limit: ${limit}, offset: ${offset}) {
+            schedule_account(where: {schedule_id: {_eq: ${schedule_id}}}, limit: ${limit}, offset: ${offset}, order_by: {account: {name: asc}}) {
                 account {
                     NAICS
                     city

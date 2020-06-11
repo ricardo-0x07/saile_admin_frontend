@@ -5,7 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Subscription, Mutation } from "react-apollo";
-
+import Moment from 'react-moment';
 import { adopt } from 'react-adopt';
 import { listAvailableCampaignAccounts, listShallowScheduleAccounts } from "../../graphql/subscription";
 import { createScheduleAccount, updateCampaignAccount } from "../../graphql/mutations";
@@ -13,7 +13,7 @@ import { createScheduleAccount, updateCampaignAccount } from "../../graphql/muta
 
 export const ScheduleCard = ({ schedule,  campaign,  history }) => {
   
-  const { name, no_targets_per_accounts, daily_outbound_limit } = schedule;
+  const { name, no_targets_per_accounts, deploy_date } = schedule;
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
   // const accounts_per_schedule = campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
@@ -85,7 +85,9 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
             <CardContent>
               <Typography>Name: {name}</Typography>
               <Typography>No of targets per Account: {no_targets_per_accounts}</Typography>
-              <Typography>Daily outbound limit: {daily_outbound_limit}</Typography>
+                  <Typography>
+                  Deploy Date: <Moment format="YYYY-MMM-DD" date={deploy_date !== null && deploy_date }></Moment>
+                </Typography>
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
             </CardContent>
             <CardActions>
