@@ -72,6 +72,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                 <Button size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign})}>View Templates</Button>
                 <Button size="small" onClick={() => history.push('/app/schedules-by-campaign', {campaign, sailebot})}>View Schedules</Button>
                 <Button size="small" onClick={() => history.push('/app/accounts-by-campaign', {campaign, sailebot})}>View Accounts</Button>
+                <Button size="small" onClick={() => history.push('/app/clarifications-by-campaign', {campaign, sailebot})}>Clarifications</Button>
                 <FormControlLabel
                   control={
                     <Switch

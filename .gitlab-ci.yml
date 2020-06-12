@@ -17,6 +17,9 @@ cache:
 build:
   stage: build
   script:
+    - export SENDGRID_API_KEY=$SAILE_SENDGRID_API_KEY # set REACT_APP variables before build command
+    - export PRIVATE_API_KEY=$SAILE_MAILGUN_PRIVATE_API_KEY # set REACT_APP variables before build command
+    - export MAILGUN_API_KEY=$SAILE_MAILGUN_PRIVATE_API_KEY # set REACT_APP variables before build command
     - npm -g install npm --silent
     - yarn
     - yarn build

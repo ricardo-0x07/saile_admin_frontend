@@ -521,6 +521,17 @@ export const listScheduleAccounts = (schedule_id, limit=10, offset=0) => {
         }
     `;
 }
+export const totalScheduleAccounts = (schedule_id) => {
+    return gql`
+        subscription TotalScheduleAccounts {
+            schedule_account_aggregate(where: {schedule_id: {_eq: ${schedule_id}}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
 
 export const listShallowScheduleAccounts = (campaign_id) => {
     return gql`
@@ -801,6 +812,92 @@ export const listAvailableCampaignAccounts = (campaign_id, is_delisted=false) =>
     }
 `;
 }
+
+export const listClarificationEvents = (limit=10, offset=0) => {
+    return gql`
+        subscription ListContactClarificationEvents{
+            event(where: { to_clarify: {_eq: true} }, limit: ${limit}, offset: ${offset}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                body
+                contact_id
+                date
+                nlu_input_text
+                nlu_json_response
+                selected_intent
+                validated_json_response
+                validated_intent
+                campaign_id
+                is_inbound
+                to_clarify
+                to
+            }
+        }
+    `;
+}
+export const listContactClarificationEvents = (contact_id, limit=10, offset=0) => {
+    return gql`
+        subscription ListContactClarificationEvents{
+            event(where: {contact_id: {_eq: ${contact_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                body
+                contact_id
+                date
+                nlu_input_text
+                nlu_json_response
+                selected_intent
+                validated_json_response
+                validated_intent
+                campaign_id
+                is_inbound
+                to_clarify
+                to
+            }
+        }
+    `;
+}
+
+
+export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0) => {
+    return gql`
+        subscription ListCampaignClarificationEvents{
+            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {date: asc}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                body
+                contact_id
+                date
+                nlu_input_text
+                nlu_json_response
+                selected_intent
+                validated_json_response
+                validated_intent
+                campaign_id
+                is_inbound
+                to_clarify
+                to
+            }
+        }
+    `;
+}
+
+
 export const listContactEvents = (contact_id, limit=10, offset=0, event_limit=10, event_offset=0) => {
     return gql`
         subscription ListContactEvents {

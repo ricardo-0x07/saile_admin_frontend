@@ -15,7 +15,6 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
   
   const { name, no_targets_per_accounts, deploy_date } = schedule;
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
-  // const accounts_per_schedule = campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
   const addScheduleAccounts = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
     const campaign_accounts = listCampaignAccountsSubscription.data && listCampaignAccountsSubscription.data.campaign_account ? listCampaignAccountsSubscription.data.campaign_account : []
@@ -85,9 +84,9 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
             <CardContent>
               <Typography>Name: {name}</Typography>
               <Typography>No of targets per Account: {no_targets_per_accounts}</Typography>
-                  <Typography>
-                  Deploy Date: <Moment format="YYYY-MMM-DD" date={deploy_date !== null && deploy_date }></Moment>
-                </Typography>
+              <Typography>
+                Deploy Date: <Moment format="YYYY-MMM-DD" date={deploy_date !== null && deploy_date }></Moment>
+              </Typography>
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
             </CardContent>
             <CardActions>

@@ -192,6 +192,7 @@ export const updateEvent = gql`
 `;
 
 
+
 export const createRequirement = gql`
   mutation InsertRequirement($objects: [requirement_insert_input!]!) {
     insert_requirement(objects: $objects) {

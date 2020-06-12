@@ -5,7 +5,7 @@ import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import { adopt } from 'react-adopt';
-import { listAccounts, listScheduleAccounts } from "../../graphql/subscription";
+import { listAccounts, totalScheduleAccounts, listScheduleAccounts } from "../../graphql/subscription";
 
 
 
@@ -19,9 +19,18 @@ const useStyles = makeStyles(theme => ({
 
 const Accounts = (props) => {
   const classes = useStyles();
-  const limit = 10
-
+  let limit = 10
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    // value = value * limit;
+    setPage(value);
+  };
   const Composed = adopt({
+    totalScheduleAccountsScubsciption: ({ render }) => (
+      <Subscription subscription={totalScheduleAccounts(props.location.state.schedule.id)} >
+        { render }
+      </Subscription>
+    ),
     accountsScubsciption: props.location.state && props.location.state.schedule && props.location.state.schedule.id ?
     ({ render }) => (
       <Subscription subscription={listScheduleAccounts(props.location.state.schedule.id, limit, (page-1) * limit)} >
@@ -36,15 +45,9 @@ const Accounts = (props) => {
     ),
   })
 
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    // value = value * limit;
-    setPage(value);
-  };
-
   return (
     <Composed>
-      {({ accountsScubsciption: { data, loading } }) => {
+      {({ accountsScubsciption: { data, loading }, totalScheduleAccountsScubsciption }) => {
         if (
           loading ||
           !data ||
@@ -52,7 +55,11 @@ const Accounts = (props) => {
         ) {
           return null;
         }
-
+        console.log('data.schedule_account: ', data.schedule_account)
+        if (!totalScheduleAccountsScubsciption.loading) {
+          console.log('totalScheduleAccountsScubsciption: ', totalScheduleAccountsScubsciption)
+          limit = totalScheduleAccountsScubsciption.data.schedule_account_aggregate.aggregate.count
+        }
 
         return (
           <div className={classes.root}>

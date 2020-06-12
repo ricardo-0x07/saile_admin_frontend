@@ -38,6 +38,7 @@ import ScheduleAccounts from './ScheduleAccounts'
 import Contacts from './Contacts'
 import Events from './Events'
 import SailebotEvents from './SailebotEvents'
+import Clarifications from './Clarifications';
 import Templates from './Templates'
 import Login from './Login'
 import DashboardSideBar from '../components/DashboardSideBar';
@@ -254,6 +255,11 @@ function Routes() {
                             exact
                             path='/app/events-by-client' 
                             component={SailebotEvents}
+                        />
+                        <Route
+                            exact
+                            path='/app/clarifications-by-campaign' 
+                            component={Clarifications}
                         />
                         <Route
                             exact
