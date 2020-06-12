@@ -896,7 +896,17 @@ export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0)
         }
     `;
 }
-
+export const totalCampaignClarificationEvents = (campaign_id) => {
+    return gql`
+        subscription TotalCampaignClarificationEvents {
+            event_aggregate(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
 
 export const listContactEvents = (contact_id, limit=10, offset=0, event_limit=10, event_offset=0) => {
     return gql`
