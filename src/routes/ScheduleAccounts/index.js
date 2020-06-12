@@ -19,10 +19,11 @@ const useStyles = makeStyles(theme => ({
 
 const Accounts = (props) => {
   const classes = useStyles();
-  let limit = 10
+  const limit = 10
+  let total = 10
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
-    // value = value * limit;
+    // value = value * total;
     setPage(value);
   };
   const Composed = adopt({
@@ -58,7 +59,7 @@ const Accounts = (props) => {
         console.log('data.schedule_account: ', data.schedule_account)
         if (!totalScheduleAccountsScubsciption.loading) {
           console.log('totalScheduleAccountsScubsciption: ', totalScheduleAccountsScubsciption)
-          limit = totalScheduleAccountsScubsciption.data.schedule_account_aggregate.aggregate.count
+          total = Math.ceil(totalScheduleAccountsScubsciption.data.schedule_account_aggregate.aggregate.count/limit)
         }
 
         return (
@@ -84,7 +85,7 @@ const Accounts = (props) => {
               }
             </div>
             <div className={classes.root}>
-              <Pagination count={limit} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
+              <Pagination count={total} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
             </div>
           </div>
         );

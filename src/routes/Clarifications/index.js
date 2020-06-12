@@ -20,7 +20,8 @@ const useStyles = makeStyles(theme => ({
 const Events = (props) => {
 
   const classes = useStyles();
-  let limit = 5;
+  const limit = 5;
+  let total = 5;
   const REACT_APP_SENDGRID_API_KEY = process.env.REACT_APP_SENDGRID_API_KEY;
   const REACT_APP_MAILGUN_API_KEY = process.env.REACT_APP_MAILGUN_API_KEY;
   const REACT_APP_PRIVATE_API_KEY = process.env.REACT_APP_PRIVATE_API_KEY;
@@ -72,7 +73,7 @@ const Events = (props) => {
 
         if (!totalCampaignClarificationEventsSubscription.loading) {
           console.log('totalCampaignClarificationEventsSubscription: ', totalCampaignClarificationEventsSubscription)
-          limit = totalCampaignClarificationEventsSubscription.data.event_aggregate.aggregate.count
+          total =  Math.ceil(totalCampaignClarificationEventsSubscription.data.event_aggregate.aggregate.count/limit)
         }
 
         return (
@@ -97,7 +98,7 @@ const Events = (props) => {
               }
             </div>
             <div className={classes.root}>
-              <Pagination count={limit} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
+              <Pagination count={total} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
             </div>
           </div>
         );
