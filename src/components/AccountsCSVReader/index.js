@@ -93,6 +93,7 @@ export default class CSVReader1 extends Component {
 
 
   render() {
+    console.log("this.props: ", this.props)
     const Composed = adopt({
       clientCampaignAccountQuery: ({ render }) => (
         <Query query={getClientCampaignAccounts(this.props.sailebot.client_id)} >
