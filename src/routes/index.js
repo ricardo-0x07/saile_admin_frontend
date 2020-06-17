@@ -405,7 +405,7 @@ function Routes() {
             {/* Confirmation */}
             <Route path="/auth" component={AuthLayout} />
             <PrivateRoute path="/app" component={WrappedAppLayout} />
-            <Redirect exact from="/" to="/app" />
+            {/* <PrivateRoute exact from="/" to="/app" /> */}
             {/* <Route path="*" component={NotFound} /> */}
         </Switch>
     );
