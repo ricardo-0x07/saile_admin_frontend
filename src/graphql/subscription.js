@@ -681,7 +681,7 @@ export const listAccountContacts = (account_id, limit=10, offset=0, event_limit=
 export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
     return gql`
         subscription SailebotEventCountByLabel {
-            event_aggregate(where: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}, label: {_eq: "${label_query}"}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}}) {
                 aggregate {
                 count(columns: label)
                 }
@@ -707,7 +707,7 @@ export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
 export const clientEventCountByLabel = (client_id, label_query) => {
     return gql`
         subscription ClientEventCountByLabel {
-            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}}) {
                 aggregate {
                 count(columns: label)
                 }
