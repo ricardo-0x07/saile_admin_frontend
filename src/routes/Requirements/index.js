@@ -2,10 +2,12 @@ import * as React from "react";
 import { Subscription } from "react-apollo";
 
 import { RequirementCard } from "./RequirementCard";
-import { listRequirements } from "../../graphql/subscription";
+import { listRequirements, listSailebotRequirements } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
+import { adopt } from 'react-adopt';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,11 +22,23 @@ const useStyles = makeStyles(theme => ({
 
 const Requirements = (props) => {
   const classes = useStyles();
+  const Composed = adopt({
+    requirementsQuery: props.location.state && props.location.state.sailebot && props.location.state.sailebot.id ?
+    ({ render }) => (
+      <Subscription subscription={listSailebotRequirements(props.location.state.sailebot.id)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Subscription subscription={listRequirements(10) } >
+        { render }
+      </Subscription>
+    ),
+  })
   return (
-    <Subscription
-     subscription={listRequirements(10)}
-    >
-      {({ data, loading }) => {
+    <Composed>
+      {({ requirementsQuery: { data, loading } }) => {
         if (
           loading ||
           !data ||
@@ -61,7 +75,7 @@ const Requirements = (props) => {
           </div>
         );
       }}
-    </Subscription>
+    </Composed>
   );
 };
 

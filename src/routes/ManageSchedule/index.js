@@ -150,14 +150,14 @@ const ManageScheduleForm = (props) => {
                                             onChange={handleChange}
                                             value={values.name  || ''}
                                         />
-                                        <TextField
+                                        {/* <TextField
                                             name="daily_outbound_limit"
                                             label="Daily outbound limit" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.daily_outbound_limit  || ''}
-                                        />
+                                        /> */}
                                         <TextField
                                             name="accounts_per_schedule"
                                             label="Number of Accounts/schedule" 

@@ -962,6 +962,41 @@ export const listRequirements = (limit=10, offset=0, campaign_limit=10, campaign
     `;
 }
 
+export const listSailebotRequirements = (sailebot_id, campaign_limit=10, campaign_offset=0) => {
+    return gql`
+        subscription ListRequirements {
+            requirement(where: {sailebot_id: {_eq: ${sailebot_id}}}) {
+                auto_reject
+                city
+                contract_no
+                elasticity
+                function
+                geography
+                id
+                is_duplicate
+                launch_date
+                ldr_notes
+                level
+                max_hits_per_contact
+                name
+                priority
+                sailebot_id
+                size
+                source
+                state
+                job_levels
+                titles
+                campaigns(limit: ${campaign_limit}, offset: ${campaign_offset}) {
+                    description
+                    id
+                    name
+                    requirement_id
+                }
+            }
+        }
+    `;
+}
+
 export const listDomains = (limit=10, offset=0) => {
     return gql`
         subscription ListDomains {
