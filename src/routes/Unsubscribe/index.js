@@ -7,8 +7,9 @@ import Container from '@material-ui/core/Container';
 import { createJWTClient,  } from '../../graphql/apollo';
 import { ApolloProvider} from "react-apollo";
 import { adopt } from 'react-adopt';
-import { Query, Mutation } from "react-apollo";
-import { getContactById } from "../../graphql/queries";
+import { Mutation } from "react-apollo";
+// import { Query, Mutation } from "react-apollo";
+// import { getContactById } from "../../graphql/queries";
 import { updateContact } from "../../graphql/mutations";
 
 
@@ -38,13 +39,8 @@ export default function Unscubscribe(props) {
   // props.history.push(props.match.url)
   const { company, contactEmail, contactId, token } = props.match.params
   const jwt_client = createJWTClient(token)
-  const id = Number(contactId)
+  // const id = Number(contactId)
   const Composed = adopt({
-    contactQuery: ({ render }) => (
-      <Query query={getContactById(id)} >
-        { render }
-      </Query>
-    ),
     contactMutation: ({ render }) => (
       <Mutation mutation={ updateContact } >
         { render }
@@ -55,9 +51,7 @@ export default function Unscubscribe(props) {
   return (
     <ApolloProvider client={jwt_client}>
       <Composed>
-        {({ contactQuery: {data, loading}, contactMutation }) => {
-          console.log('loading: ', loading);
-          console.log('data: ', data);
+        {({ contactMutation }) => {
           return (
             <Container component="main" maxWidth="md" style={{ height: '100vh' }}>
               <CssBaseline />

@@ -20,11 +20,13 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
     const campaign_accounts = listCampaignAccountsSubscription.data && listCampaignAccountsSubscription.data.campaign_account ? listCampaignAccountsSubscription.data.campaign_account : []
     const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
     const schedule_id = schedule.id
+    const campaign_id = schedule.campaign_id
     
     const processed = campaign_accounts.filter(acc => !schedule_accounts.includes(acc.account_id) ).splice(0,accounts_to_add).map( ( account ) => {
       return {
         account_id: account.account_id,
-        schedule_id
+        schedule_id,
+        campaign_id
       };
     })
 

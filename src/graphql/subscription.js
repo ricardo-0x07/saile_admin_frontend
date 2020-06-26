@@ -816,7 +816,7 @@ export const listAvailableCampaignAccounts = (campaign_id, is_delisted=false) =>
 export const listClarificationEvents = (limit=10, offset=0) => {
     return gql`
         subscription ListContactClarificationEvents{
-            event(where: { to_clarify: {_eq: true} }, limit: ${limit}, offset: ${offset}) {
+            event(where: { to_clarify: {_eq: true} }, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
                 body
                 cc
                 date
@@ -843,7 +843,7 @@ export const listClarificationEvents = (limit=10, offset=0) => {
 export const listContactClarificationEvents = (contact_id, limit=10, offset=0) => {
     return gql`
         subscription ListContactClarificationEvents{
-            event(where: {contact_id: {_eq: ${contact_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}) {
+            event(where: {contact_id: {_eq: ${contact_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
                 body
                 cc
                 date
@@ -872,7 +872,7 @@ export const listContactClarificationEvents = (contact_id, limit=10, offset=0) =
 export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0) => {
     return gql`
         subscription ListCampaignClarificationEvents{
-            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {date: asc}) {
+            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
                 body
                 cc
                 date
