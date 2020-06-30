@@ -64,6 +64,7 @@ const ManageScheduleForm = (props) => {
         daily_outbound_limit: '',
         no_targets_per_accounts: '',
         deploy_date:  new Date() ,
+        end_date:  new Date() ,
         status: '',
         timezone: '',
         accounts_per_schedule: null
@@ -93,6 +94,7 @@ const ManageScheduleForm = (props) => {
                                     no_targets_per_accounts,
                                     campaign_id,
                                     deploy_date,
+                                    end_date,
                                     status,
                                     timezone,
                                     accounts_per_schedule,
@@ -107,6 +109,7 @@ const ManageScheduleForm = (props) => {
                                                 daily_outbound_limit: Number(daily_outbound_limit),
                                                 no_targets_per_accounts: Number(no_targets_per_accounts),
                                                 deploy_date,
+                                                end_date,
                                                 status,
                                                 timezone,
                                                 accounts_per_schedule,
@@ -123,6 +126,7 @@ const ManageScheduleForm = (props) => {
                                                 daily_outbound_limit: Number(daily_outbound_limit),
                                                 no_targets_per_accounts: Number(no_targets_per_accounts),
                                                 deploy_date,
+                                                end_date,
                                                 status,
                                                 timezone,
                                                 accounts_per_schedule,
@@ -175,6 +179,7 @@ const ManageScheduleForm = (props) => {
                                             value={values.no_targets_per_accounts  || ''}
                                         />
                                         <Field label="Deploy Date" name="deploy_date" component={DatePickerField} />
+                                        <Field label="End Date" name="end_date" component={DatePickerField} />
                                         <TextField
                                             name="status"
                                             label="Status" 

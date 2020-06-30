@@ -84,7 +84,7 @@ const ManageSaileBotForm = (props) => {
                                             objects: {
                                                 client_id,
                                                 email,
-                                                fullname: `${firstname} ${lastname}`,
+                                                fullname,
                                                 id,
                                                 name,
                                                 no_targets,
@@ -107,7 +107,7 @@ const ManageSaileBotForm = (props) => {
                                             objects: {
                                                 client_id,
                                                 email,
-                                                fullname: `${firstname} ${lastname}`,
+                                                fullname,
                                                 name,
                                                 no_targets,
                                                 phone,
@@ -134,6 +134,14 @@ const ManageSaileBotForm = (props) => {
                                 <FormControl component="fieldset">
                                     <FormLabel component="legend">SaileBot Creation/Update</FormLabel>
                                     <FormGroup aria-label="position" >
+                                        <TextField
+                                            name="fullname"
+                                            label="Identifier" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.fullname === null ? '' : values.fullname }
+                                        />
                                         <TextField
                                             name="firstname"
                                             label="First Name" 

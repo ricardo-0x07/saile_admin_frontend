@@ -38,6 +38,8 @@ const Accounts = (props) => {
     city: 'Account: Billing City',
     country: 'Account: Billing Country',
     ex_id: 'Account: Account ID',
+    d_u_n_s_number: 'Account: D-U-N-S® Number',
+    postal_code: 'Account: Postal Code',
   };
 
   const contacts_csv_key_map = {
@@ -62,6 +64,7 @@ const Accounts = (props) => {
     city: 'Billing City',
     state: 'Billing State/Province',
     country: 'Billing Country',
+    
   };
 
   const Composed = adopt({

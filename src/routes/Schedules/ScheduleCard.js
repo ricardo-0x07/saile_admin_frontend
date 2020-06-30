@@ -13,7 +13,7 @@ import { createScheduleAccount, updateCampaignAccount } from "../../graphql/muta
 
 export const ScheduleCard = ({ schedule,  campaign,  history }) => {
   
-  const { name, no_targets_per_accounts, deploy_date } = schedule;
+  const { name, no_targets_per_accounts, deploy_date, end_date } = schedule;
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
   const addScheduleAccounts = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
@@ -89,6 +89,12 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
               <Typography>
                 Deploy Date: <Moment format="YYYY-MMM-DD" date={deploy_date !== null && deploy_date }></Moment>
               </Typography>
+              {
+                end_date && 
+                <Typography>
+                  End Date: <Moment format="YYYY-MMM-DD" date={end_date !== null && end_date }></Moment>
+                </Typography>
+              }
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
             </CardContent>
             <CardActions>

@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Subscription } from "react-apollo";
+import { adopt } from 'react-adopt';
 
 import { DomainCard } from "./DomainCard";
-import { listDomains } from "../../graphql/subscription";
+import { listDomains, listSailebotDomains } from "../../graphql/subscription";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,11 +20,26 @@ const useStyles = makeStyles(theme => ({
 
 const Domains = (props) => {
   const classes = useStyles();
+  const Composed = adopt({
+    sailebotsQuery: props.location.state && props.location.state.sailebot && props.location.state.sailebot.id ?
+    ({ render }) => (
+      <Subscription subscription={listSailebotDomains(props.location.state.sailebot.id)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Subscription subscription={listDomains(10) } >
+        { render }
+      </Subscription>
+    ),
+  })
   return (
-    <Subscription
-     subscription={listDomains(10)}
-    >
-      {({ data, loading }) => {
+    <Composed>
+      {({ sailebotsQuery: {data, loading} }) => {
+        console.log('loading: ', loading)
+        console.log('data: ', data)
+        console.log('props.location.state: ', props.location.state)
         if (
           loading ||
           !data ||
@@ -59,7 +75,7 @@ const Domains = (props) => {
           </div>
         );
       }}
-    </Subscription>
+    </Composed>
   );
 };
 

@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 export const SaileBotCard = ({ sailebot, client,  history }) => {
   const classes = useStyles();
-  const {name, fullname} = sailebot;
+  const { email, fullname} = sailebot;
   const Composed = adopt({
     actionableEventCountQuery: ({ render }) => (
       <Subscription subscription={sailebotEventCountByLabel(sailebot.id, "actionable_opportunity")} >
@@ -58,7 +58,8 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
         return (
           <Card>
             <CardContent>
-              <Typography>{fullname || name}</Typography>
+              <Typography>{fullname}</Typography>
+              <Typography>{email}</Typography>
             </CardContent>
             <div style={{ display: 'flex', flexDirection: 'row' }} className={classes.root}>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>

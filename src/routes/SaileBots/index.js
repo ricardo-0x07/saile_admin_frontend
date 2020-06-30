@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 const SaileBots = (props) => {
   const classes = useStyles();
   const Composed = adopt({
-    sailebotsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
+    sailebotsQuery: props.location.state && props.location.state.client && props.location.state.client.id ?
     ({ render }) => (
       <Subscription subscription={listClientSaileBots(props.location.state.client.id)} >
         { render }
@@ -47,6 +47,7 @@ const SaileBots = (props) => {
         ) {
           return null;
         }
+        console.log('data.sailebot: ', data.sailebot)
         
 
         return (

@@ -399,6 +399,7 @@ export const listSchedules = (limit=10, offset=0, account_limit=10, account_offs
                 daily_outbound_limit
                 date
                 deploy_date
+                end_date
                 id
                 name
                 no_targets_per_accounts
@@ -424,6 +425,7 @@ export const listCampaignSchedules = (campaign_id) => {
             daily_outbound_limit
             created_at
             deploy_date
+            end_date
             id
             name
             no_targets_per_accounts
@@ -872,7 +874,7 @@ export const listContactClarificationEvents = (contact_id, limit=10, offset=0) =
 export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0) => {
     return gql`
         subscription ListCampaignClarificationEvents{
-            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {created_at: desc}) {
                 body
                 cc
                 date
@@ -1017,3 +1019,23 @@ export const listDomains = (limit=10, offset=0) => {
     `;
 }
 
+
+export const listSailebotDomains = (sailebot_id) => {
+    return gql`
+        subscription ListSailebotDomains {
+            domain(where: {sailebot_id: {_eq: ${sailebot_id}}}) {
+                active
+                dns
+                host
+                id
+                ip
+                name
+                provider
+                sailebot_id
+                smtp
+                smtp_login
+                smtp_password
+            }
+        }
+    `;
+}
