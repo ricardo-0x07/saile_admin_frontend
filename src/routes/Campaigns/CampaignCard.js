@@ -8,9 +8,10 @@ import {
   FormControlLabel,
 } from '@material-ui/core';
 import { adopt } from 'react-adopt';
-import { Mutation } from "react-apollo";
+import { Mutation, Query } from "react-apollo";
 import Switch from '@material-ui/core/Switch';
 import { updateCampaign } from "../../graphql/mutations";
+import { countCampaignScheduleAccounts, countCampaignAccounts } from "../../graphql/queries"
 
 
 export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
@@ -19,12 +20,22 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
     toStatus: campaign.to_run,
   });
   const Composed = adopt({
-    updateCampaignMutation: ({ render }) => (
-        <Mutation mutation={ updateCampaign } >
+    countCampaignAccountsQuery: ({ render }) => (
+        <Query query={ countCampaignAccounts(campaign.id) } >
           { render }
-        </Mutation> 
+        </Query> 
     ),
-  })
+    countCampaignScheduleAccountsQuery: ({ render }) => (
+      <Query query={ countCampaignScheduleAccounts(campaign.id) } >
+        { render }
+      </Query> 
+  ),
+  updateCampaignMutation: ({ render }) => (
+    <Mutation mutation={ updateCampaign } >
+      { render }
+    </Mutation> 
+),
+})
 
   const handleChange = (updateCampaignMutation) => async (event) => {
     const { name, description, accounts_per_schedule, requirement_id, id } = campaign;
@@ -54,12 +65,24 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   const { name, accounts_per_schedule } = campaign;
   return (
     <Composed>
-      {({ updateCampaignMutation }) => {
+      {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery }) => {
+        console.log('countCampaignAccountsQuery: ', countCampaignAccountsQuery)
+        console.log('countCampaignScheduleAccountsQuery: ', countCampaignScheduleAccountsQuery)
+        let countCampaignAccounts = null
+        if (countCampaignAccountsQuery.data && countCampaignAccountsQuery.data.campaign_account_aggregate && !countCampaignAccountsQuery.loading) {
+          countCampaignAccounts = countCampaignAccountsQuery.data.campaign_account_aggregate.aggregate.count          
+        }
+        let countCampaignScheduleAccounts = null
+        if (countCampaignScheduleAccountsQuery.data && countCampaignScheduleAccountsQuery.data.schedule_account_aggregate && !countCampaignScheduleAccountsQuery.loading) {
+          countCampaignScheduleAccounts = countCampaignScheduleAccountsQuery.data.schedule_account_aggregate.aggregate.count          
+        }
         return (
           <Card>
             <CardContent>
               <Typography>Name: {name}</Typography>
               <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
+              <Typography>Campaign Accounts: {countCampaignAccounts}</Typography>
+              <Typography>Campaign Scheduled Accounts: {countCampaignScheduleAccounts}</Typography>
             </CardContent>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }}>

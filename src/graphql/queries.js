@@ -677,6 +677,42 @@ export const getContactById = (id) => {
     `;
 }
 
+export const totalScheduleAccounts = (schedule_id) => {
+    return gql`
+        query TotalScheduleAccounts {
+            schedule_account_aggregate(where: {schedule_id: {_eq: ${schedule_id}}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+
+export const countCampaignScheduleAccounts = (campaign_id) => {
+    return gql`
+        query CountCampaignScheduleAccounts  {
+            schedule_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}}) {
+                aggregate {
+                count(columns: account_id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+
+export const countCampaignAccounts = (campaign_id) => {
+    return gql`
+        query CountCampaignAccounts  {
+            campaign_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}}) {
+                aggregate {
+                count(columns: account_id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+
 export const listAccountContacts = (account_id, limit=10, offset=0, event_limit=10, event_offset=0) => {
     return gql`
         query ListAccountContacts {

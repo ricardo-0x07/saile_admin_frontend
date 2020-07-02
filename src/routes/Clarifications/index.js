@@ -7,6 +7,7 @@ import { listClarificationEvents, listCampaignClarificationEvents, totalCampaign
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
+// import { createreferral } from '../../utils/rest_api'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,8 +31,6 @@ const Events = (props) => {
   // console.log('REACT_APP_SENDGRID_API_KEY: ', REACT_APP_SENDGRID_API_KEY)
   // console.log('REACT_APP_MAILGUN_API_KEY: ', REACT_APP_MAILGUN_API_KEY)
   // console.log('REACT_APP_PRIVATE_API_KEY: ', REACT_APP_PRIVATE_API_KEY)
-  
-  
   
 
   const [page, setPage] = React.useState(1);
@@ -89,7 +88,7 @@ const Events = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 data.event.filter(item => item.campaign_id === props.location.state.campaign.id ).map(x => (
-                  <EventCard event={x} name={x.name} key={x.id} history={props.history} campaign={props.location.state.campaign}/>
+                  <EventCard event={x} name={x.name} key={x.id} history={props.history} campaign={props.location.state.campaign} sailebot={props.location.state.sailebot}/>
                 ))
                 :
                 data.event.filter(item => item ).map(x => (

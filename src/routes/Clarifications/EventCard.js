@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import { Mutation } from "react-apollo";
 import { updateEvent } from "../../graphql/mutations";
 import { adopt } from 'react-adopt';
+import { createreferral } from '../../utils/rest_api'
 
 // const actionable_opportunity_clarification_lambda_api_endpoint = "https://8xbo18ydk7.execute-api.us-west-2.amazonaws.com/Prod/"
 // const referral_clarification_lambda_api_endpoint = "https://d7quhnype6.execute-api.us-west-2.amazonaws.com/Prod/"
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const EventCard = ({ event }) => {
+export const EventCard = ({ event, sailebot }) => {
   const [state, setState] = React.useState({
     showBody: false,
   });
@@ -49,6 +50,16 @@ export const EventCard = ({ event }) => {
     to,
   } = event;
 
+  const _createreferral_ = async (referral) => {
+    try {
+      console.log('referral: ', referral)
+      await createreferral(referral)
+      console.log('referral: ', referral)
+    } catch (error) {
+      console.log('createreferral error: ', error)
+    }
+  }
+  
   const Composed = adopt({
     updateEventMutation: ({ render }) => (
         <Mutation mutation={ updateEvent } >
@@ -118,6 +129,10 @@ export const EventCard = ({ event }) => {
               <CardActions className={classes.root}>
                 <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                 <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Accept & Dismiss</Button>
+                {
+                  id && sailebot && sailebot.id && contact_id &&
+                  <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
+                }
               </CardActions>
               {
                 state.showBody &&
