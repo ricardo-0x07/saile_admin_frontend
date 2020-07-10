@@ -5,9 +5,9 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { adopt } from 'react-adopt';
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 
-import { clientEventCountByLabel, clientEventCount } from "../../graphql/subscription";
+import { clientEventCountByLabel, clientEventCount } from "../../graphql/queries";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -24,19 +24,19 @@ export const ClientCard = ({ client,  history }) => {
   const {name} = client;
   const Composed = adopt({
     actionableEventCountQuery: ({ render }) => (
-      <Subscription subscription={clientEventCountByLabel(client.id, "actionable_opportunity")} >
+      <Query query={clientEventCountByLabel(client.id, "actionable_opportunity")} >
         { render }
-      </Subscription>
+      </Query>
     ),
     referralEventCountQuery: ({ render }) => (
-      <Subscription subscription={clientEventCountByLabel(client.id, "refferal_thanks")} >
+      <Query query={clientEventCountByLabel(client.id, "refferal_thanks")} >
         { render }
-      </Subscription>
+      </Query>
     ),
     clientEventCountQuery: ({ render }) => (
-      <Subscription subscription={clientEventCount(client.id)} >
+      <Query query={clientEventCount(client.id)} >
         { render }
-      </Subscription>
+      </Query>
     ),
   })
 

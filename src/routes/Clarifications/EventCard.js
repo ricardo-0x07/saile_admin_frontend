@@ -9,9 +9,9 @@ import Moment from 'react-moment';
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import { Mutation } from "react-apollo";
-import { updateEvent } from "../../graphql/mutations";
+import { updateEvent, updateContact } from "../../graphql/mutations";
 import { adopt } from 'react-adopt';
-import { createreferral } from '../../utils/rest_api'
+import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
 
 // const actionable_opportunity_clarification_lambda_api_endpoint = "https://8xbo18ydk7.execute-api.us-west-2.amazonaws.com/Prod/"
 // const referral_clarification_lambda_api_endpoint = "https://d7quhnype6.execute-api.us-west-2.amazonaws.com/Prod/"
@@ -60,17 +60,51 @@ export const EventCard = ({ event, sailebot }) => {
     }
   }
   
+  const _createActionableOpportunity_ = async (opportunity) => {
+    try {
+      console.log('opportunity: ', opportunity)
+      await createActionableOpportunity(opportunity)
+      console.log('opportunity: ', opportunity)
+    } catch (error) {
+      console.log('createActionableOpportunity error: ', error)
+    }
+  }
+
   const Composed = adopt({
     updateEventMutation: ({ render }) => (
         <Mutation mutation={ updateEvent } >
           { render }
         </Mutation> 
     ),
-  })
+    updateContactMutation: ({ render }) => (
+      <Mutation mutation={ updateContact } >
+        { render }
+      </Mutation> 
+  ),
+})
   const handleChange = async () => {
     await setState({ ...state, showBody: !state.showBody });
   }
   const dismissClarification = (updateEventMutation) => async () => {
+    const {
+      cc,
+      date,
+      id,
+      label,
+      sender,
+      subject,
+      body,
+      contact_id,
+      nlu_input_text,
+      nlu_json_response,
+      selected_intent,
+      validated_json_response,
+      validated_intent,
+      campaign_id,
+      is_inbound,
+      to_clarify,
+      to,
+    } = event;
     const toClarify=false
     await updateEventMutation({
       variables: {
@@ -97,6 +131,17 @@ export const EventCard = ({ event, sailebot }) => {
       }
     });
   }
+  const unsubscribeContact = (updateContactMutation) => async () => {
+    const toClarify=false
+    await updateContactMutation({
+      variables: {
+          objects: {
+            unsubscribed: true,
+          },
+          id: event.contact_id
+      }
+    });
+  }
   function createMarkup(body) {
     return {__html: body};
   }
@@ -114,7 +159,7 @@ export const EventCard = ({ event, sailebot }) => {
   // console.log(body.split("\n").slice(0,4))
   return (
     <Composed>
-      {({ updateEventMutation }) => {
+      {({ updateEventMutation, updateContactMutation }) => {
         return (
           <Card>
             <CardContent>
@@ -132,6 +177,14 @@ export const EventCard = ({ event, sailebot }) => {
                 {
                   id && sailebot && sailebot.id && contact_id &&
                   <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
+                }
+                {
+                  id && sailebot && sailebot.id && contact_id &&
+                  <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create AO</Button>
+                }
+                {
+                  // contact_id &&
+                  // <Button variant="contained" size="small" onClick={unsubscribeContact(updateContactMutation)}>Globally Unsubscribe Contact</Button>
                 }
               </CardActions>
               {

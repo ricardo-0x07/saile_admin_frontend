@@ -45,8 +45,6 @@ export const AccountCard = ({ account,  campaign,  history }) => {
   //     }
   //   });        
   //   console.log("campaign_accounts_affected: ", campaign_accounts_affected)                
-
-
   // }
   return (
     <Composed>

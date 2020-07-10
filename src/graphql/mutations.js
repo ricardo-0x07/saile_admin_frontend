@@ -65,6 +65,16 @@ export const createCampaign = gql`
   }
 `;
 
+export const createUpdateCampaign = gql`
+  mutation InsertCampaign($objects: [campaign_insert_input!]!) {
+    insert_campaign(objects: $objects, on_conflict: {constraint: campaign_name_key, update_columns: [name]}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
 export const updateCampaign = gql`
   mutation UpdateCampaign($objects: campaign_set_input!, $id: Int) {
     update_campaign(where: {id: {_eq: $id}}, _set: $objects) {
@@ -93,7 +103,7 @@ export const updateTemplate = gql`
 
 export const createAccount = gql`
   mutation InsertAccount($objects: [account_insert_input!]!) {
-    insert_account(objects: $objects, on_conflict: {constraint: account_name_email_domain_key, update_columns: [NAICS, address, country, email_domain, employees, fax, name, phone, revenue, state, website, city]}) {
+    insert_account(objects: $objects, on_conflict: {constraint: account_name_email_domain_key, update_columns: [NAICS, address, country, email_domain, employees, fax, name, phone, revenue, street, state, website, city]}) {
       returning {
         id
       }

@@ -677,6 +677,178 @@ export const getContactById = (id) => {
     `;
 }
 
+export const listClientSaileBots = (client_id) => {
+    return gql`
+        query ListClientSaileBots {
+            sailebot(where: {client_id: {_eq: ${client_id}}}) {
+                client_id
+                email
+                fullname
+                id
+                name
+                no_targets
+                phone
+                title
+                role
+                company_name
+                signature
+                firstname
+                lastname
+                smtp_login
+                smtp_password
+            }
+        }
+    `;
+}
+
+export const listRequirementCampaigns = (requirement_id) => {
+    return gql`
+    query ListCampaigns {
+        campaign(where: {requirement_id: {_eq: ${requirement_id}}}) {
+            accounts_per_schedule
+            description
+            id
+            name
+            requirement_id
+            run_status
+            is_running
+            to_run
+            status_message
+            schedules {
+                campaign_id
+                daily_outbound_limit
+                date
+                deploy_date
+                id
+                name
+                no_targets_per_accounts
+                status
+                timezone
+            }
+            templates {
+                body_html_text
+                body_text
+                campaign_id
+                id
+                name
+                subject
+            }
+            campaign_accounts {
+                account {
+                    NAICS
+                    address
+                    city
+                    country
+                    domain
+                    email
+                    email_domain
+                    employees
+                    fax
+                    id
+                    is_scheduled
+                    name
+                    phone
+                    revenue
+                    state
+                    website
+                }
+            }
+        }
+    }
+`;
+}
+
+export const listSailebotRequirements = (sailebot_id, campaign_limit=10, campaign_offset=0) => {
+    return gql`
+        query ListRequirements {
+            requirement(where: {sailebot_id: {_eq: ${sailebot_id}}}) {
+                auto_reject
+                city
+                contract_no
+                elasticity
+                function
+                geography
+                id
+                is_duplicate
+                launch_date
+                ldr_notes
+                level
+                max_hits_per_contact
+                name
+                priority
+                sailebot_id
+                size
+                source
+                state
+                job_levels
+                titles
+                campaigns(limit: ${campaign_limit}, offset: ${campaign_offset}) {
+                    description
+                    id
+                    name
+                    requirement_id
+                }
+            }
+        }
+    `;
+}
+
+
+export const clientEventCountByLabel = (client_id, label_query) => {
+    return gql`
+        query ClientEventCountByLabel {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+
+export const clientEventCount = (client_id) => {
+    return gql`
+        query SailebotEventCount {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+
+
 export const totalScheduleAccounts = (schedule_id) => {
     return gql`
         query TotalScheduleAccounts {

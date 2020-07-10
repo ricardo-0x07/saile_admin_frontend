@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 
 import { RequirementCard } from "./RequirementCard";
-import { listRequirements, listSailebotRequirements } from "../../graphql/subscription";
+import { listRequirements, listSailebotRequirements } from "../../graphql/queries";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,15 +25,15 @@ const Requirements = (props) => {
   const Composed = adopt({
     requirementsQuery: props.location.state && props.location.state.sailebot && props.location.state.sailebot.id ?
     ({ render }) => (
-      <Subscription subscription={listSailebotRequirements(props.location.state.sailebot.id)} >
+      <Query query={listSailebotRequirements(props.location.state.sailebot.id)} >
         { render }
-      </Subscription>
+      </Query>
     )
     :
     ({ render }) => (
-      <Subscription subscription={listRequirements(10) } >
+      <Query query={listRequirements(10) } >
         { render }
-      </Subscription>
+      </Query>
     ),
   })
   return (

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { CSVReader } from 'react-papaparse'
-// import { Mutation } from "react-apollo";
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 
-import { createAccount, createCampaignAccount } from "../../graphql/mutations";
+import { createAccount, createCampaignAccount, createUpdateCampaign } from "../../graphql/mutations";
 import { getClientCampaignAccounts } from "../../graphql/queries";
 
-var _ = require('lodash');
+// var _ = require('lodash');
 const buttonRef = React.createRef()
 
 export default class CSVReader1 extends Component {
@@ -31,64 +30,83 @@ export default class CSVReader1 extends Component {
     }
   }
   
-  getAccountCSVData = async (data, createAccountMutation, createCampaignAccountMutation, clientCampaignAccountQuery) => {
+  getAccountCSVData = async (data, createUpdateCampaignMutation, createAccountMutation, createCampaignAccountMutation, clientCampaignAccountQuery) => {
     console.log('data.length: ', data.length)
     console.log('clientCampaignAccountQuery: ', clientCampaignAccountQuery)
     console.log('this.props.sailebot: ', this.props.sailebot)
     const existing_campaign_accounts = clientCampaignAccountQuery.data ? clientCampaignAccountQuery.data.campaign_account.map(acc => acc.account_id) : []
-    console.log('existing_campaign_accounts.includes(4959): ', existing_campaign_accounts.includes(4959))
-    console.log('existing_campaign_accounts.includes(100000000): ', existing_campaign_accounts.includes(100000000))
 
     let accounts = data.map(account => {
 
       return Object.entries(this.props.accounts_csv_key_map).reduce((acc, [key, value]) => {
-        acc[key] = account.data[value];
+        if (key === 'campaign_name') {
+          acc['campaign_name'] = account.data[value];
+        } else {
+          acc[key] = account.data[value];
+        }
+        
         return acc
       }, {})
     });
     // accounts = _.uniqBy(accounts, 'ex_id');
     // accounts = _.uniqBy(accounts, 'name');
-    const campaign_id = this.props.location.state.campaign.id
+    // const campaign_id = this.props.location.state.campaign.id
+    console.log('accounts[0]: ', accounts[0])
     console.log('accounts.length: ', accounts.length)
     console.log('existing_campaign_accounts.length: ', existing_campaign_accounts.length)
-    await _.chunk(accounts, 10).map(async accounts_batch => {
+    // await accounts.slice(0,1).map(async account => {
+      const results = await accounts.map(async account => {
       try {
-        let accounts_response = await createAccountMutation({
+        let campaign_response = await createUpdateCampaignMutation({
           variables: {
-            objects: accounts_batch
+            objects: {
+              name: account.campaign_name,
+              requirement_id: this.props.requirement_id
+            }
           }
         });
-        console.log('accounts_response.data.insert_account.returning.length: ', accounts_response.data.insert_account.returning.length)
-        let campaign_accounts_response = await createCampaignAccountMutation({
-          variables: {
-            objects: accounts_response.data.insert_account.returning.filter(acc => !existing_campaign_accounts.includes(acc.id)).map(account => {
-              return { campaign_id, account_id: account.id }
-            })
-          }
-        });
-        console.log('campaign_accounts_response.data.insert_campaign_account.returning.length: ', campaign_accounts_response.data.insert_campaign_account.returning.length)
-                            
-        return accounts_response
-      } catch (error) {
-        console.log('createContactMutation error: ', error)
-        console.log('createContactMutation error message: ', error.message)
-        return {accounts_batch, error}
-      }
-    });     
+        // console.log('campaign_response.data.insert_campaign.returning[0].id: ', campaign_response.data.insert_campaign.returning[0].id)
+        let campaign_accounts_response = []
+        let accounts_response = []
+        if (campaign_response.data.insert_campaign.returning.length > 0 && 'id' in campaign_response.data.insert_campaign.returning[0] && campaign_response.data.insert_campaign.returning[0].id > 0) {
+          const campaign_id = campaign_response.data.insert_campaign.returning[0].id
+          // console.log('campaign_id: ', campaign_id)
+          // console.log('account: ', account)
+          delete account.campaign_name;
+          // console.log('account: ', account)
+          const {status, street, city, state, country, ...account_} = account;
+          // console.log('status: ', status)
 
-    // const campaign_accounts_response = await createAccountMutation({
-    //   variables: {
-    //     objects: accounts
-    //   }
-    // });
-    
-    // await createCampaignAccountMutation({
-    //   variables: {
-    //     objects: accounts_response.data.insert_account.returning.map(account => {
-    //       return { campaign_id, account_id: account.id }
-    //     })
-    //   }
-    // });
+          accounts_response = await createAccountMutation({
+            variables: {
+              objects: {...account_, address: `${street}, ${city}, ${state}, ${country}`, street, city, state, country}
+            }
+          });
+          // console.log('accounts_response.data.insert_account.returning.length: ', accounts_response.data.insert_account.returning.length)
+
+          campaign_accounts_response = await createCampaignAccountMutation({
+            variables: {
+              objects: accounts_response.data.insert_account.returning.filter(acc => !existing_campaign_accounts.includes(acc.id)).map(account => {
+                return { 
+                  campaign_id,
+                  account_id: account.id,
+                  is_delisted: status === 'Actionable Opportunity' || status === 'Remove' ? true :false
+                }
+              })
+            }
+          });
+          // console.log('campaign_accounts_response.data.insert_campaign_account.returning.length: ', campaign_accounts_response.data.insert_campaign_account.returning.length)
+        }
+
+                            
+        return {campaign_response, accounts_response, campaign_accounts_response}
+      } catch (error) {
+        console.log(' error: ', error)
+        console.log(' error message: ', error.message)
+        return {account, error}
+      }
+    });   
+    console.log('results: ', results)  
     
   }
 
@@ -101,10 +119,15 @@ export default class CSVReader1 extends Component {
           { render }
         </Query>
       ),
-      createAccountMutation: ({ render }) => (
-          <Mutation mutation={ createAccount } >
+      createUpdateCampaignMutation: ({ render }) => (
+          <Mutation mutation={ createUpdateCampaign } >
             { render }
           </Mutation> 
+      ),
+      createAccountMutation: ({ render }) => (
+        <Mutation mutation={ createAccount } >
+          { render }
+        </Mutation> 
       ),
       createCampaignAccountMutation: ({ render }) => (
           <Mutation mutation={ createCampaignAccount } >
@@ -114,14 +137,14 @@ export default class CSVReader1 extends Component {
     })
     return (
       <Composed>
-        {({ clientCampaignAccountQuery, createAccountMutation, createCampaignAccountMutation }) => {
+        {({ clientCampaignAccountQuery, createUpdateCampaignMutation, createAccountMutation, createCampaignAccountMutation }) => {
           return (
             <>
               <h5>{this.props.label ? this.props.label : ''} Bulk Upload</h5>
               <CSVReader
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
-                  this.getAccountCSVData(loaded_data, createAccountMutation, createCampaignAccountMutation, clientCampaignAccountQuery)
+                  this.getAccountCSVData(loaded_data, createUpdateCampaignMutation, createAccountMutation, createCampaignAccountMutation, clientCampaignAccountQuery)
                 }}
                 onError={this.onError}
                 noClick

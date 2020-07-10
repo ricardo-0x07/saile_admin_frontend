@@ -6,8 +6,11 @@ import { getMainDefinition } from 'apollo-utilities';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
 
-const graphqlApiUri_remote = 'https://saile-graph-api.net/v1/graphql';
+const graphqlApiUri = 'https://saile-graph-api.net/v1/graphql';
+// const graphqlApiUri = 'http://localhost:8088/v1/graphql';
+
 const graphqlSocketUri = 'wss://saile-graph-api.net/v1/graphql';
+// const graphqlSocketUri = 'wss://localhost:8088/v1/graphql';
 
 
 export const createClient = (secret) => {
@@ -17,7 +20,7 @@ export const createClient = (secret) => {
   };
 
   const httpLink = new HttpLink({
-    uri: graphqlApiUri_remote, 
+    uri: graphqlApiUri, 
     headers: hasuraReqHeaders
   });
 
@@ -75,7 +78,7 @@ export const createJWTClient = (token) => {
   };
 
   const httpLink = new HttpLink({
-    uri: graphqlApiUri_remote, 
+    uri: graphqlApiUri, 
     headers: hasuraReqHeaders
   });
 

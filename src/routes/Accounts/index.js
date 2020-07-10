@@ -1,5 +1,5 @@
 import React from "react";
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
 import AccountsCSVReader from '../../components/AccountsCSVReader';
@@ -8,7 +8,7 @@ import ContactsCSVReader from '../../components/ContactsCSVReader';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import { listAccounts, listCampaignAccounts } from "../../graphql/subscription";
+import { listAccounts, listCampaignAccounts } from "../../graphql/queries";
 
 
 const useStyles = makeStyles(theme => ({
@@ -70,15 +70,15 @@ const Accounts = (props) => {
   const Composed = adopt({
     accountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
-      <Subscription subscription={listCampaignAccounts(props.location.state.campaign.id, 100)} >
+      <Query query={listCampaignAccounts(props.location.state.campaign.id, 100)} >
         { render }
-      </Subscription>
+      </Query>
     )
     :
     ({ render }) => (
-      <Subscription subscription={listAccounts(10) } >
+      <Query query={listAccounts(10) } >
         { render }
-      </Subscription>
+      </Query>
     ),
   })
   return (
@@ -86,6 +86,10 @@ const Accounts = (props) => {
       {({ accountsQuery: { data, loading } }) => {
         console.log('data: ', data)
         console.log('loading: ', loading)
+        console.log('props: ', props)
+        if (!props.location.state.sailebot) {
+          props.history.goBack()
+        }
 
         if (
           loading ||
@@ -128,7 +132,7 @@ const Accounts = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 data.campaign_account.map(x => (
-                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history} campaign={props.location.state.campaign} />
+                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history} campaign={props.location.state.campaign} sailebot={props.location.state.sailebot}/>
                 ))
                 :
                 data.account.filter(item => item ).map(x => (

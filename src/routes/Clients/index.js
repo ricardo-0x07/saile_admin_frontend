@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import { connect } from 'react-redux';
 import { ClientCard } from "./ClientCard";
-import { listClients } from "../../graphql/subscription";
+import { listClients } from "../../graphql/queries";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,8 +20,8 @@ const useStyles = makeStyles(theme => ({
 const Clients = (props) => {
   const classes = useStyles();
   return (
-    <Subscription
-    subscription={listClients(10)}
+    <Query
+    query={listClients(10)}
     >
       {({ data, loading }) => {
         if (
@@ -54,7 +54,7 @@ const Clients = (props) => {
           </div>
         );
       }}
-    </Subscription>
+    </Query>
   );
 };
 

@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import { SaileBotCard } from "./SaileBotCard";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import { listSaileBots, listClientSaileBots } from "../../graphql/subscription";
+import { listSaileBots, listClientSaileBots } from "../../graphql/queries";
 import Title from '../../components/Title';
 
 
@@ -24,15 +24,15 @@ const SaileBots = (props) => {
   const Composed = adopt({
     sailebotsQuery: props.location.state && props.location.state.client && props.location.state.client.id ?
     ({ render }) => (
-      <Subscription subscription={listClientSaileBots(props.location.state.client.id)} >
+      <Query query={listClientSaileBots(props.location.state.client.id)} >
         { render }
-      </Subscription>
+      </Query>
     )
     :
     ({ render }) => (
-      <Subscription subscription={listSaileBots(10) } >
+      <Query query={listSaileBots(10) } >
         { render }
-      </Subscription>
+      </Query>
     ),
   })
   console.log('props.location.state: ', props.location.state)

@@ -15,7 +15,6 @@ import { countCampaignScheduleAccounts, countCampaignAccounts } from "../../grap
 
 
 export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
-  console.log('campaign: ', campaign)
   const [state, setState] = React.useState({
     toStatus: campaign.to_run,
   });
@@ -66,8 +65,6 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   return (
     <Composed>
       {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery }) => {
-        console.log('countCampaignAccountsQuery: ', countCampaignAccountsQuery)
-        console.log('countCampaignScheduleAccountsQuery: ', countCampaignScheduleAccountsQuery)
         let countCampaignAccounts = null
         if (countCampaignAccountsQuery.data && countCampaignAccountsQuery.data.campaign_account_aggregate && !countCampaignAccountsQuery.loading) {
           countCampaignAccounts = countCampaignAccountsQuery.data.campaign_account_aggregate.aggregate.count          
