@@ -8,11 +8,11 @@ import {
     FormLabel,
     FormControl,
     FormGroup,
-
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
 
 import { createSaileBot, updateSaileBot } from "../../graphql/mutations";
+import SimpleSelect from './SimpleSelect'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,6 +22,13 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
       },
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
     },
 }));
 
@@ -41,6 +48,7 @@ const ManageSaileBotForm = (props) => {
         lastname: '',
         smtp_login: '',
         smtp_password: '',
+        email_service: 'mailgun',
 };
     if ( props.location.state && props.location.state.sailebot) {
         initialValues = props.location.state.sailebot
@@ -77,6 +85,7 @@ const ManageSaileBotForm = (props) => {
                                 lastname,
                                 smtp_login,
                                 smtp_password,
+                                email_service,
                             }) => {
                                 if (id) {
                                     await mutation({
@@ -97,6 +106,7 @@ const ManageSaileBotForm = (props) => {
                                                 lastname,
                                                 smtp_login,
                                                 smtp_password,
+                                                email_service,
                                             },
                                             id
                                         }
@@ -119,6 +129,7 @@ const ManageSaileBotForm = (props) => {
                                                 lastname,
                                                 smtp_login,
                                                 smtp_password,
+                                                email_service,
                                             }
                                         }
                                     });
@@ -200,6 +211,20 @@ const ManageSaileBotForm = (props) => {
                                             rowsMax={10}
                                             aria-label="signature"
                                         />
+                                        <SimpleSelect label="Email Service" name="email_service" onChange={handleChange} value={values.email_service || 'mailgun'}/>
+                                        {/* <FormControl className={classes.formControl}>
+                                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                            <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={age}
+                                            onChange={handleChange}
+                                            >
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>Twenty</MenuItem>
+                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl> */}
                                         <TextField
                                             name="smtp_login"
                                             label="Gmail sailebot email address" 

@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 export const ClientCard = ({ client,  history }) => {
   const classes = useStyles();
-  const {name} = client;
+  const {name, company } = client;
   const Composed = adopt({
     actionableEventCountQuery: ({ render }) => (
       <Query query={clientEventCountByLabel(client.id, "actionable_opportunity")} >
@@ -46,7 +46,8 @@ export const ClientCard = ({ client,  history }) => {
         return (
           <Card>
             <CardContent>
-              <Typography>{name}</Typography>
+              <Typography>Client: {name}</Typography>
+              <Typography>Company: {company && company.name ? company.name : ''}</Typography>
             </CardContent>
             <div style={{ display: 'flex', flexDirection: 'row' }} className={classes.root}>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>

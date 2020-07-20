@@ -20,6 +20,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { ApolloProvider} from "react-apollo";
 import ManageCampaign from './ManageCampaign'
 import ManageClient from './ManageClient'
+import ManageCompany from './ManageCompany'
 import ManageSaileBot from './ManageSaileBot'
 import ManageDomain from './ManageDomain'
 import ManageTemplate from './ManageTemplate'
@@ -31,6 +32,7 @@ import Campaigns from './Campaigns'
 import Requirements from './Requirements'
 import Schedules from './Schedules'
 import Clients from './Clients'
+// import Companies from './Companies'
 import SaileBots from './SaileBots'
 import Domains from './Domains'
 import Accounts from './Accounts'
@@ -49,6 +51,7 @@ import { ADMIN_SECRET_HEADER_KEY } from '../actions/types'
 // import NotFound from '../components/NotFound';
 import Unsubscribe from './Unsubscribe';
 import Confirmation from './Unsubscribe/confirmation';
+import Companies from './Companies';
 // import { Link } from 'react-router-dom';
 
 
@@ -209,12 +212,17 @@ function Routes() {
                         <Route
                             exact
                             path='/app' 
-                            component={Clients}
+                            component={Companies}
                         />
                         <Route
                             exact
                             path='/app/clients' 
                             component={Clients}
+                        />
+                        <Route
+                            exact
+                            path='/app/companies' 
+                            component={Companies}
                         />
                         <Route
                             exact
@@ -286,12 +294,12 @@ function Routes() {
                             path='/app/domains' 
                             component={Domains}
                         />
-                        {/* <Route
+                        <Route
                             exact
                             path='/app/clients-by-company' 
                             component={Clients}
                         />
-                        <Route
+                        {/* <Route
                             exact
                             path='/app/clients' 
                             component={Clients}
@@ -320,6 +328,11 @@ function Routes() {
                             exact
                             path='/app/manage-client' 
                             component={ManageClient}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-company' 
+                            component={ManageCompany}
                         />
                         <Route
                             exact

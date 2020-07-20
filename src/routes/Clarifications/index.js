@@ -23,14 +23,6 @@ const Events = (props) => {
   const classes = useStyles();
   const limit = 5;
   let total = 5;
-  // const REACT_APP_SENDGRID_API_KEY = process.env.REACT_APP_SENDGRID_API_KEY;
-  // const REACT_APP_MAILGUN_API_KEY = process.env.REACT_APP_MAILGUN_API_KEY;
-  // const REACT_APP_PRIVATE_API_KEY = process.env.REACT_APP_PRIVATE_API_KEY;
-
-  // console.log('process.env: ', process.env)
-  // console.log('REACT_APP_SENDGRID_API_KEY: ', REACT_APP_SENDGRID_API_KEY)
-  // console.log('REACT_APP_MAILGUN_API_KEY: ', REACT_APP_MAILGUN_API_KEY)
-  // console.log('REACT_APP_PRIVATE_API_KEY: ', REACT_APP_PRIVATE_API_KEY)
   
 
   const [page, setPage] = React.useState(1);

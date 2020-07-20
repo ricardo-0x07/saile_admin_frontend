@@ -7,7 +7,7 @@ import {
     FormLabel,
     FormControl,
     FormGroup,
-    FormControlLabel,
+    // FormControlLabel,
 } from '@material-ui/core';
 import { Mutation } from "react-apollo";
 import MuiCheckbox from "@material-ui/core/Checkbox";
@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 export const Checkbox = ({ ...props }) => {
     const [field] = useField(props.name);
+    
   
     return (
       <MuiCheckbox {...field} checked={field.value} />
@@ -32,6 +33,7 @@ export const Checkbox = ({ ...props }) => {
 };
 
 const ManageClientForm = (props) => {
+    console.log('props: ', props)
     const classes = useStyles();
     let initialValues = {
         name: '',
@@ -48,6 +50,8 @@ const ManageClientForm = (props) => {
         phone: '',
         revenue: '',
         website  : '',
+        firstname  : '',
+        lastname  : '',
     };
     if ( props.location.state && props.location.state.client) {
         initialValues = props.location.state.client
@@ -84,6 +88,8 @@ const ManageClientForm = (props) => {
                                 phone,
                                 revenue,
                                 website,
+                                firstname,
+                                lastname,
                                 company_id,
                             }) => {
                                 if (id) {
@@ -105,6 +111,8 @@ const ManageClientForm = (props) => {
                                                 phone,
                                                 revenue,
                                                 website,
+                                                firstname,
+                                                lastname,
                                                 company_id,
                                             },
                                             id
@@ -128,6 +136,8 @@ const ManageClientForm = (props) => {
                                                 phone,
                                                 revenue,
                                                 website,
+                                                firstname, 
+                                                lastname,
                                                 company_id,
                                             }
                                         }
@@ -145,13 +155,29 @@ const ManageClientForm = (props) => {
                                     <FormLabel component="legend">Client Creation/Update</FormLabel>
                                     <FormGroup aria-label="position" >
                                         <TextField
+                                            name="firstname"
+                                            label="First Name" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.firstname || ''}
+                                        />
+                                        <TextField
+                                            name="lastname"
+                                            label="Last Name" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.lastname || ''}
+                                        />
+                                        {/* <TextField
                                             name="name"
                                             label="Name" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.name || ''}
-                                        />
+                                        /> */}
                                         <TextField
                                             name="address"
                                             label="Address" 
@@ -248,12 +274,12 @@ const ManageClientForm = (props) => {
                                             onChange={handleChange}
                                             value={values.domain || ''}
                                         />
-                                        <FormControlLabel
+                                        {/* <FormControlLabel
                                             label="Is Company?"
                                             control={
                                                 <Checkbox name="is_company" onChange={handleChange} value={values.is_company} />
                                             }
-                                        />
+                                        /> */}
                                     </FormGroup>
                                 </FormControl>
                                 <Button variant="contained" type='submit'>Submit</Button>

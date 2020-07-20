@@ -67,7 +67,7 @@ const Schedules = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 data.schedule.filter(item => item.campaign_id === props.location.state.campaign.id ).map(x => (
-                  <ScheduleCard schedule={x} accounts_per_schedule={accounts_per_schedule} campaign={props.location.state.campaign} name={x.name} key={x.id} history={props.history}/>
+                  <ScheduleCard schedule={x} accounts_per_schedule={accounts_per_schedule} campaign={props.location.state.campaign} requirement={props.location.state.requirement} name={x.name} key={x.id} history={props.history}/>
                 ))
                 :
                 data.schedule.filter(item => item ).map(x => (

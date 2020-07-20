@@ -28,6 +28,7 @@ const Accounts = (props) => {
   const accounts_csv_key_map = {
     name: 'Account: Account Name',
     address: 'Account: Billing Street',
+    street: 'Account: Billing Street',
     employees: 'Account: Employees',
     phone: 'Account: Main Phone',
     revenue: 'Account: Revenue ($mil)',

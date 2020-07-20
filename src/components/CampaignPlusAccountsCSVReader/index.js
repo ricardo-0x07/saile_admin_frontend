@@ -3,7 +3,7 @@ import { CSVReader } from 'react-papaparse'
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 
-import { createAccount, createCampaignAccount, createUpdateCampaign } from "../../graphql/mutations";
+import { createUpdateAccount, createUpdateCampaignAccount, createUpdateCampaign } from "../../graphql/mutations";
 import { getClientCampaignAccounts } from "../../graphql/queries";
 
 // var _ = require('lodash');
@@ -30,11 +30,10 @@ export default class CSVReader1 extends Component {
     }
   }
   
-  getAccountCSVData = async (data, createUpdateCampaignMutation, createAccountMutation, createCampaignAccountMutation, clientCampaignAccountQuery) => {
+  getAccountCSVData = async (data, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation, clientCampaignAccountQuery) => {
     console.log('data.length: ', data.length)
     console.log('clientCampaignAccountQuery: ', clientCampaignAccountQuery)
     console.log('this.props.sailebot: ', this.props.sailebot)
-    const existing_campaign_accounts = clientCampaignAccountQuery.data ? clientCampaignAccountQuery.data.campaign_account.map(acc => acc.account_id) : []
 
     let accounts = data.map(account => {
 
@@ -48,15 +47,12 @@ export default class CSVReader1 extends Component {
         return acc
       }, {})
     });
-    // accounts = _.uniqBy(accounts, 'ex_id');
-    // accounts = _.uniqBy(accounts, 'name');
-    // const campaign_id = this.props.location.state.campaign.id
     console.log('accounts[0]: ', accounts[0])
     console.log('accounts.length: ', accounts.length)
-    console.log('existing_campaign_accounts.length: ', existing_campaign_accounts.length)
-    // await accounts.slice(0,1).map(async account => {
-      const results = await accounts.map(async account => {
-      try {
+
+      
+    try {
+      const campaign_create_results = await accounts.map(async account => {
         let campaign_response = await createUpdateCampaignMutation({
           variables: {
             objects: {
@@ -65,49 +61,59 @@ export default class CSVReader1 extends Component {
             }
           }
         });
-        // console.log('campaign_response.data.insert_campaign.returning[0].id: ', campaign_response.data.insert_campaign.returning[0].id)
-        let campaign_accounts_response = []
-        let accounts_response = []
-        if (campaign_response.data.insert_campaign.returning.length > 0 && 'id' in campaign_response.data.insert_campaign.returning[0] && campaign_response.data.insert_campaign.returning[0].id > 0) {
-          const campaign_id = campaign_response.data.insert_campaign.returning[0].id
-          // console.log('campaign_id: ', campaign_id)
-          // console.log('account: ', account)
-          delete account.campaign_name;
-          // console.log('account: ', account)
-          const {status, street, city, state, country, ...account_} = account;
-          // console.log('status: ', status)
+        const campaign_id = campaign_response.data.insert_campaign.returning[0].id
+        return {id: campaign_id, account}
+      });
+      console.log('campaign_create_results[0]: ', campaign_create_results[0])
 
-          accounts_response = await createAccountMutation({
-            variables: {
-              objects: {...account_, address: `${street}, ${city}, ${state}, ${country}`, street, city, state, country}
-            }
-          });
-          // console.log('accounts_response.data.insert_account.returning.length: ', accounts_response.data.insert_account.returning.length)
-
-          campaign_accounts_response = await createCampaignAccountMutation({
-            variables: {
-              objects: accounts_response.data.insert_account.returning.filter(acc => !existing_campaign_accounts.includes(acc.id)).map(account => {
-                return { 
-                  campaign_id,
-                  account_id: account.id,
-                  is_delisted: status === 'Actionable Opportunity' || status === 'Remove' ? true :false
-                }
-              })
-            }
-          });
-          // console.log('campaign_accounts_response.data.insert_campaign_account.returning.length: ', campaign_accounts_response.data.insert_campaign_account.returning.length)
+      const accounts_create_results = await campaign_create_results.map(async promise => {
+        console.log('promise: ', promise)
+        const campaign = await promise.then(res => res);
+        console.log('campaign: ', campaign)
+        const campaign_id = campaign.id
+        console.log('campaign_id: ', campaign_id)
+        const { account } = campaign
+        delete account.campaign_name;
+        const {status, street, city, state, country, ...account_} = account;
+        console.log('status: ', status)
+  
+        let accounts_response = await createAccountMutation({
+          variables: {
+            objects: {...account_, address: `${street}, ${city}, ${state}, ${country}`, street, city, state, country}
+          }
+        });
+        return {
+          id: accounts_response.data.insert_account.returning[0].id,
+          campaign_id,
+          // status: accounts_response.data.insert_account.returning[0].status,
+          status: status === 'Actionable Opportunity' ? 'ActionableOpportunity': status === 'Remove' ? 'Remove' :'Active'
         }
+      })
+      console.log('accounts_create_results[0]: ', accounts_create_results[0])
+      
+      const create_campaign_account_results = await accounts_create_results.map(async promise => {
+        const account = await promise.then(res => res);
+        const { status } = account;
+        let campaign_accounts_response = await createUpdateCampaignAccountMutation({
+          variables: {
+              objects: { 
+                campaign_id: account.campaign_id,
+                account_id: account.id,
+                status: status,
+                is_delisted: status === 'ActionableOpportunity' || status === 'Remove' ? true :false
+              }
+          }
+        });  
+        return campaign_accounts_response.data.insert_campaign_account.returning
+      })
+      console.log('create_campaign_account_results: ', create_campaign_account_results)
 
-                            
-        return {campaign_response, accounts_response, campaign_accounts_response}
-      } catch (error) {
-        console.log(' error: ', error)
-        console.log(' error message: ', error.message)
-        return {account, error}
-      }
-    });   
-    console.log('results: ', results)  
-    
+                          
+    } catch (error) {
+      console.log(' error: ', error)
+      console.log(' error message: ', error.message)
+    }
+       
   }
 
 
@@ -125,26 +131,26 @@ export default class CSVReader1 extends Component {
           </Mutation> 
       ),
       createAccountMutation: ({ render }) => (
-        <Mutation mutation={ createAccount } >
+        <Mutation mutation={ createUpdateAccount } >
           { render }
         </Mutation> 
       ),
-      createCampaignAccountMutation: ({ render }) => (
-          <Mutation mutation={ createCampaignAccount } >
+      createUpdateCampaignAccountMutation: ({ render }) => (
+          <Mutation mutation={ createUpdateCampaignAccount } >
             { render }
           </Mutation> 
       ),
     })
     return (
       <Composed>
-        {({ clientCampaignAccountQuery, createUpdateCampaignMutation, createAccountMutation, createCampaignAccountMutation }) => {
+        {({ clientCampaignAccountQuery, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation }) => {
           return (
             <>
               <h5>{this.props.label ? this.props.label : ''} Bulk Upload</h5>
               <CSVReader
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
-                  this.getAccountCSVData(loaded_data, createUpdateCampaignMutation, createAccountMutation, createCampaignAccountMutation, clientCampaignAccountQuery)
+                  this.getAccountCSVData(loaded_data, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation, clientCampaignAccountQuery)
                 }}
                 onError={this.onError}
                 noClick

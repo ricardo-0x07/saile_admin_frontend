@@ -44,6 +44,22 @@ export const listClients = (limit) => {
                 state
                 updated_at
                 website
+                firstname
+                lastname
+                company_id
+                company {
+                    id
+                    name
+                    email_domain
+                    website
+                    address
+                    street
+                    city
+                    state
+                    country
+                    industry
+                    phone
+                }
                 sailebots {
                     client_id
                     email
@@ -54,6 +70,92 @@ export const listClients = (limit) => {
                     phone
                     title
                 }
+            }
+        }
+    `;
+}
+
+export const listCompanyUserClients = (company_id) => {
+    return gql`
+        query ListCompanyUserClients {
+            client(where: {company_id: {_eq: ${company_id}}}) {
+                NAICS
+                address
+                city
+                country
+                created_at
+                domain
+                email
+                email_domain
+                employees
+                id
+                is_company
+                name
+                phone
+                revenue
+                state
+                updated_at
+                website
+                firstname
+                lastname
+                company_id
+                company {
+                    id
+                    name
+                    email_domain
+                    website
+                    address
+                    street
+                    city
+                    state
+                    country
+                    industry
+                    phone
+                }
+                sailebots {
+                    client_id
+                    email
+                    fullname
+                    id
+                    no_targets
+                    name
+                    phone
+                    title
+                }
+            }
+        }
+    `;
+}
+
+
+export const listCompanies = (limit) => {
+    return gql`
+        query ListCompanies {
+            company(limit: ${limit}, offset: 0) {
+                id
+                name
+                address
+                street
+                city
+                state
+                country
+                email_domain
+                industry
+                website
+                phone
+                created_at
+                updated_at
+            }
+        }
+    `;
+}
+
+export const listEmailOptions = () => {
+    return gql`
+        query ListEmailOptions {
+            email_option {
+                description
+                value
             }
         }
     `;
@@ -132,6 +234,7 @@ export const listSaileBots = (limit) => {
                 lastname
                 smtp_login
                 smtp_password
+                email_service
                 requirements {
                     auto_reject
                     city
@@ -696,10 +799,12 @@ export const listClientSaileBots = (client_id) => {
                 lastname
                 smtp_login
                 smtp_password
+                email_service
             }
         }
     `;
 }
+
 
 export const listRequirementCampaigns = (requirement_id) => {
     return gql`
@@ -820,11 +925,65 @@ export const clientEventCountByLabel = (client_id, label_query) => {
     `;
 }
 
+export const companyEventCountByLabel = (company_id, label_query) => {
+    return gql`
+        query CompanyEventCountByLabel {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client: {company_id: {_eq: ${company_id}}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
 
 export const clientEventCount = (client_id) => {
     return gql`
         query SailebotEventCount {
             event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+
+
+export const companyEventCount = (company_id) => {
+    return gql`
+        query SailebotEventCount {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client: {company_id: {_eq: ${company_id}}}}}}}) {
                 aggregate {
                 count(columns: label)
                 }

@@ -78,21 +78,22 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
             <CardContent>
               <Typography>Name: {name}</Typography>
               <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
+              <Typography>Elasticity: {requirement.elasticity}</Typography>
               <Typography>Campaign Accounts: {countCampaignAccounts}</Typography>
               <Typography>Campaign Scheduled Accounts: {countCampaignScheduleAccounts}</Typography>
             </CardContent>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-                <Button size="small" onClick={() => history.push('/app/manage-campaign', {campaign, requirement})}>Edit</Button>
-                <Button size="small" onClick={() => history.push('/app/manage-template', {campaign})}>Add Template</Button>
-                <Button size="small" onClick={() => history.push('/app/manage-schedule', {campaign})}>Add Schedule</Button>
-                <Button size="small" onClick={() => history.push('/app/manage-account', {campaign})}>Add Account</Button>
+                <Button size="small" onClick={() => history.push('/app/manage-campaign', {campaign, requirement, sailebot})}>Edit</Button>
+                <Button size="small" onClick={() => history.push('/app/manage-template', {campaign, requirement, sailebot})}>Add Template</Button>
+                <Button size="small" onClick={() => history.push('/app/manage-schedule', {campaign, requirement, sailebot})}>Add Schedule</Button>
+                <Button size="small" onClick={() => history.push('/app/manage-account', {campaign, requirement, sailebot})}>Add Account</Button>
               </CardActions>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-                <Button size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign})}>View Templates</Button>
-                <Button size="small" onClick={() => history.push('/app/schedules-by-campaign', {campaign, sailebot})}>View Schedules</Button>
-                <Button size="small" onClick={() => history.push('/app/accounts-by-campaign', {campaign, sailebot})}>View Accounts</Button>
-                <Button size="small" onClick={() => history.push('/app/clarifications-by-campaign', {campaign, sailebot})}>Clarifications</Button>
+                <Button size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign, requirement})}>View Templates</Button>
+                <Button size="small" onClick={() => history.push('/app/schedules-by-campaign', {campaign, requirement, sailebot})}>View Schedules</Button>
+                <Button size="small" onClick={() => history.push('/app/accounts-by-campaign', {campaign, requirement, sailebot})}>View Accounts</Button>
+                <Button size="small" onClick={() => history.push('/app/clarifications-by-campaign', {campaign, requirement, sailebot})}>Clarifications</Button>
                 <FormControlLabel
                   control={
                     <Switch

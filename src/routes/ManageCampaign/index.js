@@ -99,7 +99,7 @@ const ManageCampaignForm = (props) => {
                                 }
                       
                                 
-                                props.history.push('/app/campaigns-by-requirement', {requirement: props.location.state.requirement})
+                                props.history.push('/app/campaigns-by-requirement', {requirement: props.location.state.requirement, sailebot: props.location.state.sailebot})
                             }
                         }
                     >

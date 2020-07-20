@@ -7,7 +7,7 @@ import { adopt } from 'react-adopt';
 import { createAccount, createCampaignAccount } from "../../graphql/mutations";
 import { getClientCampaignAccounts } from "../../graphql/queries";
 
-var _ = require('lodash');
+// var _ = require('lodash');
 const buttonRef = React.createRef()
 
 export default class CSVReader1 extends Component {
@@ -46,50 +46,81 @@ export default class CSVReader1 extends Component {
         return acc
       }, {})
     });
-    // accounts = _.uniqBy(accounts, 'ex_id');
-    // accounts = _.uniqBy(accounts, 'name');
     const campaign_id = this.props.location.state.campaign.id
     console.log('accounts.length: ', accounts.length)
     console.log('existing_campaign_accounts.length: ', existing_campaign_accounts.length)
-    await _.chunk(accounts, 10).map(async accounts_batch => {
-      try {
+    console.log('campaign_id: ', campaign_id)
+    try {
+      const create_accounts_results = await accounts.filter(item =>  item['email_domain'] !== undefined && item['name'] !== undefined).map( async account => {
+        console.log('account: ', account)
+        console.log('campaign_id: ', campaign_id)
+        // const account = await promise.then(res => res);
+        // console.log('account: ', account)
+
         let accounts_response = await createAccountMutation({
           variables: {
-            objects: accounts_batch
+            objects: account
           }
         });
         console.log('accounts_response.data.insert_account.returning.length: ', accounts_response.data.insert_account.returning.length)
+        return { campaign_id, account_id: accounts_response.data.insert_account.returning[0].id }
+      });   
+      console.log('create_accounts_results: ', create_accounts_results)
+      
+      const create_campaign_account_results = await create_accounts_results.filter( async promise =>  {
+        console.log('promise: ', promise)
+        const item = await promise.then(res => res);
+        console.log('item: ', item)
+
+        return item['campaign_id'] !== undefined && item['account_id'] !== undefined
+      }).map(async promise => {
+        console.log('promise: ', promise)
+        const account = await promise.then(res => res);
+        console.log('account: ', account)
+
         let campaign_accounts_response = await createCampaignAccountMutation({
           variables: {
-            objects: accounts_response.data.insert_account.returning.filter(acc => !existing_campaign_accounts.includes(acc.id)).map(account => {
-              return { campaign_id, account_id: account.id }
-            })
+            objects: { 
+              campaign_id: account.campaign_id,
+              account_id: account.account_id
+            }
           }
         });
         console.log('campaign_accounts_response.data.insert_campaign_account.returning.length: ', campaign_accounts_response.data.insert_campaign_account.returning.length)
-                            
-        return accounts_response
-      } catch (error) {
-        console.log('createContactMutation error: ', error)
-        console.log('createContactMutation error message: ', error.message)
-        return {accounts_batch, error}
-      }
-    });     
+        return campaign_accounts_response.data.insert_campaign_account.returning[0]
 
-    // const campaign_accounts_response = await createAccountMutation({
-    //   variables: {
-    //     objects: accounts
+      });
+      console.log('create_campaign_account_results.length: ', create_campaign_account_results.length)
+
+    } catch (error) {
+      console.log('error: ', error)
+      console.log('error message: ', error.message)    
+    }
+
+    // await _.chunk(accounts, 10).map(async accounts_batch => {
+    //   try {
+    //     let accounts_response = await createAccountMutation({
+    //       variables: {
+    //         objects: accounts_batch
+    //       }
+    //     });
+    //     console.log('accounts_response.data.insert_account.returning.length: ', accounts_response.data.insert_account.returning.length)
+    //     let campaign_accounts_response = await createCampaignAccountMutation({
+    //       variables: {
+    //         objects: accounts_response.data.insert_account.returning.filter(acc => !existing_campaign_accounts.includes(acc.id)).map(account => {
+    //           return { campaign_id, account_id: account.id }
+    //         })
+    //       }
+    //     });
+    //     console.log('campaign_accounts_response.data.insert_campaign_account.returning.length: ', campaign_accounts_response.data.insert_campaign_account.returning.length)
+                            
+    //     return accounts_response
+    //   } catch (error) {
+    //     console.log('createContactMutation error: ', error)
+    //     console.log('createContactMutation error message: ', error.message)
+    //     return {accounts_batch, error}
     //   }
-    // });
-    
-    // await createCampaignAccountMutation({
-    //   variables: {
-    //     objects: accounts_response.data.insert_account.returning.map(account => {
-    //       return { campaign_id, account_id: account.id }
-    //     })
-    //   }
-    // });
-    
+    // });         
   }
 
 

@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const Templates = (props) => {
+  console.log('Templates props: ', props)
   const classes = useStyles();
   const Composed = adopt({
     templatesQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
@@ -38,6 +39,8 @@ const Templates = (props) => {
   return (
     <Composed>
       {({ templatesQuery: { data, loading} }) => {
+        console.log('Templates loading: ', loading)
+        console.log('Templates data: ', data)
         if (
           loading ||
           !data ||

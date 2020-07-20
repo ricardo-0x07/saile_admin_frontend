@@ -11,7 +11,7 @@ import { listAvailableCampaignAccounts, listShallowScheduleAccounts } from "../.
 import { createScheduleAccount, updateCampaignAccount } from "../../graphql/mutations";
 
 
-export const ScheduleCard = ({ schedule,  campaign,  history }) => {
+export const ScheduleCard = ({ schedule, requirement,  campaign,  history }) => {
   
   const { name, no_targets_per_accounts, deploy_date, end_date } = schedule;
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
@@ -85,7 +85,11 @@ export const ScheduleCard = ({ schedule,  campaign,  history }) => {
           <Card>
             <CardContent>
               <Typography>Name: {name}</Typography>
-              <Typography>No of targets per Account: {no_targets_per_accounts}</Typography>
+              <Typography>Schedule Elasticity: {no_targets_per_accounts}</Typography>
+              {
+                requirement && 
+                <Typography>Campaign Elasticity: {requirement.elasticity}</Typography>
+              }
               <Typography>
                 Deploy Date: <Moment format="YYYY-MMM-DD" date={deploy_date !== null && deploy_date }></Moment>
               </Typography>

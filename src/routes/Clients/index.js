@@ -2,10 +2,11 @@ import * as React from "react";
 import { Query } from "react-apollo";
 import { connect } from 'react-redux';
 import { ClientCard } from "./ClientCard";
-import { listClients } from "../../graphql/queries";
+import { listClients, listCompanyUserClients } from "../../graphql/queries";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
+import { adopt } from 'react-adopt';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,12 +19,26 @@ const useStyles = makeStyles(theme => ({
 
 
 const Clients = (props) => {
+  console.log('props: ', props)
   const classes = useStyles();
+  const Composed = adopt({
+    clientsQuery: props.location.state && props.location.state.company && props.location.state.company.id ?
+    ({ render }) => (
+      <Query query={listCompanyUserClients(props.location.state.company.id)} >
+        { render }
+      </Query>
+    )
+    :
+    ({ render }) => (
+      <Query query={listClients(10) } >
+        { render }
+      </Query>
+    ),
+  })
+
   return (
-    <Query
-    query={listClients(10)}
-    >
-      {({ data, loading }) => {
+    <Composed>
+      {({ clientsQuery: {data, loading} }) => {
         if (
           loading ||
           !data ||
@@ -37,7 +52,7 @@ const Clients = (props) => {
         return (
           <div className={classes.root}>
             <Title>Clients</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-client')}>Add Client</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-client', {company: props.location.state.company})}>Add Client</Button>
             <div
               style={{
                 display: "grid",
@@ -54,7 +69,7 @@ const Clients = (props) => {
           </div>
         );
       }}
-    </Query>
+    </Composed>
   );
 };
 
