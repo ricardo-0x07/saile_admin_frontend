@@ -780,6 +780,22 @@ export const getContactById = (id) => {
     `;
 }
 
+export const getCampaignContact = (campaign_id, contact_id) => {
+    return gql`
+        query GetCampaignContact {
+            campaign_contact(where: {campaign_id: {_eq: ${campaign_id}}, contact_id: {_eq: ${contact_id}}}) {
+                id
+                campaign_id
+                contact_id
+                account_id
+                is_delisted
+                next_date
+                status
+            }
+        }
+    `;
+}
+
 export const listClientSaileBots = (client_id) => {
     return gql`
         query ListClientSaileBots {

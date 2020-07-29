@@ -73,6 +73,8 @@ export default class CSVReader1 extends Component {
         return {contacts_batch, error}
       }
     });     
+    const {requirement, sailebot} = this.props;
+    this.props.history.push('/app/campaigns-by-requirement', {requirement, sailebot})
 
     // const campaign_id = this.props.location.state.campaign.id
 

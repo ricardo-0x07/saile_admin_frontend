@@ -193,6 +193,16 @@ export const createUpdateCampaignContact = gql`
   }
 `;
 
+export const updateCampaignContact = gql`
+  mutation UpdateCampaignContact($objects: campaign_contact_set_input, $contact_id: Int!, $campaign_id: Int!) {
+    update_campaign_contact(_set: $objects, where: {contact_id: {_eq: $contact_id}, campaign_id: {_eq: $campaign_id}}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
 export const updateCampaignAccount = gql`
   mutation UpdateCampaignAccount($objects: campaign_account_set_input, $id_list: [Int!]!) {
     update_campaign_account(_set: $objects, where: {id: {_in: $id_list}}) {

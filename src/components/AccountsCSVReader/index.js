@@ -91,6 +91,8 @@ export default class CSVReader1 extends Component {
 
       });
       console.log('create_campaign_account_results.length: ', create_campaign_account_results.length)
+      const {requirement, sailebot} = this.props;
+      this.props.history.push('/app/campaigns-by-requirement', {requirement, sailebot})
 
     } catch (error) {
       console.log('error: ', error)

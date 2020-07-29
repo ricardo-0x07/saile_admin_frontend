@@ -416,6 +416,23 @@ export const listSchedules = (limit=10, offset=0, account_limit=10, account_offs
     `;
 }
 
+export const getCampaignContact = (campaign_id, contact_id) => {
+    return gql`
+        subscription GetCampaignContact {
+            campaign_contact(where: {campaign_id: {_eq: ${campaign_id}}, contact_id: {_eq: ${contact_id}}}) {
+                id
+                campaign_id
+                contact_id
+                account_id
+                is_delisted
+                next_date
+                status
+            }
+        }
+    `;
+}
+
+
 export const listCampaignSchedules = (campaign_id) => {
     return gql`
     subscription listCampaignSchedules {
@@ -874,7 +891,7 @@ export const listContactClarificationEvents = (contact_id, limit=10, offset=0) =
 export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0) => {
     return gql`
         subscription ListCampaignClarificationEvents{
-            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {created_at: desc}) {
+            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
                 body
                 cc
                 date
