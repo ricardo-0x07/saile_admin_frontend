@@ -33,6 +33,7 @@ export const Checkbox = ({ ...props }) => {
     );
 };
 
+
 const ManageCampaignForm = (props) => {
     const classes = useStyles();
     let initialValues = {
@@ -54,6 +55,11 @@ const ManageCampaignForm = (props) => {
             };
         }
     }
+
+    const createWarmupSchedule = (schedule={name: 'warmup', campaign_id: 0, no_targets_per_accounts: 1, deploy_date: '2020-08-07', status: 'Active'}) => {
+        // create schedule
+    }
+    console.log('createWarmupSchedule: ', createWarmupSchedule);
     return (
         <Mutation
             mutation={props.location.state && props.location.state.campaign ? updateCampaign : createCampaign}

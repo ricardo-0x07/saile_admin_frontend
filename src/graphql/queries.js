@@ -266,6 +266,61 @@ export const GET_ALL_CAMPAIGNS = gql`
         }
     }
 `;
+
+export const sailebotEventCount = (sailebot_id) => {
+    return gql`
+        query ClientEventCount {
+            event_aggregate(where: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
+    return gql`
+        query SailebotEventCountByLabel {
+            event_aggregate(where: {campaign: {requirement: {sailebot_id: {_eq: ${sailebot_id}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}}) {
+                aggregate {
+                count(columns: label)
+                }
+                nodes {
+                    body
+                    cc
+                    contact_id
+                    date
+                    id
+                    label
+                    nlu_input_text
+                    selected_intent
+                    subject
+                    sender
+                    to
+                    validated_intent
+                }
+            }
+        }
+    `;
+}
+
+
+
 export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false) => {
     return gql`
     query ListCampaignAccounts {

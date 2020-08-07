@@ -5,10 +5,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { adopt } from 'react-adopt';
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 
 
-import { sailebotEventCountByLabel, sailebotEventCount } from "../../graphql/subscription";
+import { sailebotEventCountByLabel, sailebotEventCount } from "../../graphql/queries";
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -25,24 +25,24 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
   const { email, fullname, email_service} = sailebot;
   const Composed = adopt({
     actionableEventCountQuery: ({ render }) => (
-      <Subscription subscription={sailebotEventCountByLabel(sailebot.id, "actionable_opportunity")} >
+      <Query query={sailebotEventCountByLabel(sailebot.id, "actionable_opportunity")} >
         { render }
-      </Subscription>
+      </Query>
     ),
     referralEventCountQuery: ({ render }) => (
-      <Subscription subscription={sailebotEventCountByLabel(sailebot.id, "refferal_thanks")} >
+      <Query query={sailebotEventCountByLabel(sailebot.id, "refferal_thanks")} >
         { render }
-      </Subscription>
+      </Query>
     ),
     neutralEventCountQuery: ({ render }) => (
-      <Subscription subscription={sailebotEventCountByLabel(sailebot.id, "sent_neutral_outbound")} >
+      <Query query={sailebotEventCountByLabel(sailebot.id, "sent_neutral_outbound")} >
         { render }
-      </Subscription>
+      </Query>
     ),
     sailebotEventCountQuery: ({ render }) => (
-      <Subscription subscription={sailebotEventCount(sailebot.id)} >
+      <Query query={sailebotEventCount(sailebot.id)} >
         { render }
-      </Subscription>
+      </Query>
     ),
   })
 
