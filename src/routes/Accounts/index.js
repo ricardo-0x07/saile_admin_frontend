@@ -119,8 +119,8 @@ const Accounts = (props) => {
             {
               props.location.state && props.location.state.campaign && props.location.state.campaign.id && 
               <>
-                <ContactsCSVReader history={props.history} location={props.location} contacts_csv_key_map={contacts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Contacts'} sailebot={props.location.state.sailebot}/>
-                <AccountsCSVReader history={props.history} location={props.location} accounts_csv_key_map={accounts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Accounts'} sailebot={props.location.state.sailebot}/>
+                <ContactsCSVReader history={props.history} location={props.location} contacts_csv_key_map={contacts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Contacts'} sailebot={props.location.state.sailebot} requirement={props.location.state.requirement}/>
+                <AccountsCSVReader history={props.history} location={props.location} accounts_csv_key_map={accounts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Accounts'} sailebot={props.location.state.sailebot} requirement={props.location.state.requirement}/>
               </>
             }
             <div

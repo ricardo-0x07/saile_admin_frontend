@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const EventCard = ({ event, sailebot }) => {
+export const EventCard = ({ event, sailebot, updateReload }) => {
   const [state, setState] = React.useState({
     showBody: false,
   });
@@ -116,6 +116,7 @@ export const EventCard = ({ event, sailebot }) => {
       to_clarify,
       to,
     } = event;
+    
     const toClarify=false
     await updateEventMutation({
       variables: {
@@ -141,6 +142,7 @@ export const EventCard = ({ event, sailebot }) => {
           id
       }
     });
+    updateReload()
   }
   const unsubscribeContact = (updateContactMutation) => async () => {
     const toClarify=false
@@ -152,6 +154,7 @@ export const EventCard = ({ event, sailebot }) => {
           id: event.contact_id
       }
     });
+    updateReload()
   }
   const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data) => {
     console.log('contact_data: ', contact_data)
@@ -212,6 +215,7 @@ export const EventCard = ({ event, sailebot }) => {
           id
       }
     });
+    updateReload()
   }
   const _delistCampaignContact_ = async (updateCampaignContactMutation, updateEventMutation) => {
     const {
@@ -272,6 +276,7 @@ export const EventCard = ({ event, sailebot }) => {
           id
       }
     });
+    updateReload()
   }
   function createMarkup(body) {
     return {__html: body};
@@ -286,11 +291,7 @@ export const EventCard = ({ event, sailebot }) => {
       </React.Fragment>
     );
   }
-  // console.log(body.split("\n").slice(0,4))
-  console.log('id: ', id)
-  console.log('sailebot: ', sailebot)
-  console.log('campaign_id: ', campaign_id)
-  console.log('contact_id: ', contact_id)
+  
   return (
     <Composed>
       {({ updateEventMutation, updateContactMutation, updateCampaignAccountMutation, updateCampaignContactMutation  }) => {

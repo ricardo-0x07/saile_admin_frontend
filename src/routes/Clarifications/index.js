@@ -1,9 +1,9 @@
 
 import * as React from "react";
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import Pagination from '@material-ui/lab/Pagination';
 import { EventCard } from "./EventCard";
-import { listClarificationEvents, listCampaignClarificationEvents, totalCampaignClarificationEvents } from "../../graphql/subscription";
+import { listClarificationEvents, listCampaignClarificationEvents, totalCampaignClarificationEvents } from "../../graphql/queries";
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
@@ -25,34 +25,44 @@ const Events = (props) => {
   let total = 5;
   
 
-  const [page, setPage] = React.useState(1);
+  const [state, setState] = React.useState({
+    reload: false,
+    page: 1
+  });
+  const { page } = state;
   const handleChange = (event, value) => {
-    setPage(value);
+    setState({ page: value})
   };
+  // const updateReload = () => {
+  //   setState({ 
+  //     reload: !reload,
+  //     page
+  //   })
+  // };
   const Composed = adopt({
     totalCampaignClarificationEventsSubscription: ({ render }) => (
-      <Subscription subscription={totalCampaignClarificationEvents(props.location.state.campaign.id)} >
+      <Query query={totalCampaignClarificationEvents(props.location.state.campaign.id)} >
         { render }
-      </Subscription>
+      </Query>
     ), 
     eventsSubscription: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
-      <Subscription subscription={listCampaignClarificationEvents(props.location.state.campaign.id, limit, (page-1) * limit)} >
+      <Query query={listCampaignClarificationEvents(props.location.state.campaign.id, limit, (page-1) * limit)} >
         { render }
-      </Subscription>
+      </Query>
     )
     :
     ({ render }) => (
-      <Subscription subscription={listClarificationEvents(limit, (page-1) * limit) } >
+      <Query query={listClarificationEvents(limit, (page-1) * limit) } >
         { render }
-      </Subscription>
+      </Query>
     ),
   })
-
+  console.log('page: ', page);
 
   return (
     <Composed>
-      {({ eventsSubscription: {data, loading}, totalCampaignClarificationEventsSubscription }) => {
+      {({ eventsSubscription: {data, loading, refetch}, totalCampaignClarificationEventsSubscription }) => {
         if (
           loading ||
           !data ||
@@ -80,11 +90,17 @@ const Events = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 data.event.filter(item => item.campaign_id === props.location.state.campaign.id ).map(x => (
-                  <EventCard event={x} name={x.name} key={x.id} history={props.history} campaign={props.location.state.campaign} sailebot={props.location.state.sailebot}/>
+                  <EventCard updateReload={() => {
+                    refetch();
+                    totalCampaignClarificationEventsSubscription.refetch()
+                  }} event={x} name={x.name} key={x.id} history={props.history} campaign={props.location.state.campaign} sailebot={props.location.state.sailebot}/>
                 ))
                 :
                 data.event.filter(item => item ).map(x => (
-                  <EventCard event={x} name={x.name} key={x.id}  history={props.history} />
+                  <EventCard updateReload={() => {
+                    refetch();
+                    totalCampaignClarificationEventsSubscription.refetch()
+                  }} event={x} name={x.name} key={x.id}  history={props.history} />
                 ))
               }
             </div>

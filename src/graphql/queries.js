@@ -795,7 +795,73 @@ export const getCampaignContact = (campaign_id, contact_id) => {
         }
     `;
 }
+export const totalCampaignClarificationEvents = (campaign_id) => {
+    return gql`
+        query TotalCampaignClarificationEvents {
+            event_aggregate(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
 
+
+export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0) => {
+    return gql`
+        query ListCampaignClarificationEvents{
+            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                body
+                contact_id
+                date
+                nlu_input_text
+                nlu_json_response
+                selected_intent
+                validated_json_response
+                validated_intent
+                campaign_id
+                is_inbound
+                to_clarify
+                to
+            }
+        }
+    `;
+}
+export const listClarificationEvents = (limit=10, offset=0) => {
+    return gql`
+        query ListContactClarificationEvents{
+            event(where: { to_clarify: {_eq: true} }, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                body
+                contact_id
+                date
+                nlu_input_text
+                nlu_json_response
+                selected_intent
+                validated_json_response
+                validated_intent
+                campaign_id
+                is_inbound
+                to_clarify
+                to
+            }
+        }
+    `;
+}
 export const listClientSaileBots = (client_id) => {
     return gql`
         query ListClientSaileBots {

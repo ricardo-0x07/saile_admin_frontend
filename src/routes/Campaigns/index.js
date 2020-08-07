@@ -42,13 +42,14 @@ const accounts_csv_key_map = {
 const contacts_csv_key_map = {
   campaign_name: 'Campaign Name',
 
-  name: 'Account: Account Name',
+  name: 'Account Name',
   email_domain: 'Account: Email Domain',
 
   firstname: 'First Name',
   lastname: 'Last Name',
-  email: 'Email',
+  email: 'Contact Email',
   title: 'Title',
+  gender: 'Gender',
 
   status: 'Member Status',
   delisted_date: 'Remove/Optout Date',

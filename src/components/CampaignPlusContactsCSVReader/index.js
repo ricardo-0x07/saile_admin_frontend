@@ -33,6 +33,13 @@ export default class CSVReader1 extends Component {
       return Object.entries(this.props.contacts_csv_key_map).reduce((acc, [key, value]) => {
         if (key === 'campaign_name') {
           acc['campaign_name'] = contact.data[value];
+        } else if (key === 'email'){
+          acc['email_domain'] = contact.data[value].split('@')[1];
+          acc[key] = contact.data[value];
+        } else if (key === 'email_domain'){
+          if (value in contact.data) {
+            acc['email_domain'] = contact.data[value];
+          }
         } else {
           acc[key] = contact.data[value];
         }
@@ -55,7 +62,7 @@ export default class CSVReader1 extends Component {
         const campaign_id = campaign_response.data.insert_campaign.returning[0].id
         return {id: campaign_id, contact}
       });
-      console.log('campaign_create_results[0]: ', campaign_create_results[0])
+      console.log('campaign_create_results.length: ', campaign_create_results.length)
   
       const accounts_create_results = await campaign_create_results.map(async promise => {
         console.log('promise: ', promise)
@@ -80,7 +87,7 @@ export default class CSVReader1 extends Component {
           status: status === 'Actionable Opportunity' ? 'ActionableOpportunity': status === 'Remove' ? 'Remove' : status === 'Opt Out' ? 'OptOut' :'Active'
         }
       })
-      console.log('accounts_create_results[0]: ', accounts_create_results[0])
+      console.log('accounts_create_results.length: ', accounts_create_results.length)
       
       const create_campaign_account_results = await accounts_create_results.map(async promise => {
         const account = await promise.then(res => res);
