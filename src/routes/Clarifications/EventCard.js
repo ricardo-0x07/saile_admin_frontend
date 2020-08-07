@@ -56,6 +56,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
       console.log('referral: ', referral)
       await createreferral(referral)
       console.log('referral: ', referral)
+      updateReload()
     } catch (error) {
       console.log('createreferral error: ', error)
     }
@@ -66,6 +67,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
       console.log('opportunity: ', opportunity)
       await createActionableOpportunity(opportunity)
       console.log('opportunity: ', opportunity)
+      updateReload()
     } catch (error) {
       console.log('createActionableOpportunity error: ', error)
     }

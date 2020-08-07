@@ -260,46 +260,6 @@ export const listCampaigns = (limit) => {
             is_running
             to_run
             status_message
-            schedules {
-                campaign_id
-                daily_outbound_limit
-                date
-                deploy_date
-                id
-                name
-                no_targets_per_accounts
-                status
-                timezone
-            }
-            templates {
-                body_html_text
-                body_text
-                campaign_id
-                id
-                name
-                subject
-            }
-            campaign_accounts {
-                account {
-                    NAICS
-                    address
-                    city
-                    country
-                    domain
-                    email
-                    email_domain
-                    employees
-                    fax
-                    id
-                    is_scheduled
-                    name
-                    phone
-                    revenue
-                    state
-                    website
-                }
-            }
-        }
     }
 `;
 }

@@ -47,29 +47,6 @@ export const listClients = (limit) => {
                 firstname
                 lastname
                 company_id
-                company {
-                    id
-                    name
-                    email_domain
-                    website
-                    address
-                    street
-                    city
-                    state
-                    country
-                    industry
-                    phone
-                }
-                sailebots {
-                    client_id
-                    email
-                    fullname
-                    id
-                    no_targets
-                    name
-                    phone
-                    title
-                }
             }
         }
     `;
@@ -235,39 +212,6 @@ export const listSaileBots = (limit) => {
                 smtp_login
                 smtp_password
                 email_service
-                requirements {
-                    auto_reject
-                    city
-                    contract_no
-                    elasticity
-                    function
-                    geography
-                    id
-                    is_duplicate
-                    launch_date
-                    ldr_notes
-                    level
-                    max_hits_per_contact
-                    name
-                    priority
-                    sailebot_id
-                    size
-                    source
-                    state
-                }
-                domains {
-                    active
-                    dns
-                    host
-                    id
-                    ip
-                    name
-                    provider
-                    sailebot_id
-                    smtp
-                    smtp_login
-                    smtp_password
-                }
             }
         }
     `;
@@ -442,45 +386,6 @@ export const listCampaigns = (limit) => {
             id
             name
             requirement_id
-            schedules {
-                campaign_id
-                daily_outbound_limit
-                date
-                deploy_date
-                id
-                name
-                no_targets_per_accounts
-                status
-                timezone
-            }
-            templates {
-                body_html_text
-                body_text
-                campaign_id
-                id
-                name
-                subject
-            }
-            campaign_accounts {
-                account {
-                    NAICS
-                    address
-                    city
-                    country
-                    domain
-                    email
-                    email_domain
-                    employees
-                    fax
-                    id
-                    is_scheduled
-                    name
-                    phone
-                    revenue
-                    state
-                    website
-                }
-            }
         }
     }
 `;
@@ -549,12 +454,7 @@ export const listCampaignSchedules = (campaign_id) => {
             status
             timezone
             updated_at
-            schedule_accounts {
-                id
-                account_id
-                schedule_id
-            }
-      }
+        }
     }
   `;
   }
@@ -901,45 +801,6 @@ export const listRequirementCampaigns = (requirement_id) => {
             is_running
             to_run
             status_message
-            schedules {
-                campaign_id
-                daily_outbound_limit
-                date
-                deploy_date
-                id
-                name
-                no_targets_per_accounts
-                status
-                timezone
-            }
-            templates {
-                body_html_text
-                body_text
-                campaign_id
-                id
-                name
-                subject
-            }
-            campaign_accounts {
-                account {
-                    NAICS
-                    address
-                    city
-                    country
-                    domain
-                    email
-                    email_domain
-                    employees
-                    fax
-                    id
-                    is_scheduled
-                    name
-                    phone
-                    revenue
-                    state
-                    website
-                }
-            }
         }
     }
 `;
