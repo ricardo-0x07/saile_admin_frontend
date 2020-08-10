@@ -4,10 +4,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { adopt } from 'react-adopt';
-import { Query } from "react-apollo";
+// import { adopt } from 'react-adopt';
+// import { Query } from "react-apollo";
 
-import { companyEventCountByLabel, companyEventCount } from "../../graphql/queries";
+// import { companyEventCountByLabel, companyEventCount } from "../../graphql/queries";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -22,28 +22,28 @@ const useStyles = makeStyles(theme => ({
 export const CompanyCard = ({ company,  history }) => {
   const classes = useStyles();
   const {name } = company;
-  const Composed = adopt({
-    actionableEventCountQuery: ({ render }) => (
-      <Query query={companyEventCountByLabel(company.id, "actionable_opportunity")} >
-        { render }
-      </Query>
-    ),
-    referralEventCountQuery: ({ render }) => (
-      <Query query={companyEventCountByLabel(company.id, "refferal_thanks")} >
-        { render }
-      </Query>
-    ),
-    companyEventCountQuery: ({ render }) => (
-      <Query query={companyEventCount(company.id)} >
-        { render }
-      </Query>
-    ),
-  })
+  // const Composed = adopt({
+  //   actionableEventCountQuery: ({ render }) => (
+  //     <Query query={companyEventCountByLabel(company.id, "actionable_opportunity")} >
+  //       { render }
+  //     </Query>
+  //   ),
+  //   referralEventCountQuery: ({ render }) => (
+  //     <Query query={companyEventCountByLabel(company.id, "refferal_thanks")} >
+  //       { render }
+  //     </Query>
+  //   ),
+  //   companyEventCountQuery: ({ render }) => (
+  //     <Query query={companyEventCount(company.id)} >
+  //       { render }
+  //     </Query>
+  //   ),
+  // })
 
   return (
-    <Composed>
-      {({ actionableEventCountQuery, referralEventCountQuery, companyEventCountQuery }) => {
-        return (
+    // <Composed>
+    //   {({ actionableEventCountQuery, referralEventCountQuery, companyEventCountQuery }) => {
+    //     return (
           <Card>
             <CardContent>
               <Typography>Company: {name}</Typography>
@@ -76,8 +76,8 @@ export const CompanyCard = ({ company,  history }) => {
               </CardActions> */}
             </div>
           </Card>
-        );
-      }}
-    </Composed>
+    //     );
+    //   }}
+    // </Composed>
   );
 };

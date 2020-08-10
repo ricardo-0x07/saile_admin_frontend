@@ -4,11 +4,11 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { adopt } from 'react-adopt';
-import { Query } from "react-apollo";
+// import { adopt } from 'react-adopt';
+// import { Query } from "react-apollo";
 
 
-import { sailebotEventCountByLabel, sailebotEventCount } from "../../graphql/queries";
+// import { sailebotEventCountByLabel, sailebotEventCount } from "../../graphql/queries";
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -23,39 +23,39 @@ const useStyles = makeStyles(theme => ({
 export const SaileBotCard = ({ sailebot, client,  history }) => {
   const classes = useStyles();
   const { email, fullname, email_service} = sailebot;
-  const Composed = adopt({
-    actionableEventCountQuery: ({ render }) => (
-      <Query query={sailebotEventCountByLabel(sailebot.id, "actionable_opportunity")} >
-        { render }
-      </Query>
-    ),
-    referralEventCountQuery: ({ render }) => (
-      <Query query={sailebotEventCountByLabel(sailebot.id, "refferal_thanks")} >
-        { render }
-      </Query>
-    ),
-    neutralEventCountQuery: ({ render }) => (
-      <Query query={sailebotEventCountByLabel(sailebot.id, "sent_neutral_outbound")} >
-        { render }
-      </Query>
-    ),
-    sailebotEventCountQuery: ({ render }) => (
-      <Query query={sailebotEventCount(sailebot.id)} >
-        { render }
-      </Query>
-    ),
-  })
+  // const Composed = adopt({
+  //   actionableEventCountQuery: ({ render }) => (
+  //     <Query query={sailebotEventCountByLabel(sailebot.id, "actionable_opportunity")} >
+  //       { render }
+  //     </Query>
+  //   ),
+  //   referralEventCountQuery: ({ render }) => (
+  //     <Query query={sailebotEventCountByLabel(sailebot.id, "refferal_thanks")} >
+  //       { render }
+  //     </Query>
+  //   ),
+  //   neutralEventCountQuery: ({ render }) => (
+  //     <Query query={sailebotEventCountByLabel(sailebot.id, "sent_neutral_outbound")} >
+  //       { render }
+  //     </Query>
+  //   ),
+  //   sailebotEventCountQuery: ({ render }) => (
+  //     <Query query={sailebotEventCount(sailebot.id)} >
+  //       { render }
+  //     </Query>
+  //   ),
+  // })
 
   return (
-    <Composed>
-      {({ actionableEventCountQuery, referralEventCountQuery, sailebotEventCountQuery, neutralEventCountQuery }) => {
-        // if (
-        //   loading ||
-        //   !data
-        // ) {
-        //   return null;
-        // }
-        return (
+    // <Composed>
+    //   {({ actionableEventCountQuery, referralEventCountQuery, sailebotEventCountQuery, neutralEventCountQuery }) => {
+    //     // if (
+    //     //   loading ||
+    //     //   !data
+    //     // ) {
+    //     //   return null;
+    //     // }
+    //     return (
           <Card>
             <CardContent>
               <Typography>{fullname}</Typography>
@@ -70,7 +70,7 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
                 <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/requirements-by-sailebot', {sailebot})}>View Requirements</Button>
                 <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/domains-by-sailebot', {sailebot})}>View Domains</Button>
               </CardActions>
-              <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
+              {/* <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {
                   sailebotEventCountQuery.data && 
                   sailebotEventCountQuery.data.event_aggregate &&
@@ -95,12 +95,12 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
                   neutralEventCountQuery.data.event_aggregate.aggregate &&
                   <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-sailebot', {sailebot, events: neutralEventCountQuery.data.event_aggregate.nodes })}>Neutral Events: <br/> {neutralEventCountQuery.data.event_aggregate.aggregate.count}</Button>
                 }
-              </CardActions>
+              </CardActions> */}
             </div>
           </Card>    
-        );
-        }
-      }
-    </Composed>
+    //     );
+    //     }
+    //   }
+    // </Composed>
   );
 };
