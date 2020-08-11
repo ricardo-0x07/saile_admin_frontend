@@ -23,6 +23,7 @@ import ManageClient from './ManageClient'
 import ManageCompany from './ManageCompany'
 import ManageSaileBot from './ManageSaileBot'
 import ManageDomain from './ManageDomain'
+import ManageCompanyDomain from './ManageCompanyDomain'
 import ManageTemplate from './ManageTemplate'
 import ManageAccount from './ManageAccount'
 import ManageContact from './ManageContact'
@@ -35,6 +36,7 @@ import Clients from './Clients'
 // import Companies from './Companies'
 import SaileBots from './SaileBots'
 import Domains from './Domains'
+import CompanyDomains from './CompanyDomains'
 import Accounts from './Accounts'
 import ScheduleAccounts from './ScheduleAccounts'
 import Contacts from './Contacts'
@@ -296,6 +298,16 @@ function Routes() {
                         />
                         <Route
                             exact
+                            path='/app/domains-by-company' 
+                            component={CompanyDomains}
+                        />
+                        <Route
+                            exact
+                            path='/app/company-domains' 
+                            component={CompanyDomains}
+                        />
+                        <Route
+                            exact
                             path='/app/clients-by-company' 
                             component={Clients}
                         />
@@ -343,6 +355,11 @@ function Routes() {
                             exact
                             path='/app/manage-domain' 
                             component={ManageDomain}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-company-domain' 
+                            component={ManageCompanyDomain}
                         />
                         <Route
                             exact

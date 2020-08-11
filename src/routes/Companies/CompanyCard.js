@@ -53,6 +53,7 @@ export const CompanyCard = ({ company,  history }) => {
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-company', {company})}>Edit</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-client', {company})}>Add Client</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/clients-by-company', {company})}>View Clients</Button>
+                <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/domains-by-company', {company})}>View Domains</Button>
               </CardActions>
               {/* <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {

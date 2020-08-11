@@ -441,6 +441,14 @@ export const listCampaigns = (limit) => {
             id
             name
             requirement_id
+            run_status
+            is_running
+            to_run
+            status_message
+            smtp_login
+            smtp_password
+            email_service
+            company_domain_id
         }
     }
 `;
@@ -654,6 +662,46 @@ export const getAccountsByCampaignId = (campaign_id) => {
     `;
 }
 
+export const getCompanyByCampaignId = (campaign_id) => {
+    return gql`
+        query CompanyByCampaignId {
+            company(where: {clients: {sailebots: {requirements: {campaigns: {id: {_eq: ${campaign_id}}}}}}}, limit: 1) {
+                id
+                country
+                created_at
+                email_domain
+                industry
+                name
+                phone
+                state
+                street
+                updated_at
+                website
+            }
+        }
+    `;
+}
+
+export const getCompanyByRequirementId = (requirement_id) => {
+    return gql`
+        query CompanyByRequirementId {
+            company(where: {clients: {sailebots: {requirements: {id: {_eq: ${requirement_id}}}}}}, limit: 1) {
+                id
+                country
+                created_at
+                email_domain
+                industry
+                name
+                phone
+                state
+                street
+                updated_at
+                website
+            }
+        }
+    `;
+}
+
 export const getClientCampaignAccounts = (client_id) => {
     return gql`
         query GetClientCampaignAccounts {
@@ -710,6 +758,35 @@ export const getContactById = (id) => {
     return gql`
         query GetContactById {
             contact(where: {id: {_eq: ${id}}}) {
+                account_id
+                bounce_type
+                email
+                first_outbound_done
+                firstname
+                gender
+                id
+                is_ema_eligible
+                is_eva_eligible
+                is_referral
+                lastname
+                member_status
+                phone
+                position
+                role
+                sam_status
+                second_outbound_done
+                source
+                title
+                to_followup
+            }
+        }
+    `;
+}
+
+export const getContactByEmail = (email) => {
+    return gql`
+        query GetContactByEmail {
+            contact(where: {email: {_eq: "${email}"}}) {
                 account_id
                 bounce_type
                 email
@@ -856,6 +933,10 @@ export const listRequirementCampaigns = (requirement_id) => {
             is_running
             to_run
             status_message
+            smtp_login
+            smtp_password
+            email_service
+            company_domain_id
         }
     }
 `;
@@ -1155,3 +1236,72 @@ export const listDomains = (limit=10, offset=0) => {
     `;
 }
 
+
+export const listSailebotDomains = (sailebot_id) => {
+    return gql`
+        query ListSailebotDomains {
+            domain(where: {sailebot_id: {_eq: ${sailebot_id}}}) {
+                active
+                dns
+                host
+                id
+                ip
+                name
+                provider
+                sailebot_id
+                smtp
+                smtp_login
+                smtp_password
+            }
+        }
+    `;
+}
+
+export const listCompanyDomains = (limit=10, offset=0) => {
+    return gql`
+        query ListCompanyDomains {
+            company_domain(limit: ${limit}, offset: ${offset}) {
+                id
+                dns
+                host
+                name
+                smtp
+                company_id
+                ip
+            }
+        }
+    `;
+}
+
+
+export const listCompanyDomainsByCompanyId = (company_id) => {
+    return gql`
+        query ListCompanyDomains {
+            company_domain(where: {company_id: {_eq: ${company_id}}}) {
+                id
+                dns
+                host
+                name
+                smtp
+                company_id
+                ip
+            }
+        }
+    `;
+}
+
+export const listCompanyDomainsByRequirementId = (requirement_id) => {
+    return gql`
+        query ListCompanyDomainsByRequirementId {
+            company_domain(where: {campaigns: {requirement_id: {_eq: ${requirement_id}}}}) {
+                id
+                dns
+                host
+                name
+                smtp
+                company_id
+                ip
+            }
+        }
+    `;
+}

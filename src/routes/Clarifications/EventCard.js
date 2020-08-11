@@ -6,6 +6,14 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
+// import {
+//   TextField,
+//   Button,
+//   FormLabel,
+//   FormControl,
+//   FormGroup,
+//   FormControlLabel,
+// } from '@material-ui/core';
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import { Mutation, Query } from "react-apollo";
@@ -13,6 +21,8 @@ import { updateEvent, updateContact, updateSingleCampaignAccount, updateCampaign
 import { getContactById, getCampaignContact } from "../../graphql/queries";
 import { adopt } from 'react-adopt';
 import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
+import ContactSelect from "./ContactSelect";
+
 
 // const actionable_opportunity_clarification_lambda_api_endpoint = "https://8xbo18ydk7.execute-api.us-west-2.amazonaws.com/Prod/"
 // const referral_clarification_lambda_api_endpoint = "https://d7quhnype6.execute-api.us-west-2.amazonaws.com/Prod/"
@@ -156,6 +166,10 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
           id: event.contact_id
       }
     });
+    updateReload()
+  }
+  const handleSelectChange= async (item) => {
+    console.log('item: ', item)
     updateReload()
   }
   const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data) => {
@@ -386,6 +400,18 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                   </Query>
                   
                 }
+                {
+                  id && sailebot && sailebot.id && !contact_id &&
+                  
+                  <ContactSelect
+                        placeholder='Contact by Email'
+                        name='contact'
+                        handleSelectChange={handleSelectChange}
+                        variant="outlined"
+                        event_id={id}
+                        // sailebot={props.location.state.sailebot}
+                  />  
+                }            
                 {
                   // contact_id &&
                   // <Button variant="contained" size="small" onClick={unsubscribeContact(updateContactMutation)}>Globally Unsubscribe Contact</Button>

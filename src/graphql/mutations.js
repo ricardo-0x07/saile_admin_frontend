@@ -337,6 +337,24 @@ export const updateDomain = gql`
   }
 `;
 
+export const createCompanyDomain = gql`
+  mutation InsertCompanyDomain($objects: [company_domain_insert_input!]!) {
+    insert_company_domain(objects: $objects) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const updateCompanyDomain = gql`
+  mutation UpdateCompanyDomain($objects: company_domain_set_input!, $id: Int) {
+    update_company_domain(where: {id: {_eq: $id}}, _set: $objects) {
+      affected_rows
+    }
+  }
+`;
+
 export const deleteCampaignAccount = gql`
   mutation DeleteCampaignContacts( $account_id: Int, $campaign_id: Int) {
     delete_event(where: {contact: {contact_campaigns: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}}}}) {

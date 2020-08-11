@@ -260,6 +260,10 @@ export const listCampaigns = (limit) => {
             is_running
             to_run
             status_message
+            smtp_login
+            smtp_password
+            email_service
+            company_domain_id
     }
 `;
 }
@@ -1012,6 +1016,39 @@ export const listSailebotDomains = (sailebot_id) => {
                 smtp
                 smtp_login
                 smtp_password
+            }
+        }
+    `;
+}
+
+export const listCompanyDomains = (limit=10, offset=0) => {
+    return gql`
+        subscription ListCompanyDomains {
+            company_domain(limit: ${limit}, offset: ${offset}) {
+                id
+                dns
+                host
+                name
+                smtp
+                company_id
+                ip
+            }
+        }
+    `;
+}
+
+
+export const listCompanyDomainsByCompanyId = (company_id) => {
+    return gql`
+        subscription ListCompanyDomains {
+            company_domain(where: {company_id: {_eq: ${company_id}}}) {
+                id
+                dns
+                host
+                name
+                smtp
+                company_id
+                ip
             }
         }
     `;
