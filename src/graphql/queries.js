@@ -965,6 +965,7 @@ export const listSailebotRequirements = (sailebot_id, campaign_limit=10, campaig
                 source
                 state
                 job_levels
+                job_functions
                 titles
                 campaigns(limit: ${campaign_limit}, offset: ${campaign_offset}) {
                     description
@@ -1204,6 +1205,7 @@ export const listRequirements = (limit=10, offset=0, campaign_limit=10, campaign
                 source
                 state
                 job_levels
+                job_functions
                 titles
                 campaigns(limit: ${campaign_limit}, offset: ${campaign_offset}) {
                     description

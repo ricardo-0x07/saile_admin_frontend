@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types, react/jsx-handler-names */
 
 import React from 'react';
+// import Creatable from 'react-select/lib/Creatable';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -166,14 +167,16 @@ class IntegrationReactSelect extends React.Component {
             ( { updateEventMutation } ) => {
               return (
                 <div className={classes.root}>
-                  <TextField
-                      name="smtp_login"
-                      label="Contact Email" 
-                      variant="filled" 
-                      margin="normal" 
-                      onChange={this.handleChange(name)}
-                      value={this.state[name]}
-                  />
+                  <form onSubmit={() => this.onSearchTermChange(this.state.searchEmail)}>
+                    <TextField
+                        name="smtp_login"
+                        label="Contact Email" 
+                        variant="filled" 
+                        margin="normal" 
+                        onChange={this.handleChange(name)}
+                        value={this.state[name]}
+                    />                    
+                  </form>
                   {/* <Typography><strong>Email:</strong> {this.state.searchEmail}</Typography> */}
                   
                   {

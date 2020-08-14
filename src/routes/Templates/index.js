@@ -53,7 +53,7 @@ const Templates = (props) => {
 
         return (
           <div className={classes.root}>
-            <Title>Templates</Title>
+            <Title>Content</Title>
             <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-template', {campaign: props.location.state.campaign})}>Add Template</Button>
             <div
               style={{

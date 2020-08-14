@@ -21,6 +21,7 @@ import { Mutation } from "react-apollo";
 
 import { createRequirement, updateRequirement } from "../../graphql/mutations";
 import MultipleSelect from './MultipleSelect'
+import FunctionMultipleSelect from './FunctionMultipleSelect'
 import ChipInput from 'material-ui-chip-input'
 
 
@@ -91,11 +92,12 @@ const ManageRequirementForm = (props) => {
         source: '',
         state: '',
         job_levels: [],
+        job_functions: [],
         titles: []
     };
     if ( props.location.state && props.location.state.requirement) {
-        const { job_levels, titles, ...rest } = props.location.state.requirement
-        initialValues = { job_levels: job_levels !== null ? job_levels.replace('{', '').replace('}','').split(',') : '', titles: titles !== null ? titles.replace('{', '').replace('}', '').split(',') : '', ...rest}
+        const { job_levels, job_functions, titles, ...rest } = props.location.state.requirement
+        initialValues = { job_functions: job_functions !== null ? job_functions.replace('{', '').replace('}','').split(',') : '', job_levels: job_levels !== null ? job_levels.replace('{', '').replace('}','').split(',') : '', titles: titles !== null ? titles.replace('{', '').replace('}', '').split(',') : '', ...rest}
     } else {
         if ( props.location.state && props.location.state.sailebot && props.location.state.sailebot.id) {
             initialValues = {
@@ -129,6 +131,7 @@ const ManageRequirementForm = (props) => {
                                 source,
                                 state,
                                 job_levels,
+                                job_functions,
                                 titles,
                                 sailebot_id,
                                 id
@@ -152,6 +155,7 @@ const ManageRequirementForm = (props) => {
                                                 size: Number(size),
                                                 source,
                                                 state,
+                                                job_functions: `{${job_functions.toString()}}`,
                                                 job_levels: `{${job_levels.toString()}}`,
                                                 titles: `{${titles.toString()}}`,
                                                 sailebot_id,
@@ -177,6 +181,7 @@ const ManageRequirementForm = (props) => {
                                                 priority,
                                                 source,
                                                 state,
+                                                job_functions: `{${job_functions.toString()}}`,
                                                 job_levels: `{${job_levels.toString()}}`,
                                                 titles: `{${titles.toString()}}`,
                                                 sailebot_id,
@@ -228,6 +233,7 @@ const ManageRequirementForm = (props) => {
                                             onChange={handleChange}
                                             value={values.elasticity === null ? '' : values.elasticity }
                                         />
+                                        <FunctionMultipleSelect name="job_functions" onChange={handleChange} value={Boolean(values.job_functions) ? values.job_functions : []}/>
                                         <MultipleSelect name="job_levels" onChange={handleChange} value={Boolean(values.job_levels) ? values.job_levels : []}/>
                                         <FormControlLabel
                                             label="Job Titles"
