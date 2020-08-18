@@ -83,7 +83,7 @@ const Accounts = (props) => {
   };
 
   const handleChange = (event, value) => {
-    setState({ page: value})
+    setState({ page: value, search_term: `%${''}%`, searchQuery: ''})
   };
   const handleSearchChange = (fetchMore, data) => (e)=> { 
     e.preventDefault();

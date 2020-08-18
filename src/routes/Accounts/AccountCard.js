@@ -11,7 +11,7 @@ import {createUpdateCampaignAccount, createUpdateCampaignContact } from "../../g
 
 
 export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
-  const { name, address, email } = account;
+  const { name, address, email, email_domain, website } = account;
   const Composed = adopt({
    createUpdateCampaignAccountMutation: ({ render }) => (
       <Mutation mutation={createUpdateCampaignAccount } >
@@ -62,9 +62,11 @@ export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
           return (
             <Card>
               <CardContent>
-                <Typography>{name}</Typography>
+                <Typography>Name: {name}</Typography>
+                {/* <Typography>Website: {website}</Typography> */}
+                <Typography>Email Domain: {email_domain}</Typography>
                 <Typography>{address}</Typography>
-                <Typography>{email}</Typography>
+                <Typography>{website}</Typography>
               </CardContent>
               <CardActions>
                 <Button size="small" onClick={() => history.push('/app/manage-account', {account, campaign})}>Edit</Button>
