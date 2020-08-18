@@ -10,7 +10,7 @@ import { adopt } from 'react-adopt';
 import {createUpdateCampaignAccount, createUpdateCampaignContact } from "../../graphql/mutations";
 
 
-export const AccountCard = ({ account,  campaign,  history }) => {
+export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
   const { name, address, email } = account;
   const Composed = adopt({
    createUpdateCampaignAccountMutation: ({ render }) => (
@@ -48,7 +48,8 @@ export const AccountCard = ({ account,  campaign,  history }) => {
         status: 'Remove'
       }
     });        
-    console.log("campaign_accounts_affected: ", campaign_accounts_affected)                
+    console.log("campaign_accounts_affected: ", campaign_accounts_affected)     
+    updateReload()           
   }
   return (
     <Composed>

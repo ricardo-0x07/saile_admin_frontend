@@ -161,7 +161,7 @@ const Accounts = (props) => {
     <Composed>
       {({ accountsQuery }) => {
         console.log('accountsQuery: ', accountsQuery)
-        const { loading, data, fetchMore }  = accountsQuery
+        const { loading, data, refetch, fetchMore }  = accountsQuery
         console.log('data: ', data)
         console.log('search_term: ', search_term)
         console.log('_page: ', _page)
@@ -224,11 +224,31 @@ const Accounts = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 _data.campaign_account.map(x => (
-                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} status={x.status} history={props.history} campaign={props.location.state.campaign} sailebot={props.location.state.sailebot}/>
+                  <AccountCard
+                    account={x.account}
+                    name={x.account.name}
+                    key={x.account.id}
+                    status={x.status}
+                    history={props.history}
+                    campaign={props.location.state.campaign}
+                    sailebot={props.location.state.sailebot}
+                    updateReload={() => {
+                      refetch();
+                    }}
+                  />
                 ))
                 :
                 _data.account.filter(item => item ).map(x => (
-                  <AccountCard account={x} name={x.name} key={x.id}  history={props.history} />
+                  <AccountCard 
+                    account={x}
+                    name={x.name}
+                    key={x.id} 
+                    history={props.history}
+                    updateReload={() => {
+                      refetch();
+                    }}
+
+                  />
                 ))
               }
             </div>
