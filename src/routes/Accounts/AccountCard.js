@@ -6,13 +6,12 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
-import Title from '../../components/Title';
 
 import {createUpdateCampaignAccount, createUpdateCampaignContact } from "../../graphql/mutations";
 
 
 export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
-  const { name, address, email, email_domain, website } = account;
+  const { name, address, email_domain, website } = account;
   const Composed = adopt({
    createUpdateCampaignAccountMutation: ({ render }) => (
       <Mutation mutation={createUpdateCampaignAccount } >
