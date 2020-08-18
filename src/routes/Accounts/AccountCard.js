@@ -42,10 +42,13 @@ export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
 
     const campaign_accounts_affected = await createUpdateCampaignAccountMutation({
       variables: {
-        campaign_id,
-        account_id,
-        is_delisted: true,
-        status: 'Remove'
+        objects: 
+          {
+            campaign_id,
+            account_id,
+            is_delisted: true,
+            status: 'Remove'
+          }
       }
     });        
     console.log("campaign_accounts_affected: ", campaign_accounts_affected)     
