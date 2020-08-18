@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
+import Title from '../../components/Title';
 
 import {createUpdateCampaignAccount, createUpdateCampaignContact } from "../../graphql/mutations";
 
@@ -62,11 +63,10 @@ export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
           return (
             <Card>
               <CardContent>
-                <Typography>Name: {name}</Typography>
-                {/* <Typography>Website: {website}</Typography> */}
-                <Typography>Email Domain: {email_domain}</Typography>
-                <Typography>{address}</Typography>
-                <Typography>{website}</Typography>
+                {name && <Typography variant="caption"  display="block"><Typography variant="button" >Name: </Typography>{name}</Typography>}
+                {email_domain && <Typography variant="caption"  display="block"><Typography variant="button" >Email Domain: : </Typography>{email_domain}</Typography>}
+                {website && <Typography variant="caption"  display="block"><Typography variant="button" >Website: </Typography>{website}</Typography>}
+                {address && <Typography variant="caption"  display="block"><Typography variant="button" >Address: </Typography>{address}</Typography>}
               </CardContent>
               <CardActions>
                 <Button size="small" onClick={() => history.push('/app/manage-account', {account, campaign})}>Edit</Button>
