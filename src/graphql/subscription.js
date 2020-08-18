@@ -216,10 +216,10 @@ export const GET_ALL_CAMPAIGNS = gql`
         }
     }
 `;
-export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false) => {
+export const listCampaignAccounts = (campaign_id, limit=100, offset=0, is_scheduled=false) => {
     return gql`
     subscription ListCampaignAccounts {
-        campaign_account(limit:${limit}, offset: 0, where: {campaign_id: {_eq: ${campaign_id}}}) {
+        campaign_account(limit:${limit}, offset:${offset}, where: {campaign_id: {_eq: ${campaign_id}}}, order_by: {account_id: desc}) {
             account {
                     NAICS
                     city
@@ -263,6 +263,7 @@ export const listCampaigns = (limit) => {
             smtp_login
             smtp_password
             email_service
+            wait_days
             company_domain_id
     }
 `;

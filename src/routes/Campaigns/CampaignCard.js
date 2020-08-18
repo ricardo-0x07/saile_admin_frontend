@@ -61,7 +61,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   });
 
   };
-  const { name, accounts_per_schedule } = campaign;
+  const { name, accounts_per_schedule, wait_days } = campaign;
   return (
     <Composed>
       {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery }) => {
@@ -78,6 +78,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
             <CardContent>
               <Typography>Name: {name}</Typography>
               <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
+              <Typography>Outbound delay: {wait_days}</Typography>
               <Typography>Elasticity: {requirement.elasticity}</Typography>
               <Typography>Campaign Accounts: {countCampaignAccounts}</Typography>
               <Typography>Campaign Scheduled Accounts: {countCampaignScheduleAccounts}</Typography>

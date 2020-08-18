@@ -52,6 +52,7 @@ const ManageCampaignForm = (props) => {
         smtp_login: '',
         smtp_password: '',
         email_service: '',
+        wait_days: 0
 };
     if ( props.location.state && props.location.state.campaign) {
         initialValues = props.location.state.campaign
@@ -110,6 +111,7 @@ const ManageCampaignForm = (props) => {
                                             smtp_login,
                                             smtp_password,
                                             email_service,
+                                            wait_days,
                                             company_domain_id
                                         }) => {
                                             if (id) {
@@ -128,6 +130,7 @@ const ManageCampaignForm = (props) => {
                                                             smtp_login,
                                                             smtp_password,
                                                             email_service,
+                                                            wait_days: Number(wait_days),
                                                             company_domain_id
                                                         },
                                                         id
@@ -148,6 +151,7 @@ const ManageCampaignForm = (props) => {
                                                             smtp_login,
                                                             smtp_password,
                                                             email_service,
+                                                            wait_days: Number(wait_days),
                                                             company_domain_id
                                                         }
                                                     }
@@ -187,6 +191,14 @@ const ManageCampaignForm = (props) => {
                                                         margin="normal" 
                                                         onChange={handleChange}
                                                         value={values.accounts_per_schedule  || ''}
+                                                    />
+                                                    <TextField
+                                                        name="wait_days"
+                                                        label="#Outbound delay" 
+                                                        variant="filled" 
+                                                        margin="normal" 
+                                                        onChange={handleChange}
+                                                        value={values.wait_days  || ''}
                                                     />
                                                     <EmailServiceSimpleSelect label="Email Service" name="email_service" onChange={handleChange} value={values.email_service || 'mailgun'}/>
                                                     <TextField

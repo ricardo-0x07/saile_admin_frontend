@@ -3,7 +3,7 @@ import { CSVReader } from 'react-papaparse'
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 import { listAllCampaignAccounts } from "../../graphql/queries";
-import { createUpdateContact, createUpdateCampaignContact, createContactAccount, createContactCampaignAccount, createUpdateCampaign } from "../../graphql/mutations";
+import { createUpdateContact, createUpdateCampaignContact, createContactAccount, createUpdateCampaignAccount, createUpdateCampaign } from "../../graphql/mutations";
 import { getClientCampaignAccounts } from "../../graphql/queries";
 
 
@@ -27,7 +27,7 @@ export default class CSVReader1 extends Component {
     }
   }
   
-  getContactCSVData = async (data, createUpdateContactMutation, createUpdateCampaignContactMutation, campaign_accounts_data, clientCampaignAccountQuery, createUpdateCampaignMutation, createContactAccountMutation, createContactCampaignAccountMutation) => {
+  getContactCSVData = async (data, createUpdateContactMutation, createUpdateCampaignContactMutation, campaign_accounts_data, clientCampaignAccountQuery, createUpdateCampaignMutation, createContactAccountMutation, createUpdateCampaignAccountMutation) => {
     let contacts = data.map(contact => {
 
       return Object.entries(this.props.contacts_csv_key_map).reduce((acc, [key, value]) => {
@@ -92,11 +92,14 @@ export default class CSVReader1 extends Component {
       const create_campaign_account_results = await accounts_create_results.map(async promise => {
         const account = await promise.then(res => res);
         const { firstname, lastname, email, title, status } = account;
-        await createContactCampaignAccountMutation({
+        const is_delisted = status === 'ActionableOpportunity' ? true :false
+        await createUpdateCampaignAccountMutation({
           variables: {
               objects: { 
                 campaign_id: account.campaign_id,
                 account_id: account.id,
+                status: status,
+                is_delisted: is_delisted
               }
           }
         });  
@@ -170,8 +173,8 @@ export default class CSVReader1 extends Component {
           { render }
         </Mutation> 
       ),
-      createContactCampaignAccountMutation: ({ render }) => (
-          <Mutation mutation={ createContactCampaignAccount } >
+      createUpdateCampaignAccountMutation: ({ render }) => (
+          <Mutation mutation={ createUpdateCampaignAccount } >
             { render }
           </Mutation> 
       ),
@@ -193,7 +196,7 @@ export default class CSVReader1 extends Component {
     })
     return (
       <Composed>
-        {({ accountsQuery: { data, loading }, createUpdateContactMutation, createUpdateCampaignContactMutation, clientCampaignAccountQuery, createUpdateCampaignMutation, createContactAccountMutation, createContactCampaignAccountMutation }) => {
+        {({ accountsQuery: { data, loading }, createUpdateContactMutation, createUpdateCampaignContactMutation, clientCampaignAccountQuery, createUpdateCampaignMutation, createContactAccountMutation, createUpdateCampaignAccountMutation }) => {
           return (
             <>
               <h5>{this.props.label ? this.props.label : ''} Bulk Upload</h5>
@@ -201,7 +204,7 @@ export default class CSVReader1 extends Component {
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
                   if (!loading) {
-                    this.getContactCSVData(loaded_data, createUpdateContactMutation, createUpdateCampaignContactMutation, data, clientCampaignAccountQuery, createUpdateCampaignMutation, createContactAccountMutation, createContactCampaignAccountMutation)                     
+                    this.getContactCSVData(loaded_data, createUpdateContactMutation, createUpdateCampaignContactMutation, data, clientCampaignAccountQuery, createUpdateCampaignMutation, createContactAccountMutation, createUpdateCampaignAccountMutation)                     
                   }
                 }}
                 onError={this.onError}

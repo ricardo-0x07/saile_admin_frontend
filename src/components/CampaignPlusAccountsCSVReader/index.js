@@ -77,34 +77,51 @@ export default class CSVReader1 extends Component {
         const {status, street, city, state, country, ...account_} = account;
         console.log('status: ', status)
   
-        let accounts_response = await createAccountMutation({
+        return createAccountMutation({
           variables: {
             objects: {...account_, address: `${street}, ${city}, ${state}, ${country}`, street, city, state, country}
           }
+        }).then(accounts_response => {
+          console.log('accounts_response: ', accounts_response)
+          const { id } = accounts_response.data.insert_account.returning[0];
+          console.log('account_id: ', id)
+          return {
+            id,
+            campaign_id,
+            // status: accounts_response.data.insert_account.returning[0].status,
+            status: status === 'Actionable Opportunity' ? 'ActionableOpportunity': status === 'Remove' ? 'Remove' :'Active'
+          }
         });
-        return {
-          id: accounts_response.data.insert_account.returning[0].id,
-          campaign_id,
-          // status: accounts_response.data.insert_account.returning[0].status,
-          status: status === 'Actionable Opportunity' ? 'ActionableOpportunity': status === 'Remove' ? 'Remove' :'Active'
-        }
       })
+      console.log('accounts_create_results.length: ', accounts_create_results.length)
       console.log('accounts_create_results[0]: ', accounts_create_results[0])
       
       const create_campaign_account_results = await accounts_create_results.map(async promise => {
-        const account = await promise.then(res => res);
-        const { status } = account;
-        let campaign_accounts_response = await createUpdateCampaignAccountMutation({
-          variables: {
-              objects: { 
-                campaign_id: account.campaign_id,
-                account_id: account.id,
-                status: status,
-                is_delisted: status === 'ActionableOpportunity' || status === 'Remove' ? true :false
-              }
+        console.log('promise: ', promise);
+        return promise.then(async account => {
+          console.log('account: ', account);
+          const { status } = account;
+          if (account.id === 95165) {
+            console.log('TEST')
+            console.log('account.id: ', account.id);
+            console.log('status: ', status);   
+            console.log('account: ', account);
           }
-        });  
-        return campaign_accounts_response.data.insert_campaign_account.returning
+          const is_delisted = status === 'ActionableOpportunity' || status === 'Remove' ? true :false
+          console.log('is_delisted: ', is_delisted);
+          let campaign_accounts_response = await createUpdateCampaignAccountMutation({
+            variables: {
+                objects: { 
+                  campaign_id: account.campaign_id,
+                  account_id: account.id,
+                  status: status,
+                  is_delisted: is_delisted
+                }
+            }
+          });  
+          console.log('campaign_accounts_response: ', campaign_accounts_response)
+          return campaign_accounts_response.data.insert_campaign_account.returning
+        });
       })
       console.log('create_campaign_account_results: ', create_campaign_account_results)
 

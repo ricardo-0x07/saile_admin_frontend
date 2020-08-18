@@ -321,10 +321,10 @@ export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
 
 
 
-export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false) => {
+export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_term='', is_scheduled=false) => {
     return gql`
     query ListCampaignAccounts {
-        campaign_account(limit:${limit}, offset: 0, where: {campaign_id: {_eq: ${campaign_id}}}) {
+        campaign_account(limit:${limit}, offset:${offset}, where: {account: {name: {_ilike: "%${search_term}%"}}, campaign_id: {_eq: ${campaign_id}}}, order_by: {account_id: desc}) {
             account {
                     NAICS
                     city
@@ -350,6 +350,86 @@ export const listCampaignAccounts = (campaign_id, limit=100, is_scheduled=false)
     }
 `;
 }
+
+export const ListCampaignAccounts =  gql`
+query ListCampaignAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!) {
+    campaign_account(limit:$limit, offset:$offset, where: {is_delisted: {_eq: false}, account: {name: {_ilike: $search_term}}, campaign_id: {_eq: $campaign_id}}, order_by: {account_id: desc}) {
+        account {
+                NAICS
+                city
+                domain
+                email
+                email_domain
+                employees
+                ex_id
+                fax
+                id
+                is_scheduled
+                name
+                phone
+                revenue
+                state
+                website
+                NAICS
+                is_scheduled
+        }
+        account_id
+        campaign_id
+        id
+        is_scheduled
+    }
+}
+`;
+
+export const ListAccounts  = gql`
+    query ListAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!) {
+        account(limit:$limit, offset:$offset, order_by: {id: desc}, where: {name: {_ilike: $search_term}, campaign_accounts: {is_delisted: {_eq: false}}}) {
+            NAICS
+            address
+            city
+            country
+            domain
+            email
+            email_domain
+            employees
+            fax
+            id
+            ex_id
+            is_scheduled
+            name
+            phone
+            revenue
+            state
+            website
+            account_campaigns {
+                campaign_id
+            }
+            contacts {
+                account_id
+                bounce_type
+                email
+                first_outbound_done
+                firstname
+                gender
+                id
+                is_ema_eligible
+                is_eva_eligible
+                is_referral
+                lastname
+                member_status
+                phone
+                position
+                role
+                sam_status
+                second_outbound_done
+                source
+                title
+                to_followup
+            }
+        }
+    }
+`;
+
 
 export const nonCampaignAccounts = (campaign_id) => {
     return gql`
@@ -432,10 +512,10 @@ export const listAvailableCampaignAccounts = (campaign_id, limit=100, is_schedul
 `;
 }
 
-export const listCampaigns = (limit) => {
+export const listCampaigns = (limit=10, offset=0) => {
     return gql`
     query ListCampaigns {
-        campaign(limit: ${limit}, offset: 0) {
+        campaign(limit:${limit}, offset:${offset}) {
             accounts_per_schedule
             description
             id
@@ -448,6 +528,7 @@ export const listCampaigns = (limit) => {
             smtp_login
             smtp_password
             email_service
+            wait_days
             company_domain_id
         }
     }
@@ -521,10 +602,10 @@ export const listCampaignSchedules = (campaign_id) => {
     }
   `;
   }
-export const listAccounts = (limit=10, offset=0) => {
+export const listAccounts = (limit=10, offset=0, search_term='') => {
     return gql`
         query ListAccounts {
-            account(limit: ${limit}, offset: ${offset}) {
+            account(limit: ${limit}, offset: ${offset}, order_by: {id: desc}, where: {name: {_ilike: "%${search_term}%"}}) {
                 NAICS
                 address
                 city
@@ -936,6 +1017,7 @@ export const listRequirementCampaigns = (requirement_id) => {
             smtp_login
             smtp_password
             email_service
+            wait_days
             company_domain_id
         }
     }
