@@ -319,6 +319,18 @@ export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
     `;
 }
 
+export const inbox_event_logs = (campaign_id=94192, is_inbound=false, after_date="2020-08-14") => {
+    return gql`
+        query InboxEventLogs {
+            inbox_event_log(where: {campaign_id: {_eq: ${campaign_id}}, is_inbound: {_eq: ${is_inbound}}, date: {_gte: "${after_date}"}}) {
+                count
+                campaign_id
+                date
+                is_inbound
+            }
+        }
+    `;
+}
 
 
 export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_term='', is_scheduled=false) => {

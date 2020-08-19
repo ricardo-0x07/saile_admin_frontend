@@ -7,22 +7,37 @@ import Typography from "@material-ui/core/Typography";
 import {
   FormControlLabel,
 } from '@material-ui/core';
+import moment from 'moment';
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 import Switch from '@material-ui/core/Switch';
 import { updateCampaign } from "../../graphql/mutations";
-import { countCampaignScheduleAccounts, countCampaignAccounts } from "../../graphql/queries"
+import { countCampaignScheduleAccounts, countCampaignAccounts, inbox_event_logs } from "../../graphql/queries"
+import CampaignChart from './CampaignChart';
 
 
 export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   const [state, setState] = React.useState({
     toStatus: campaign.to_run,
   });
+  const StartDate = moment(new Date()).add(-14, 'days').format('YYYY-MM-DD');
+  console.log('typeof StartDate: ', typeof StartDate)
+  console.log('StartDate: ', StartDate)
   const Composed = adopt({
-    countCampaignAccountsQuery: ({ render }) => (
-        <Query query={ countCampaignAccounts(campaign.id) } >
+    outboundEventLogsQuery: ({ render }) => (
+        <Query query={ inbox_event_logs(campaign.id, false, StartDate) } >
           { render }
         </Query> 
+    ),
+    inboundEventLogsQuery: ({ render }) => (
+      <Query query={ inbox_event_logs(campaign.id, true, StartDate) } >
+        { render }
+      </Query> 
+    ),
+    countCampaignAccountsQuery: ({ render }) => (
+      <Query query={ countCampaignAccounts(campaign.id) } >
+        { render }
+      </Query> 
     ),
     countCampaignScheduleAccountsQuery: ({ render }) => (
       <Query query={ countCampaignScheduleAccounts(campaign.id) } >
@@ -61,10 +76,10 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   });
 
   };
-  const { name, accounts_per_schedule, wait_days } = campaign;
+  const { name, accounts_per_schedule, wait_days, to_run } = campaign;
   return (
     <Composed>
-      {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery }) => {
+      {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery, outboundEventLogsQuery, inboundEventLogsQuery }) => {
         let countCampaignAccounts = null
         if (countCampaignAccountsQuery.data && countCampaignAccountsQuery.data.campaign_account_aggregate && !countCampaignAccountsQuery.loading) {
           countCampaignAccounts = countCampaignAccountsQuery.data.campaign_account_aggregate.aggregate.count          
@@ -73,40 +88,56 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
         if (countCampaignScheduleAccountsQuery.data && countCampaignScheduleAccountsQuery.data.schedule_account_aggregate && !countCampaignScheduleAccountsQuery.loading) {
           countCampaignScheduleAccounts = countCampaignScheduleAccountsQuery.data.schedule_account_aggregate.aggregate.count          
         }
+        console.log('outboundEventLogsQuery: ', outboundEventLogsQuery)
+        console.log('countCampaignAccountsQuery: ', countCampaignAccountsQuery)
         return (
           <Card>
-            <CardContent>
-              <Typography>Name: {name}</Typography>
-              <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
-              <Typography>Outbound delay: {wait_days}</Typography>
-              <Typography>Elasticity: {requirement.elasticity}</Typography>
-              <Typography>Campaign Accounts: {countCampaignAccounts}</Typography>
-              <Typography>Campaign Scheduled Accounts: {countCampaignScheduleAccounts}</Typography>
-            </CardContent>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-                <Button size="small" onClick={() => history.push('/app/manage-campaign', {campaign, requirement, sailebot})}>Edit</Button>
-                <Button size="small" onClick={() => history.push('/app/manage-template', {campaign, requirement, sailebot})}>Add Template</Button>
-                <Button size="small" onClick={() => history.push('/app/manage-schedule', {campaign, requirement, sailebot})}>Add Schedule</Button>
-                <Button size="small" onClick={() => history.push('/app/manage-account', {campaign, requirement, sailebot})}>Add Account</Button>
-              </CardActions>
-              <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-                <Button size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign, requirement})}>View Templates</Button>
-                <Button size="small" onClick={() => history.push('/app/schedules-by-campaign', {campaign, requirement, sailebot})}>View Schedules</Button>
-                <Button size="small" onClick={() => history.push('/app/accounts-by-campaign', {campaign, requirement, sailebot})}>View Accounts</Button>
-                <Button size="small" onClick={() => history.push('/app/clarifications-by-campaign', {campaign, requirement, sailebot})}>Clarifications</Button>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={state.toStatus}
-                      onChange={handleChange(updateCampaignMutation)}
-                      name="toStatus"
-                      color="primary"
-                    />
-                  }
-                  label="Run?"
-                />
-              </CardActions>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {/* <Typography>Campaign: {name}</Typography> */}
+              {
+                name && 
+                <span>
+                  <Typography variant="h4" display="inline">Campaign: </Typography><Typography variant="h6"  display="inline">{name}</Typography>
+                </span>
+              }
+              {
+                to_run &&
+                <CampaignChart inbound_data={inboundEventLogsQuery.loading ? [] : inboundEventLogsQuery.data}  outbound_data={outboundEventLogsQuery.loading ? [] : outboundEventLogsQuery.data}></CampaignChart>
+              }
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <CardContent>
+                  {/* <Typography>Name: {name}</Typography> */}
+                  
+                  <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
+                  <Typography>Outbound delay: {wait_days}</Typography>
+                  <Typography>Elasticity: {requirement.elasticity}</Typography>
+                  <Typography>Campaign Accounts: {countCampaignAccounts}</Typography>
+                  <Typography>Campaign Scheduled Accounts: {countCampaignScheduleAccounts}</Typography>
+                </CardContent>
+                <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-campaign', {campaign, requirement, sailebot})}>Edit</Button>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-template', {campaign, requirement, sailebot})}>Add Template</Button>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-schedule', {campaign, requirement, sailebot})}>Add Schedule</Button>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-account', {campaign, requirement, sailebot})}>Add Account</Button>
+                </CardActions>
+                <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign, requirement})}>View Templates</Button>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/schedules-by-campaign', {campaign, requirement, sailebot})}>View Schedules</Button>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/accounts-by-campaign', {campaign, requirement, sailebot})}>View Accounts</Button>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/clarifications-by-campaign', {campaign, requirement, sailebot})}>Clarifications</Button>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={state.toStatus}
+                        onChange={handleChange(updateCampaignMutation)}
+                        name="toStatus"
+                        color="primary"
+                      />
+                    }
+                    label="Run?"
+                  />
+                </CardActions>
+              </div>
             </div>
           </Card>
         );

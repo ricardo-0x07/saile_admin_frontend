@@ -9,6 +9,7 @@ import { adopt } from 'react-adopt';
 import { makeStyles } from '@material-ui/core/styles';
 import CampaignPlusAccountsCSVReader from '../../components/CampaignPlusAccountsCSVReader'
 import CampaignPlusContactsCSVReader from '../../components/CampaignPlusContactsCSVReader'
+// import CampaignChart from './CampaignChart';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,19 +89,19 @@ const Campaigns = (props) => {
         return (
           <div className={classes.root}>
             <Title>{props.location.state && props.location.state.sailebot ? `${props.location.state.sailebot.fullname} @ ${props.location.state.sailebot.email}`: ''}</Title>
-            <Title>{props.location.state && props.location.state.requirement ? props.location.state.requirement.name : ''} Campaigns</Title>
+            {/* <Title>{props.location.state && props.location.state.requirement ? props.location.state.requirement.name : ''} Campaigns</Title> */}
             <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-campaign', {requirement: props.location.state.requirement, sailebot: props.location.state.sailebot})}>Add Campaign</Button>
             {
               props.location.state && props.location.state.requirement && props.location.state.requirement.id && 
-              <>
-                <CampaignPlusContactsCSVReader location={props.location} contacts_csv_key_map={contacts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'LEGACY Campaigns + Contacts'} sailebot={props.location.state.sailebot}/>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <CampaignPlusAccountsCSVReader location={props.location} accounts_csv_key_map={accounts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'LEGACY Campaigns + Accounts'} sailebot={props.location.state.sailebot}/>
-              </>
+                <CampaignPlusContactsCSVReader location={props.location} contacts_csv_key_map={contacts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'LEGACY Campaigns + Contacts'} sailebot={props.location.state.sailebot}/>
+              </div>
             }
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateColumns: "repeat(1, 1fr)",
                 gridGap: 10
               }}
             >
@@ -115,6 +116,7 @@ const Campaigns = (props) => {
                 ))
               }
             </div>
+            
           </div>
         );
       }}

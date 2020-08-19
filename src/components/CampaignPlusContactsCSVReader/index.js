@@ -199,7 +199,7 @@ export default class CSVReader1 extends Component {
         {({ accountsQuery: { data, loading }, createUpdateContactMutation, createUpdateCampaignContactMutation, clientCampaignAccountQuery, createUpdateCampaignMutation, createContactAccountMutation, createUpdateCampaignAccountMutation }) => {
           return (
             <>
-              <h5>{this.props.label ? this.props.label : ''} Bulk Upload</h5>
+              {/* <h5>{this.props.label ? this.props.label : ''} Bulk Upload</h5> */}
               <CSVReader
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
@@ -214,31 +214,35 @@ export default class CSVReader1 extends Component {
               >
                 {({file}) => (
                   <>
-                    <aside style={{display: 'flex', flexDirection: 'row', marginBottom: 10}}>
+                    <aside style={{display: 'flex', flexDirection: 'column', margin: 10}}>
                       <button
                         type="button"
                         onClick={this.openDialog}
                         style={{
-                          width: '40%',
-                          borderRadius: 0,
-                          marginLeft: 0,
-                          marginRight: 0,
-                          paddingLeft: 0,
-                          paddingRight: 0,
+                          width: '100%',
+                          borderRadius: 5,
+                          marginLeft: 5,
+                          marginRight: 5,
+                          paddingLeft: 5,
+                          paddingRight: 5,
                         }}
                       >
                         Browse {this.props.label ? this.props.label : ''} CSV file
                       </button>
                       <div
                         style={{
-                          width: '60%',
-                          height: 45,
+                          width: '100%',
+                          height: 20,
+                          borderRadius: 5,
                           borderWidth: 1,
                           borderStyle: 'solid',
                           borderColor: '#ccc',
                           marginTop: 5,
+                          marginLeft: 5,
+                          marginRight: 5,
                           marginBottom: 5,
-                          paddingLeft: 13,
+                          paddingLeft: 5,
+                          paddingRight: 5,
                           paddingTop: 3,
                           lineHeight: 2.2,
                         }}
