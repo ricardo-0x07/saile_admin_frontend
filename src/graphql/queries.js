@@ -365,7 +365,7 @@ export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_ter
 
 export const ListCampaignAccounts =  gql`
 query ListCampaignAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!) {
-    campaign_account(limit:$limit, offset:$offset, where: {is_delisted: {_eq: false}, account: {name: {_ilike: $search_term}}, campaign_id: {_eq: $campaign_id}}, order_by: {account_id: desc}) {
+    campaign_account(limit:$limit, offset:$offset, where: {is_delisted: {_eq: false}, account: {name: {_ilike: $search_term}}, campaign_id: {_eq: $campaign_id}}, order_by: {account: {name: asc}}) {
         account {
                 NAICS
                 city
@@ -395,7 +395,7 @@ query ListCampaignAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search
 
 export const ListAccounts  = gql`
     query ListAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!) {
-        account(limit:$limit, offset:$offset, order_by: {id: desc}, where: {name: {_ilike: $search_term}, campaign_accounts: {is_delisted: {_eq: false}}}) {
+        account(limit:$limit, offset:$offset, order_by: {name: asc}, where: {name: {_ilike: $search_term}, campaign_accounts: {is_delisted: {_eq: false}}}) {
             NAICS
             address
             city

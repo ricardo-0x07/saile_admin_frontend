@@ -51,6 +51,7 @@ const Schedules = (props) => {
         ) {
           return null;
         }
+        console.log('data: ', data);
 
 
         return (

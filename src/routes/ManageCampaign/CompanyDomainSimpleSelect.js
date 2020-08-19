@@ -34,7 +34,7 @@ export default function CompanyDomainSimpleSelect({...props}) {
     // const handleChange = (event) => {
     //     setAge(event.target.value);
     // };
-
+    let default_domain = [{id:0, name: 'Default'}];
     return (
         <Query
         query={listCompanyDomainsByCompanyId(props.company_id)}
@@ -49,7 +49,7 @@ export default function CompanyDomainSimpleSelect({...props}) {
             return null;
             }
             console.log('data: ', data)
-
+            const company_domains = default_domain.concat(data.company_domain)
             return (
                 <div>
                     <FormControl className={classes.formControl}>
@@ -57,11 +57,11 @@ export default function CompanyDomainSimpleSelect({...props}) {
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        {...field} value={props.value || data.company_domain[0].id}
+                        {...field} value={props.value ||company_domains[0].id}
                         // onChange={handleChange}
                     >   
                         {
-                            data.company_domain.map(eo => <MenuItem key={eo.id} value={eo.id}>{eo.name}</MenuItem>)
+                            company_domains.map(eo => <MenuItem key={eo.id} value={eo.id}>{eo.name}</MenuItem>)
                         }
                     </Select>
                 </FormControl>
