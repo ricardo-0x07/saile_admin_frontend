@@ -316,7 +316,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
           <Card>
             <CardContent>
               <Typography><strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
-              <Typography><strong>Subject:</strong> {subject}</Typography>
+              <Typography><strong>Subject:</strong> {subject} <strong>Cc:</strong> {cc}</Typography>
               <Typography>
                 <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment>
               </Typography>
