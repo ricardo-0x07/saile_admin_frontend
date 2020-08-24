@@ -10,7 +10,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BusinessIcon from '@material-ui/icons/Business';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+// import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import List from '@material-ui/core/List';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ export default function DashboardSideBar (props) {
               </ListItemIcon>
               <ListItemText primary="Companies" />
             </ListItem>
-            <ListItem button  component={RouterLink} to="/app/clients">
+            {/* <ListItem button  component={RouterLink} to="/app/clients">
               <ListItemIcon>
                 <SupervisedUserCircleIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
@@ -36,7 +36,7 @@ export default function DashboardSideBar (props) {
                 <PeopleIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Sailebots" />
-            </ListItem>
+            </ListItem> */}
             {/* <ListItem button  component={RouterLink} to="/app/contacts">
               <ListItemIcon>
                 <ContactMailIcon style={{ color: '#43485a' }}/>
