@@ -1218,10 +1218,10 @@ export const countCampaignScheduleAccounts = (campaign_id) => {
     `;
 }
 
-export const countCampaignAccounts = (campaign_id) => {
+export const countCampaignAccounts = (campaign_id, is_delisted=false) => {
     return gql`
         query CountCampaignAccounts  {
-            campaign_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}}) {
+            campaign_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}, is_delisted: {_eq: ${is_delisted}}}) {
                 aggregate {
                 count(columns: account_id, distinct: true)
                 }
