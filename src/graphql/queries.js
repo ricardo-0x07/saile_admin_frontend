@@ -333,10 +333,10 @@ export const inbox_event_logs = (campaign_id=94192, is_inbound=false, after_date
 }
 
 
-export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_term='', email_domain_search_term='', is_scheduled=false) => {
+export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_term='', is_scheduled=false) => {
     return gql`
     query ListCampaignAccounts {
-        campaign_account(limit:${limit}, offset:${offset}, where: {account: {name: {_ilike: "%${search_term}%"}, email_domain: {_ilike: "%${email_domain_search_term}%"}}, campaign_id: {_eq: ${campaign_id}}}, order_by: {account_id: desc}) {
+        campaign_account(limit:${limit}, offset:${offset}, where: {account: {name: {_ilike: "%${search_term}%"}}, campaign_id: {_eq: ${campaign_id}}}, order_by: {account_id: desc}) {
             account {
                     NAICS
                     city
@@ -364,8 +364,8 @@ export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_ter
 }
 
 export const ListCampaignAccounts =  gql`
-query ListCampaignAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!, $email_domain_search_term:String!) {   
-    campaign_account(limit:$limit, offset:$offset, where: {is_delisted: {_eq: false}, account: {name: {_ilike: $search_term}, email_domain: {_ilike: $email_domain_search_term}}, campaign_id: {_eq: $campaign_id}}, order_by: {account: {name: asc}}) {
+query ListCampaignAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!) {   
+    campaign_account(limit:$limit, offset:$offset, where: {is_delisted: {_eq: false}, account: {name: {_ilike: $search_term}}, campaign_id: {_eq: $campaign_id}}, order_by: {account: {name: asc}}) {
         account {
                 NAICS
                 city

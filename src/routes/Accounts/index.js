@@ -106,6 +106,7 @@ const Accounts = (props) => {
     console.log('searchQuery: ', searchQuery)
     console.log('searchQuery.length>4: ', searchQuery.length>4)
     console.log('search_term: ', search_term)
+    console.log('email_domain_search_term: ', email_domain_search_term)
     await fetchMore({
       query: ListCampaignAccounts, // 10
       variables: {
@@ -144,7 +145,6 @@ const Accounts = (props) => {
         variables= {{
           campaign_id: props.location.state.campaign.id,
           search_term: search_term,
-          email_domain_search_term: email_domain_search_term,
           limit,
           offset: (_page-1) * limit,
         }}
@@ -159,7 +159,6 @@ const Accounts = (props) => {
         query={ListAccounts}
         variables= {{
           search_term: search_term,
-          email_domain_search_term: email_domain_search_term,
           limit,
           offset: (_page-1) * limit,
         }}
@@ -177,6 +176,7 @@ const Accounts = (props) => {
         const { loading, data, refetch, fetchMore }  = accountsQuery
         console.log('data: ', data)
         console.log('search_term: ', search_term)
+        console.log('email_domain_search_term: ', email_domain_search_term)
         console.log('_page: ', _page)
         console.log('limit: ', limit)
         console.log('loading: ', loading)
