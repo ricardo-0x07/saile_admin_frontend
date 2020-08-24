@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 
-import {createUpdateCampaignAccount, createUpdateCampaignContact } from "../../graphql/mutations";
+import {createUpdateCampaignAccount, createUpdateCampaignContact, deleteScheduleAccount } from "../../graphql/mutations";
 
 
 export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
@@ -22,9 +22,14 @@ export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
       <Mutation mutation={ createUpdateCampaignContact } >
         { render }
       </Mutation> 
-    )
+    ),
+    deleteScheduleAccountMutation: ({ render }) => (
+      <Mutation mutation={ deleteScheduleAccount } >
+        { render }
+      </Mutation> 
+    ),
   })
-  const removeCampaignAccount = async (createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation, campaign_id, account_id) => {
+  const removeCampaignAccount = async (createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation, deleteScheduleAccountMutation, campaign_id, account_id) => {
     console.log(createUpdateCampaignAccountMutation)
     console.log(createUpdateCampaignContactMutation)
     console.log("campaign_id: ", campaign_id)
@@ -52,12 +57,19 @@ export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
       }
     });        
     console.log("campaign_accounts_affected: ", campaign_accounts_affected)     
+    const schedule_accounts_affected = await deleteScheduleAccountMutation({
+      variables: {
+        campaign_id,
+        account_id,
+      }
+    });        
+    console.log("schedule_accounts_affected: ", schedule_accounts_affected)     
     updateReload()           
   }
   return (
     <Composed>
       {
-        ({createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation }) => {
+        ({createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation, deleteScheduleAccountMutation }) => {
         // () => {
           return (
             <Card>
@@ -69,7 +81,7 @@ export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
               </CardContent>
               <CardActions>
                 <Button size="small" onClick={() => history.push('/app/manage-account', {account, campaign})}>Edit</Button>
-                <Button variant="contained" color="secondary" size="small" onClick={() => removeCampaignAccount(createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation, campaign.id, account.id)}>Remove Account</Button>
+                <Button variant="contained" color="secondary" size="small" onClick={() => removeCampaignAccount(createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation, deleteScheduleAccountMutation, campaign.id, account.id)}>Remove Account</Button>
                 <Button size="small" onClick={() => history.push('/app/manage-contact', {account})}>Add Contact</Button>
                 <Button size="small" onClick={() => history.push('/app/contacts-by-account', {account})}>View Contacts</Button>
               </CardActions>

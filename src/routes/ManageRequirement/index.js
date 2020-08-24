@@ -209,7 +209,7 @@ const ManageRequirementForm = (props) => {
                                             onChange={handleChange}
                                             value={values.name === null ? '' : values.name }
                                         />
-                                        <TextField
+                                        {/* <TextField
                                             name="city"
                                             label="City" 
                                             variant="filled" 
@@ -224,7 +224,7 @@ const ManageRequirementForm = (props) => {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.state === null ? '' : values.state }
-                                        />
+                                        /> */}
                                         <TextField
                                             name="elasticity"
                                             label="Elasticity" 
@@ -260,12 +260,12 @@ const ManageRequirementForm = (props) => {
                                                 />
                                             }
                                         />
-                                        <FormControlLabel
+                                        {/* <FormControlLabel
                                             label="Auto Reject?"
                                             control={
                                                 <Checkbox name="auto_reject" onChange={handleChange} value={values.auto_reject} />
                                             }
-                                        />
+                                        /> */}
                                         <TextField
                                             name="source"
                                             label="Source" 
@@ -274,23 +274,23 @@ const ManageRequirementForm = (props) => {
                                             onChange={handleChange}
                                             value={values.source === null ? '' : values.source }
                                         />
-                                        <TextField
+                                        {/* <TextField
                                             name="contract_no"
                                             label="Contract#" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.contract_no === null ? '' : values.contract_no }
-                                        />
-                                        <TextField
+                                        /> */}
+                                        {/* <TextField
                                             name="geography"
                                             label="Geography#" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.geography === null ? '' : values.geography }
-                                        />
-                                        <FormControlLabel
+                                        /> */}
+                                        {/* <FormControlLabel
                                             label="Duplicate?"
                                             control={
                                                 <Checkbox
@@ -299,7 +299,7 @@ const ManageRequirementForm = (props) => {
                                                     value={values.is_duplicate}
                                                 />
                                             }
-                                        />
+                                        /> */}
                                         <Field label="Launch Date" name="launch_date" component={DatePickerField} />
                                         <TextField
                                             name="max_hits_per_contact"
@@ -309,22 +309,22 @@ const ManageRequirementForm = (props) => {
                                             onChange={handleChange}
                                             value={values.max_hits_per_contact === null ? '' : values.max_hits_per_contact }
                                         />
-                                        <TextField
+                                        {/* <TextField
                                             name="size"
                                             label="Size" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.size === null ? '' : values.size }
-                                        />
-                                        <TextField
+                                        /> */}
+                                        {/* <TextField
                                             name="priority"
                                             label="Priority" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.priority === null ? '' : values.priority }
-                                        />
+                                        /> */}
                                     </FormGroup>
                                 </FormControl>
                                 <Button variant="contained" type='submit'>Submit</Button>

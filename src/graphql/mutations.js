@@ -381,4 +381,21 @@ export const deleteCampaignAccountContactEvents = gql`
   }
 `;
 
+export const deleteScheduleAccount = gql`
+  mutation DeleteScheduleAccount( $account_id: Int, $campaign_id: Int) {
+    delete_schedule_account(where: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}}) {
+      affected_rows
+    }
+  }
+`;
+
+export const deleteCampaignContact = gql`
+  mutation DeleteCampaignContact( $contact_id: Int, $campaign_id: Int) {
+    delete_schedule_account(where: {contact_id: {_eq: $contact_id}, campaign_id: {_eq: $campaign_id}}) {
+      affected_rows
+    }
+  }
+`;
+
+
 

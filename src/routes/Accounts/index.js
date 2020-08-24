@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import { ListAccounts, ListCampaignAccounts } from "../../graphql/queries";
+import { ListAccounts, ListCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
 import debounce from 'lodash/debounce' // 1
 
 const useStyles = makeStyles(theme => ({
@@ -35,9 +35,10 @@ const Accounts = (props) => {
     reload: false,
     page: 1,
     searchQuery: '',
-    search_term: `%${''}%`
+    search_term: `%${''}%`,
+    email_domain_search_term: `%${''}%`
   });
-  const { page, search_term } = state;
+  const { page, search_term, email_domain_search_term } = state;
   _page = page
   const accounts_csv_key_map = {
     name: 'Account: Account Name',
@@ -83,13 +84,19 @@ const Accounts = (props) => {
   };
 
   const handleChange = (event, value) => {
-    setState({ page: value, search_term: `%${''}%`, searchQuery: ''})
+    setState({ page: value, email_domain_search_term: `%${''}%`, search_term: `%${''}%`, searchQuery: ''})
   };
+  // const handleEmailDomainChange = (event, value) => {
+  //   setState({ page: value, email_domain_search_term: `%${''}%`, searchQuery: ''})
+  // };
+
   const handleSearchChange = (fetchMore, data) => (e)=> { 
     e.preventDefault();
     let search_term = e.target.elements.search_term.value;
+    // let email_domain_search_term = e.target.elements.email_domain_search_term.value;
     console.log('event: ', e)
     console.log('search_term: ', search_term)
+    // console.log('email_domain_search_term: ', email_domain_search_term)
     updateFilter(search_term, fetchMore)
   }
 // 
@@ -126,13 +133,18 @@ const Accounts = (props) => {
 
 
   const Composed = adopt({
-    accountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
+    totalCampaignAccountsQuery: ({ render }) => (
+      <Query query={totalCampaignAccounts(props.location.state.campaign.id)} >
+        { render }
+      </Query>
+    ),     accountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
       <Query
         query={ListCampaignAccounts}
         variables= {{
           campaign_id: props.location.state.campaign.id,
           search_term: search_term,
+          email_domain_search_term: email_domain_search_term,
           limit,
           offset: (_page-1) * limit,
         }}
@@ -147,6 +159,7 @@ const Accounts = (props) => {
         query={ListAccounts}
         variables= {{
           search_term: search_term,
+          email_domain_search_term: email_domain_search_term,
           limit,
           offset: (_page-1) * limit,
         }}
@@ -159,7 +172,7 @@ const Accounts = (props) => {
   const _data = { campaign_account: []}
   return (
     <Composed>
-      {({ accountsQuery }) => {
+      {({ accountsQuery, totalCampaignAccountsQuery }) => {
         console.log('accountsQuery: ', accountsQuery)
         const { loading, data, refetch, fetchMore }  = accountsQuery
         console.log('data: ', data)
@@ -179,6 +192,10 @@ const Accounts = (props) => {
         // ) {
         //   _data.campaign_account = [];
         // }
+        if (!totalCampaignAccountsQuery.loading) {
+          console.log('totalCampaignAccountsQuery: ', totalCampaignAccountsQuery)
+          total =  Math.ceil(totalCampaignAccountsQuery.data.campaign_account_aggregate.aggregate.count/limit)
+        }
         _data.campaign_account = (loading || !data || (!data.account && !data.campaign_account)) ? [] : data.campaign_account
         return (
           <div className={classes.root}>
