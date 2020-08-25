@@ -37,21 +37,37 @@ const Schedules = (props) => {
         { render }
       </Query>
     ),
+    listDelistedSchedulesCampaignAccountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
+    ({ render }) => (
+      <Subscription subscription={listCampaignSchedules(props.location.state.campaign.id,true)} >
+        { render }
+      </Subscription>
+    )
+    :
+    ({ render }) => (
+      <Query query={listSchedules(10, true) } >
+        { render }
+      </Query>
+    ),
   })
 
 
   return (
     <Composed>
-      {({ listSchedulesQuery: { data, loading } }) => {
+      {({ listSchedulesQuery: { data, loading }, listDelistedSchedulesCampaignAccountsQuery }) => {
         if (
           loading ||
           !data ||
           !data.schedule ||
-          !data.schedule
+          !data.schedule ||
+          listDelistedSchedulesCampaignAccountsQuery.loading ||
+          !listDelistedSchedulesCampaignAccountsQuery.data ||
+          !listDelistedSchedulesCampaignAccountsQuery.data.schedule 
         ) {
           return null;
         }
         console.log('data: ', data);
+        console.log('listDelistedSchedulesCampaignAccountsQuery: ', listDelistedSchedulesCampaignAccountsQuery);
 
 
         return (
@@ -68,11 +84,11 @@ const Schedules = (props) => {
               {
                 props.location.state && props.location.state.campaign  && props.location.state.campaign ?
                 data.schedule.filter(item => item.campaign_id === props.location.state.campaign.id ).map(x => (
-                  <ScheduleCard schedule={x} accounts_per_schedule={accounts_per_schedule} campaign={props.location.state.campaign} requirement={props.location.state.requirement} name={x.name} key={x.id} history={props.history}/>
+                  <ScheduleCard schedule_campaign_accounts_to_remove={listDelistedSchedulesCampaignAccountsQuery.data.schedule} schedule={x} accounts_per_schedule={accounts_per_schedule} campaign={props.location.state.campaign} requirement={props.location.state.requirement} name={x.name} key={x.id} history={props.history}/>
                 ))
                 :
                 data.schedule.filter(item => item ).map(x => (
-                  <ScheduleCard schedule={x} accounts_per_schedule={accounts_per_schedule} name={x.name} key={x.id}  history={props.history} />
+                  <ScheduleCard schedule_campaign_accounts_to_remove={[]} schedule={x} accounts_per_schedule={accounts_per_schedule} name={x.name} key={x.id}  history={props.history} />
                 ))
               }
             </div>

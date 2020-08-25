@@ -1,6 +1,6 @@
 import React from "react";
 import Pagination from '@material-ui/lab/Pagination';
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
 import AccountsCSVReader from '../../components/AccountsCSVReader';
@@ -9,9 +9,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import { ListAccounts, ListCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
-import debounce from 'lodash/debounce' // 1
+import CampaignSimpleSelect from './CampaignSimpleSelect';
 
+import { ListAccounts, ListCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
+import { updateSingleCampaignAccount, } from "../../graphql/mutations";
+
+import debounce from 'lodash/debounce' // 1
+// import IntegrationReactSelect from './AccountsSelect'
 const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
@@ -36,7 +40,8 @@ const Accounts = (props) => {
     page: 1,
     searchQuery: '',
     search_term: `%${''}%`,
-    email_domain_search_term: `%${''}%`
+    email_domain_search_term: `%${''}%`,
+    campaign_id: props.location.state.campaign !== undefined ? props.location.state.campaign.id : null,
   });
   const { page, search_term, email_domain_search_term } = state;
   _page = page
@@ -86,7 +91,12 @@ const Accounts = (props) => {
   const handleChange = (event, value) => {
     setState({ page: value, email_domain_search_term: `%${''}%`, search_term: `%${''}%`, searchQuery: ''})
   };
-  // const handleEmailDomainChange = (event, value) => {
+  const handleClientChange = (event) => {
+    const { name, value } = event.target;
+    console.log('name: ', name)
+    console.log('value: ', value)
+    setState({ [name]: value, email_domain_search_term: `%${''}%`, search_term: `%${''}%`, searchQuery: '', page: 1})
+  };  // const handleEmailDomainChange = (event, value) => {
   //   setState({ page: value, email_domain_search_term: `%${''}%`, searchQuery: ''})
   // };
 
@@ -131,14 +141,49 @@ const Accounts = (props) => {
 
   }, 500)
 
-
+  const moveCampaignAccount = async (updateSingleCampaignAccountMutation, to_campaign_id, from_campaign_id, campaign_accounts, updateReload) => {
+    console.log(updateSingleCampaignAccountMutation)
+    console.log("from_campaign_id: ", from_campaign_id)
+    console.log("to_campaign_id: ", to_campaign_id)
+    
+               
+    const move_campaign_accounts_results = await campaign_accounts.map(async account => {
+      console.log("account.account_id: ", account.account_id)
+      console.log("from_campaign_id: ", from_campaign_id)
+      console.log("to_campaign_id: ", to_campaign_id)
+      // const campaign_accounts_affected = {
+      //   from_campaign_id,
+      //   to_campaign_id,
+      //   account_id: account.id,
+      // };
+      const campaign_accounts_affected = await updateSingleCampaignAccountMutation({
+        variables: {
+          objects: 
+            {
+              campaign_id: to_campaign_id,
+            },
+            campaign_id: from_campaign_id,
+            account_id: account.account_id,
+        }
+      });        
+      return campaign_accounts_affected;
+    })
+    console.log("move_campaign_accounts_results: ", move_campaign_accounts_results)        
+    updateReload()           
+  }
 
   const Composed = adopt({
+    updateSingleCampaignAccountMutation: ({ render }) => (
+      <Mutation mutation={updateSingleCampaignAccount } >
+        { render }
+      </Mutation> 
+    ),
     totalCampaignAccountsQuery: ({ render }) => (
       <Query query={totalCampaignAccounts(props.location.state.campaign.id)} >
         { render }
       </Query>
-    ),     accountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
+    ),
+    accountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
       <Query
         query={ListCampaignAccounts}
@@ -171,7 +216,7 @@ const Accounts = (props) => {
   const _data = { campaign_account: []}
   return (
     <Composed>
-      {({ accountsQuery, totalCampaignAccountsQuery }) => {
+      {({ accountsQuery, totalCampaignAccountsQuery, updateSingleCampaignAccountMutation }) => {
         console.log('accountsQuery: ', accountsQuery)
         const { loading, data, refetch, fetchMore }  = accountsQuery
         console.log('data: ', data)
@@ -201,6 +246,14 @@ const Accounts = (props) => {
           <div className={classes.root}>
             <Title>{props.location.state && props.location.state.campaign  && props.location.state.campaign ? props.location.state.campaign.name : '' } Accounts</Title>
             <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-account', {campaign: props.location.state.campaign})}>Add Account</Button>
+            {
+              props.location.state.sailebot && props.location.state.campaign && _data.campaign_account.length > 0 &&
+              <div>
+                <CampaignSimpleSelect client_id={props.location.state.sailebot.client_id} label="Client Campaigns" name="campaign_id" onChange={handleClientChange} value={state.campaign_id}/>
+                <Button variant="contained" size="small" onClick={() => moveCampaignAccount(updateSingleCampaignAccountMutation, state.campaign_id, props.location.state.campaign.id, _data.campaign_account, refetch)}>Move Accounts</Button>
+              </div>
+            }
+            
             {
               // props.location.state && props.location.state.campaign && props.location.state.campaign.id
               // && 

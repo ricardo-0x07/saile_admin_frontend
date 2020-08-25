@@ -356,7 +356,7 @@ export const listTemplates = (limit) => {
     `;
 }
 
-export const listSchedules = (limit=10, offset=0, account_limit=10, account_offset=0) => {
+export const listSchedules = ( limit=10, is_delisted=false, offset=0, account_limit=10, account_offset=0) => {
     return gql`
         subscription ListSchedules {
             schedule(limit: ${limit}, offset: ${offset}) {
@@ -371,7 +371,7 @@ export const listSchedules = (limit=10, offset=0, account_limit=10, account_offs
                 status
                 timezone
                 accounts_per_schedule
-                schedule_accounts {
+                schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}}}}) {
                     id
                     account_id
                     schedule_id
@@ -398,7 +398,7 @@ export const getCampaignContact = (campaign_id, contact_id) => {
 }
 
 
-export const listCampaignSchedules = (campaign_id) => {
+export const listCampaignSchedules = (campaign_id, is_delisted=false) => {
     return gql`
     subscription listCampaignSchedules {
         schedule(where: {campaign_id: {_eq: ${campaign_id}}}) {
@@ -415,7 +415,7 @@ export const listCampaignSchedules = (campaign_id) => {
             timezone
             updated_at
             accounts_per_schedule
-            schedule_accounts {
+            schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}, campaign_id: {_eq: ${campaign_id}}}}}) {
                 id
                 account_id
                 schedule_id

@@ -577,7 +577,7 @@ export const listTemplates = (limit) => {
     `;
 }
 
-export const listSchedules = (limit=10, offset=0, account_limit=10, account_offset=0) => {
+export const listSchedules = (limit=10, is_delisted=false, offset=0, account_limit=10, account_offset=0) => {
     return gql`
         query ListSchedules {
             schedule(limit: ${limit}, offset: ${offset}) {
@@ -590,12 +590,38 @@ export const listSchedules = (limit=10, offset=0, account_limit=10, account_offs
                 no_targets_per_accounts
                 status
                 timezone
+                schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}}}}) {
+                    id
+                    account_id
+                    schedule_id
+                }
             }
         }
     `;
 }
 
-export const listCampaignSchedules = (campaign_id) => {
+// export const listCampaignSchedules = (campaign_id) => {
+//     return gql`
+//     query listCampaignSchedules {
+//         schedule(where: {campaign_id: {_eq: ${campaign_id}}}) {
+//             campaign_id
+//             date
+//             daily_outbound_limit
+//             created_at
+//             deploy_date
+//             id
+//             name
+//             no_targets_per_accounts
+//             status
+//             timezone
+//             updated_at
+//         }
+//     }
+//   `;
+//   }
+
+  export const listCampaignSchedules = (campaign_id, is_delisted=false) => {
+      console.log("is_delisted: ", is_delisted)
     return gql`
     query listCampaignSchedules {
         schedule(where: {campaign_id: {_eq: ${campaign_id}}}) {
@@ -604,13 +630,47 @@ export const listCampaignSchedules = (campaign_id) => {
             daily_outbound_limit
             created_at
             deploy_date
+            end_date
             id
             name
             no_targets_per_accounts
             status
             timezone
             updated_at
-        }
+            accounts_per_schedule
+            schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}, campaign_id: {_eq: ${campaign_id}}}}}) {
+                id
+                account_id
+                schedule_id
+            }
+      }
+    }
+  `;
+  }
+
+  export const getScheduleById = (id, campaign_id, is_delisted=true) => {
+    return gql`
+    query GetScheduleById {
+        schedule(where: {id: {_eq: ${id}}}) {
+            campaign_id
+            date
+            daily_outbound_limit
+            created_at
+            deploy_date
+            end_date
+            id
+            name
+            no_targets_per_accounts
+            status
+            timezone
+            updated_at
+            accounts_per_schedule
+            schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}, campaign_id: {_eq: ${campaign_id}}}}}) {
+                id
+                account_id
+                schedule_id
+            }
+      }
     }
   `;
   }
@@ -1026,6 +1086,30 @@ export const listRequirementCampaigns = (requirement_id) => {
 `;
 }
 
+
+export const listClientCampaigns = (client_id) => {
+    return gql`
+    query ListClientCampaigns {
+        campaign(where: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}) {
+            accounts_per_schedule
+            description
+            id
+            name
+            requirement_id
+            run_status
+            is_running
+            to_run
+            status_message
+            smtp_login
+            smtp_password
+            email_service
+            wait_days
+            company_domain_id
+        }
+    }
+`;
+}
+
 export const listSailebotRequirements = (sailebot_id, campaign_limit=10, campaign_offset=0) => {
     return gql`
         query ListRequirements {
@@ -1364,6 +1448,21 @@ export const listCompanyDomainsByCompanyId = (company_id) => {
     return gql`
         query ListCompanyDomains {
             company_domain(where: {company_id: {_eq: ${company_id}}}) {
+                id
+                dns
+                host
+                name
+                smtp
+                company_id
+                ip
+            }
+        }
+    `;
+}
+export const listCompanyDomainById = (id) => {
+    return gql`
+        query ListCompanyDomainById {
+            company_domain(where: {id: {_eq: ${id}}}) {
                 id
                 dns
                 host
