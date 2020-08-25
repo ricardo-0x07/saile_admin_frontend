@@ -448,28 +448,6 @@ export const listAccounts = (limit=10, offset=0) => {
                 account_campaigns {
                     campaign_id
                 }
-                contacts {
-                    account_id
-                    bounce_type
-                    email
-                    first_outbound_done
-                    firstname
-                    gender
-                    id
-                    is_ema_eligible
-                    is_eva_eligible
-                    is_referral
-                    lastname
-                    member_status
-                    phone
-                    position
-                    role
-                    sam_status
-                    second_outbound_done
-                    source
-                    title
-                    to_followup
-                }
             }
         }
     `;

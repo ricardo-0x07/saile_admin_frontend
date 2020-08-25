@@ -3,7 +3,7 @@ import { CSVReader } from 'react-papaparse'
 import { Query, Mutation } from "react-apollo";
 import { adopt } from 'react-adopt';
 
-import { createUpdateAccount, createUpdateCampaignAccount, createUpdateCampaign } from "../../graphql/mutations";
+import { createUpdateAccount, createUpdateCampaignAccount, createUpdateCampaign, delistCampaignAccountByName, delistCampaignAccountByEmailDomain } from "../../graphql/mutations";
 import { getClientCampaignAccounts } from "../../graphql/queries";
 
 // var _ = require('lodash');
@@ -30,7 +30,7 @@ export default class CSVReader1 extends Component {
     }
   }
   
-  getAccountCSVData = async (data, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation, clientCampaignAccountQuery) => {
+  getAccountCSVData = async (data, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation, clientCampaignAccountQuery, delistCampaignAccountByNameMutation, delistCampaignAccountByEmailDomainMutation) => {
     console.log('data.length: ', data.length)
     console.log('clientCampaignAccountQuery: ', clientCampaignAccountQuery)
     console.log('this.props.sailebot: ', this.props.sailebot)
@@ -119,11 +119,84 @@ export default class CSVReader1 extends Component {
                 }
             }
           });  
+
           console.log('campaign_accounts_response: ', campaign_accounts_response)
           return campaign_accounts_response.data.insert_campaign_account.returning
         });
       })
+
+      const delist_campaign_account_byName_results = await create_campaign_account_results.map(async promise => {
+        console.log('promise: ', promise);
+        return promise.then(async _account => {
+          if(_account.length === 0) {
+            return false
+          }
+          const account = _account[0];
+          console.log('account: ', account);
+          const { status } = account;
+          if (account.id === 95165) {
+            console.log('TEST')
+            console.log('account.id: ', account.id);
+            console.log('status: ', status);   
+            console.log('account: ', account);
+          }
+          console.log('account.account: ', account.account);
+          console.log('account.account.name: ', account.account.name);
+          const is_delisted = status === 'ActionableOpportunity' || status === 'Remove' ? true :false
+          console.log('is_delisted: ', is_delisted);
+          if(is_delisted === true) {
+            let campaign_accounts_response = await delistCampaignAccountByNameMutation({
+              variables: {
+                name:  account.account.name,
+                campaign_id: account.campaign_id,
+              }
+            });  
+            console.log('campaign_accounts_response: ', campaign_accounts_response)
+            return campaign_accounts_response.data
+          } else {
+            return false;
+          }
+        });
+      })
+
+      const delist_campaign_account_byEmailDomain_results = await create_campaign_account_results.map(async promise => {
+        console.log('promise: ', promise);
+        return promise.then(async _account => {
+          if(_account.length === 0) {
+            return false
+          }
+          const account = _account[0];
+          console.log('account: ', account);
+          const { status } = account;
+          if (account.id === 95165) {
+            console.log('TEST')
+            console.log('account.id: ', account.id);
+            console.log('status: ', status);   
+            console.log('account: ', account);
+          }
+          console.log('account.account: ', account.account);
+          console.log('account.account.email_domain: ', account.account.email_domain);
+          const is_delisted = status === 'ActionableOpportunity' || status === 'Remove' ? true :false
+          console.log('is_delisted: ', is_delisted);
+          if(is_delisted === true) {
+            let campaign_accounts_response = await delistCampaignAccountByEmailDomainMutation({
+              variables: {
+                email_domain:  account.account.email_domain,
+                campaign_id: account.campaign_id,
+              }
+            });  
+            console.log('campaign_accounts_response: ', campaign_accounts_response)
+            return campaign_accounts_response.data
+          } else {
+            return false;
+          }
+        });
+      })
+
+
       console.log('create_campaign_account_results: ', create_campaign_account_results)
+      console.log('delist_campaign_account_byName_results: ', delist_campaign_account_byName_results)
+      console.log('delist_campaign_account_byEmailDomain_results: ', delist_campaign_account_byEmailDomain_results)
 
                           
     } catch (error) {
@@ -136,7 +209,7 @@ export default class CSVReader1 extends Component {
 
   render() {
     console.log("this.props: ", this.props)
-    const Composed = adopt({
+    const Composed = adopt({ 
       clientCampaignAccountQuery: ({ render }) => (
         <Query query={getClientCampaignAccounts(this.props.sailebot.client_id)} >
           { render }
@@ -157,17 +230,27 @@ export default class CSVReader1 extends Component {
             { render }
           </Mutation> 
       ),
-    })
+      delistCampaignAccountByNameMutation: ({ render }) => (
+        <Mutation mutation={ delistCampaignAccountByName } >
+          { render }
+        </Mutation> 
+    ),
+    delistCampaignAccountByEmailDomainMutation: ({ render }) => (
+      <Mutation mutation={ delistCampaignAccountByEmailDomain } >
+        { render }
+      </Mutation> 
+  ),
+})
     return (
       <Composed>
-        {({ clientCampaignAccountQuery, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation }) => {
+        {({ clientCampaignAccountQuery, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation, delistCampaignAccountByNameMutation, delistCampaignAccountByEmailDomainMutation }) => {
           return (
             <>
               {/* <h5>{this.props.label ? this.props.label : ''} Bulk Upload</h5> */}
               <CSVReader
                 ref={buttonRef}
                 onFileLoad={(loaded_data) => {
-                  this.getAccountCSVData(loaded_data, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation, clientCampaignAccountQuery)
+                  this.getAccountCSVData(loaded_data, createUpdateCampaignMutation, createAccountMutation, createUpdateCampaignAccountMutation, clientCampaignAccountQuery, delistCampaignAccountByNameMutation, delistCampaignAccountByEmailDomainMutation)
                 }}
                 onError={this.onError}
                 noClick

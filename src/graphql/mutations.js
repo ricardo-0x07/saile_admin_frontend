@@ -160,6 +160,11 @@ export const createUpdateCampaignAccount = gql`
         status
         is_delisted
         account_id
+        campaign_id
+        account { 
+          name
+          email_domain
+        }
       }
     }
   }
@@ -212,9 +217,27 @@ export const updateCampaignAccount = gql`
     }
   }
 `;
+
+
 export const updateSingleCampaignAccount = gql`
   mutation UpdateCampaignAccount($objects: campaign_account_set_input, $account_id: Int!, $campaign_id: Int!) {
     update_campaign_account(_set: $objects, where: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}}) {
+      affected_rows
+    }
+  }
+`;
+
+export const delistCampaignAccountByName = gql`
+  mutation DelistCampaignAccountByName($name: String!, $campaign_id: Int!) {
+    update_campaign_account(_set: {is_delisted: true}, where: {account: {name: {_eq: $name}}, campaign_id: {_eq: $campaign_id}}) {
+      affected_rows
+    }
+  }
+`;
+
+export const delistCampaignAccountByEmailDomain = gql`
+  mutation DelistCampaignAccountByEmailDomain($email_domain: String!, $campaign_id: Int!) {
+    update_campaign_account(_set: {is_delisted: true}, where: {account: {email_domain: {_eq: $email_domain}}, campaign_id: {_eq: $campaign_id}}) {
       affected_rows
     }
   }

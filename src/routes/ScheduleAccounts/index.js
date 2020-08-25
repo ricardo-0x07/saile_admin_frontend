@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import { adopt } from 'react-adopt';
-import { listAccounts, totalScheduleAccounts, listScheduleAccounts } from "../../graphql/subscription";
+import { listAccounts, totalScheduleAccounts, listScheduleAccounts } from "../../graphql/queries";
 
 
 
@@ -28,27 +28,32 @@ const Accounts = (props) => {
   };
   const Composed = adopt({
     totalScheduleAccountsScubsciption: ({ render }) => (
-      <Subscription subscription={totalScheduleAccounts(props.location.state.schedule.id)} >
+      <Query query={totalScheduleAccounts(props.location.state.schedule.id)} >
         { render }
-      </Subscription>
+      </Query>
     ),
     accountsScubsciption: props.location.state && props.location.state.schedule && props.location.state.schedule.id ?
     ({ render }) => (
-      <Subscription subscription={listScheduleAccounts(props.location.state.schedule.id, limit, (page-1) * limit)} >
+      <Query query={listScheduleAccounts(props.location.state.schedule.id, limit, (page-1) * limit)} >
         { render }
-      </Subscription>
+      </Query>
     )
     :
     ({ render }) => (
-      <Subscription subscription={listAccounts(10) } >
+      <Query query={listAccounts(10) } >
         { render }
-      </Subscription>
+      </Query>
     ),
   })
 
   return (
     <Composed>
-      {({ accountsScubsciption: { data, loading }, totalScheduleAccountsScubsciption }) => {
+      {({ accountsScubsciption: { data, refetch, loading, error }, totalScheduleAccountsScubsciption }) => {
+        console.log('data: ', data);
+        console.log('loading: ', loading);
+        console.log('error: ', error);
+        console.log('refetch: ', refetch);
+        // const { loading, data, refetch, fetchMore }  = accountsQuery
         if (
           loading ||
           !data ||
@@ -76,11 +81,29 @@ const Accounts = (props) => {
               {
                 props.location.state && props.location.state.schedule  && props.location.state.schedule ?
                 data.schedule_account.map(x => (
-                  <AccountCard account={x.account} name={x.account.name} key={x.account.id} history={props.history} schedule={props.location.state.schedule} sailebot={props.location.state.sailebot}/>
+                  <AccountCard
+                    account={x.account}
+                    name={x.account.name}
+                    campaign_id={props.location.state.schedule.campaign_id}
+                    key={x.account.id} history={props.history}
+                    schedule={props.location.state.schedule}
+                    sailebot={props.location.state.sailebot}
+                    updateReload={() => {
+                      refetch();
+                    }}
+                  />
                 ))
                 :
                 data.account.filter(item => item ).map(x => (
-                  <AccountCard account={x} name={x.name} key={x.id}  history={props.history} />
+                  <AccountCard 
+                    account={x}
+                    name={x.name}
+                    key={x.id}
+                    history={props.history}
+                    updateReload={() => {
+                      refetch();
+                    }}
+                  />
                 ))
               }
             </div>
