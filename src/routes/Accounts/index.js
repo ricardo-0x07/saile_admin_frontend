@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
 import CampaignSimpleSelect from './CampaignSimpleSelect';
 
-import { ListAccounts, ListCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
+import { ListAccounts, ListCampaignAccounts, listAllCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
 import { updateSingleCampaignAccount, } from "../../graphql/mutations";
 
 import debounce from 'lodash/debounce' // 1
@@ -141,10 +141,13 @@ const Accounts = (props) => {
 
   }, 500)
 
-  const moveCampaignAccount = async (updateSingleCampaignAccountMutation, to_campaign_id, from_campaign_id, campaign_accounts, updateReload) => {
-    console.log(updateSingleCampaignAccountMutation)
-    console.log("from_campaign_id: ", from_campaign_id)
-    console.log("to_campaign_id: ", to_campaign_id)
+  const moveCampaignAccount = async (updateSingleCampaignAccountMutation, to_campaign_id, from_campaign_id, campaign_accounts, updateReload, to_campaign_accounts) => {
+    console.log(updateSingleCampaignAccountMutation);
+    console.log("from_campaign_id: ", from_campaign_id);
+    console.log("to_campaign_id: ", to_campaign_id);
+    console.log("to_campaign_accounts: ", to_campaign_accounts);
+    const existing_to_campaign_account_ids = to_campaign_accounts.map(ca => ca.account_id);
+    console.log("existing_to_campaign_account_ids: ", existing_to_campaign_account_ids);
     
                
     const move_campaign_accounts_results = await campaign_accounts.map(async account => {
@@ -156,16 +159,19 @@ const Accounts = (props) => {
       //   to_campaign_id,
       //   account_id: account.id,
       // };
-      const campaign_accounts_affected = await updateSingleCampaignAccountMutation({
-        variables: {
-          objects: 
-            {
-              campaign_id: to_campaign_id,
-            },
-            campaign_id: from_campaign_id,
-            account_id: account.account_id,
-        }
-      });        
+      let campaign_accounts_affected = [];
+      if(!existing_to_campaign_account_ids.includes(account.account_id)) {
+        campaign_accounts_affected = await updateSingleCampaignAccountMutation({
+          variables: {
+            objects: 
+              {
+                campaign_id: to_campaign_id,
+              },
+              campaign_id: from_campaign_id,
+              account_id: account.account_id,
+          }
+        });        
+      }
       return campaign_accounts_affected;
     })
     console.log("move_campaign_accounts_results: ", move_campaign_accounts_results)        
@@ -248,10 +254,21 @@ const Accounts = (props) => {
             <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-account', {campaign: props.location.state.campaign})}>Add Account</Button>
             {
               props.location.state.sailebot && props.location.state.campaign && _data.campaign_account.length > 0 &&
-              <div>
-                <CampaignSimpleSelect client_id={props.location.state.sailebot.client_id} label="Client Campaigns" name="campaign_id" onChange={handleClientChange} value={state.campaign_id}/>
-                <Button variant="contained" size="small" onClick={() => moveCampaignAccount(updateSingleCampaignAccountMutation, state.campaign_id, props.location.state.campaign.id, _data.campaign_account, refetch)}>Move Accounts</Button>
-              </div>
+              <Query
+                query={listAllCampaignAccounts(state.campaign_id)}
+              >
+                {({ data, loading , error }) => {
+                  if (loading) return null;
+                  if (error) return `Error! ${error}`;
+                  console.log("to ListCampaignAccounts data: ", data)
+                  return (
+                    <div>  
+                      <CampaignSimpleSelect client_id={props.location.state.sailebot.client_id} label="Client Campaigns" name="campaign_id" onChange={handleClientChange} value={state.campaign_id}/>
+                      <Button variant="contained" size="small" onClick={() => moveCampaignAccount(updateSingleCampaignAccountMutation, state.campaign_id, props.location.state.campaign.id, _data.campaign_account, refetch, data.campaign_account)}>Move Accounts</Button>
+                    </div>
+                  );
+                }}
+              </Query>
             }
             
             {

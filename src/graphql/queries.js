@@ -333,6 +333,36 @@ export const inbox_event_logs = (campaign_id=94192, is_inbound=false, after_date
 }
 
 
+// export const listAllCampaignAccounts = (campaign_id) => {
+//     return gql`
+//     query ListCampaignAccounts {
+//         campaign_account(where: {campaign_id: {_eq: ${campaign_id}}}) {
+//             account {
+//                     NAICS
+//                     city
+//                     domain
+//                     email
+//                     email_domain
+//                     employees
+//                     ex_id
+//                     fax
+//                     id
+//                     is_scheduled
+//                     name
+//                     phone
+//                     revenue
+//                     state
+//                     website
+//             }
+//             account_id
+//             campaign_id
+//             id
+//             is_scheduled
+//         }
+//     }
+// `;
+// }
+
 export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_term='', is_scheduled=false) => {
     return gql`
     query ListCampaignAccounts {

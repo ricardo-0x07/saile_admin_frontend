@@ -118,7 +118,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                   <Typography>Inbox Email: {campaign.smtp_login}</Typography>
                   {
                     campany_domain &&
-                    <Typography>Company Domain: {campany_domain.name}</Typography>
+                    <Typography>Company Domain: {campaign.company_domain_id !==null ? campany_domain.name : ''}</Typography>
                   }
                   <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
                   <Typography>Outbound delay: {wait_days}</Typography>
