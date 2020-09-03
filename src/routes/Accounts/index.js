@@ -9,9 +9,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-import CampaignSimpleSelect from './CampaignSimpleSelect';
-
-import { ListAccounts, ListCampaignAccounts, listAllCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
+// import CampaignSimpleSelect from './CampaignSimpleSelect';
+import { ListAccounts, ListCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
+// import { ListAccounts, ListCampaignAccounts, listAllCampaignAccounts, totalCampaignAccounts } from "../../graphql/queries";
 import { updateSingleCampaignAccount, } from "../../graphql/mutations";
 
 import debounce from 'lodash/debounce' // 1
@@ -92,12 +92,15 @@ const Accounts = (props) => {
   const handleChange = (event, value) => {
     setState({ page: value, email_domain_search_term: `%${''}%`, search_term: `%${''}%`, searchQuery: ''})
   };
-  const handleClientChange = (event) => {
-    const { name, value } = event.target;
-    console.log('name: ', name)
-    console.log('value: ', value)
-    setState({ [name]: value, email_domain_search_term: `%${''}%`, search_term: `%${''}%`, searchQuery: '', page: 1})
-  };  // const handleEmailDomainChange = (event, value) => {
+
+  // const handleClientChange = (event) => {
+  //   const { name, value } = event.target;
+  //   console.log('name: ', name)
+  //   console.log('value: ', value)
+  //   setState({ [name]: value, email_domain_search_term: `%${''}%`, search_term: `%${''}%`, searchQuery: '', page: 1})
+  // };
+  
+  // const handleEmailDomainChange = (event, value) => {
   //   setState({ page: value, email_domain_search_term: `%${''}%`, searchQuery: ''})
   // };
 
@@ -142,42 +145,40 @@ const Accounts = (props) => {
 
   }, 500)
 
-  const moveCampaignAccount = async (updateSingleCampaignAccountMutation, to_campaign_id, from_campaign_id, campaign_accounts, updateReload, to_campaign_accounts) => {
-    console.log(updateSingleCampaignAccountMutation);
-    console.log("from_campaign_id: ", from_campaign_id);
-    console.log("to_campaign_id: ", to_campaign_id);
-    console.log("to_campaign_accounts: ", to_campaign_accounts);
-    const existing_to_campaign_account_ids = to_campaign_accounts.map(ca => ca.account_id);
-    console.log("existing_to_campaign_account_ids: ", existing_to_campaign_account_ids);
-    
-               
-    const move_campaign_accounts_results = await campaign_accounts.map(async account => {
-      console.log("account.account_id: ", account.account_id)
-      console.log("from_campaign_id: ", from_campaign_id)
-      console.log("to_campaign_id: ", to_campaign_id)
-      // const campaign_accounts_affected = {
-      //   from_campaign_id,
-      //   to_campaign_id,
-      //   account_id: account.id,
-      // };
-      let campaign_accounts_affected = [];
-      if(!existing_to_campaign_account_ids.includes(account.account_id)) {
-        campaign_accounts_affected = await updateSingleCampaignAccountMutation({
-          variables: {
-            objects: 
-              {
-                campaign_id: to_campaign_id,
-              },
-              campaign_id: from_campaign_id,
-              account_id: account.account_id,
-          }
-        });        
-      }
-      return campaign_accounts_affected;
-    })
-    console.log("move_campaign_accounts_results: ", move_campaign_accounts_results)        
-    updateReload()           
-  }
+  // const moveCampaignAccount = async (updateSingleCampaignAccountMutation, to_campaign_id, from_campaign_id, campaign_accounts, updateReload, to_campaign_accounts) => {
+  //   console.log(updateSingleCampaignAccountMutation);
+  //   console.log("from_campaign_id: ", from_campaign_id);
+  //   console.log("to_campaign_id: ", to_campaign_id);
+  //   console.log("to_campaign_accounts: ", to_campaign_accounts);
+  //   const existing_to_campaign_account_ids = to_campaign_accounts.map(ca => ca.account_id);
+  //   console.log("existing_to_campaign_account_ids: ", existing_to_campaign_account_ids);    
+  //   const move_campaign_accounts_results = await campaign_accounts.map(async account => {
+  //     console.log("account.account_id: ", account.account_id)
+  //     console.log("from_campaign_id: ", from_campaign_id)
+  //     console.log("to_campaign_id: ", to_campaign_id)
+  //     // const campaign_accounts_affected = {
+  //     //   from_campaign_id,
+  //     //   to_campaign_id,
+  //     //   account_id: account.id,
+  //     // };
+  //     let campaign_accounts_affected = [];
+  //     if(!existing_to_campaign_account_ids.includes(account.account_id)) {
+  //       campaign_accounts_affected = await updateSingleCampaignAccountMutation({
+  //         variables: {
+  //           objects: 
+  //             {
+  //               campaign_id: to_campaign_id,
+  //             },
+  //             campaign_id: from_campaign_id,
+  //             account_id: account.account_id,
+  //         }
+  //       });        
+  //     }
+  //     return campaign_accounts_affected;
+  //   })
+  //   console.log("move_campaign_accounts_results: ", move_campaign_accounts_results)        
+  //   updateReload()           
+  // }
 
   const Composed = adopt({
     updateSingleCampaignAccountMutation: ({ render }) => (
