@@ -61,6 +61,7 @@ const Accounts = (props) => {
     ex_id: 'Account: Account ID',
     d_u_n_s_number: 'Account: D-U-N-S® Number',
     postal_code: 'Account: Postal Code',
+    industry: 'LinkedInIndustryName',
   };
 
   const contacts_csv_key_map = {

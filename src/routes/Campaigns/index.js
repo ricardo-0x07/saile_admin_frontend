@@ -51,6 +51,13 @@ const contacts_csv_key_map = {
   email: 'Contact Email',
   title: 'Title',
   gender: 'Gender',
+  source: 'Source',
+  linkedin: 'LinkedIn URL',
+  phone: 'Phone',
+  // city:'',
+  // state:'',
+  // country:'',
+  industry: 'Industry',
 
   status: 'Member Status',
   delisted_date: 'Remove/Optout Date',

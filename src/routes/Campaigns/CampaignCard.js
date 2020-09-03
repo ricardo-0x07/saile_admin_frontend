@@ -81,7 +81,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   });
 
   };
-  const { name, accounts_per_schedule, wait_days, to_run } = campaign;
+  const { name, accounts_per_schedule, email_service, wait_days, to_run } = campaign;
   return (
     <Composed>
       {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery, outboundEventLogsQuery, inboundEventLogsQuery, listCompanyDomainByIdQuery }) => {
@@ -119,6 +119,10 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                   {
                     campany_domain &&
                     <Typography>Company Domain: {campaign.company_domain_id !==null ? campany_domain.name : ''}</Typography>
+                  }
+                  {
+                    email_service &&
+                    <Typography>Email Service: {email_service}</Typography>
                   }
                   <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
                   <Typography>Outbound delay: {wait_days}</Typography>
