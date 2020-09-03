@@ -67,7 +67,7 @@ export const EventCard = ({ event, updateReload }) => {
       validated_intent,
       campaign_id,
       is_inbound,
-      to_clarify,
+      // to_clarify,
       to,
     } = event;
     
