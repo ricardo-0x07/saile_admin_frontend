@@ -1177,26 +1177,56 @@ export const listSailebotRequirements = (sailebot_id, campaign_limit=10, campaig
 }
 
 
+export const clientEventByLabel = (client_id, label_query, limit=10, offset=0) => {
+    return gql`
+        query ClientEventByLabel {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+                body
+                cc
+                contact_id
+                date
+                id
+                label
+                nlu_input_text
+                selected_intent
+                subject
+                sender
+                to
+                validated_intent
+            }
+        }
+    `;
+}
+
+
+export const totalCampaignEventsByLabel = (client_id, label_query) => {
+    return gql`
+        query TotalCampaignClarificationEvents {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: true}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+export const totalCampaignEvents = (client_id) => {
+    return gql`
+        query TotalCampaignClarificationEvents {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
 export const clientEventCountByLabel = (client_id, label_query) => {
     return gql`
         query ClientEventCountByLabel {
             event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}}) {
                 aggregate {
-                count(columns: label)
-                }
-                nodes {
-                    body
-                    cc
-                    contact_id
-                    date
-                    id
-                    label
-                    nlu_input_text
-                    selected_intent
-                    subject
-                    sender
-                    to
-                    validated_intent
+                    count(columns: label)
                 }
             }
         }
@@ -1235,27 +1265,33 @@ export const clientEventCount = (client_id) => {
         query SailebotEventCount {
             event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}) {
                 aggregate {
-                count(columns: label)
-                }
-                nodes {
-                    body
-                    cc
-                    contact_id
-                    date
-                    id
-                    label
-                    nlu_input_text
-                    selected_intent
-                    subject
-                    sender
-                    to
-                    validated_intent
+                    count(columns: label)
                 }
             }
         }
     `;
 }
 
+export const clientEvent = (client_id, limit=10, offset=0) => {
+    return gql`
+        query SailebotEvent {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+                body
+                cc
+                contact_id
+                date
+                id
+                label
+                nlu_input_text
+                selected_intent
+                subject
+                sender
+                to
+                validated_intent
+            }
+        }
+    `;
+}
 
 
 export const companyEventCount = (company_id) => {

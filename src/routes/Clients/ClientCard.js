@@ -60,19 +60,19 @@ export const ClientCard = ({ client,  history }) => {
                   clientEventCountQuery.data && 
                   clientEventCountQuery.data.event_aggregate &&
                   clientEventCountQuery.data.event_aggregate.aggregate &&
-                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, events: clientEventCountQuery.data.event_aggregate.nodes })}>Digital Labor: <br/> {clientEventCountQuery.data.event_aggregate.aggregate.count}</Button>
+                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client })}>Digital Labor: <br/> {clientEventCountQuery.data.event_aggregate.aggregate.count}</Button>
                 }
                 {
                   referralEventCountQuery.data && 
                   referralEventCountQuery.data.event_aggregate &&
                   referralEventCountQuery.data.event_aggregate.aggregate &&
-                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, events: referralEventCountQuery.data.event_aggregate.nodes })}>Referral Events: <br/> {referralEventCountQuery.data.event_aggregate.aggregate.count}</Button>
+                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, label: 'refferal' })}>Referral Events: <br/> {referralEventCountQuery.data.event_aggregate.aggregate.count}</Button>
                 }
                 {
                   actionableEventCountQuery.data && 
                   actionableEventCountQuery.data.event_aggregate &&
                   actionableEventCountQuery.data.event_aggregate.aggregate &&
-                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, events: actionableEventCountQuery.data.event_aggregate.nodes })}>Actionable Events: <br/> {actionableEventCountQuery.data.event_aggregate.aggregate.count}</Button>
+                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, label: 'actionable_opportunity' })}>Actionable Events: <br/> {actionableEventCountQuery.data.event_aggregate.aggregate.count}</Button>
                 }
               </CardActions>
             </div>
