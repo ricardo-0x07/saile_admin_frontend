@@ -254,22 +254,22 @@ const Accounts = (props) => {
             <Title>{props.location.state && props.location.state.campaign  && props.location.state.campaign ? props.location.state.campaign.name : '' } Accounts</Title>
             <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-account', {campaign: props.location.state.campaign})}>Add Account</Button>
             {
-              props.location.state.sailebot && props.location.state.campaign && _data.campaign_account.length > 0 &&
-              <Query
-                query={listAllCampaignAccounts(state.campaign_id)}
-              >
-                {({ data, loading , error }) => {
-                  if (loading) return null;
-                  if (error) return `Error! ${error}`;
-                  console.log("to ListCampaignAccounts data: ", data)
-                  return (
-                    <div>  
-                      <CampaignSimpleSelect client_id={props.location.state.sailebot.client_id} label="Client Campaigns" name="campaign_id" onChange={handleClientChange} value={state.campaign_id}/>
-                      <Button variant="contained" size="small" onClick={() => moveCampaignAccount(updateSingleCampaignAccountMutation, state.campaign_id, props.location.state.campaign.id, _data.campaign_account, refetch, data.campaign_account)}>Move Accounts</Button>
-                    </div>
-                  );
-                }}
-              </Query>
+              // props.location.state.sailebot && props.location.state.campaign && _data.campaign_account.length > 0 &&
+              // <Query
+              //   query={listAllCampaignAccounts(state.campaign_id)}
+              // >
+              //   {({ data, loading , error }) => {
+              //     if (loading) return null;
+              //     if (error) return `Error! ${error}`;
+              //     console.log("to ListCampaignAccounts data: ", data)
+              //     return (
+              //       <div>  
+              //         <CampaignSimpleSelect client_id={props.location.state.sailebot.client_id} label="Client Campaigns" name="campaign_id" onChange={handleClientChange} value={state.campaign_id}/>
+              //         <Button variant="contained" size="small" onClick={() => moveCampaignAccount(updateSingleCampaignAccountMutation, state.campaign_id, props.location.state.campaign.id, _data.campaign_account, refetch, data.campaign_account)}>Move Accounts</Button>
+              //       </div>
+              //     );
+              //   }}
+              // </Query>
             }
             
             {
