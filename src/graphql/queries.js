@@ -1180,7 +1180,7 @@ export const listSailebotRequirements = (sailebot_id, campaign_limit=10, campaig
 export const clientEventByLabel = (client_id, label_query, limit=10, offset=0) => {
     return gql`
         query ClientEventByLabel {
-            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: true}, to_clarify: {_eq: false}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
                 body
                 cc
                 contact_id
@@ -1202,7 +1202,7 @@ export const clientEventByLabel = (client_id, label_query, limit=10, offset=0) =
 export const totalCampaignEventsByLabel = (client_id, label_query) => {
     return gql`
         query TotalCampaignClarificationEvents {
-            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: true}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: true}, to_clarify: {_eq: false}}) {
                 aggregate {
                 count(columns: id, distinct: true)
                 }
@@ -1213,7 +1213,7 @@ export const totalCampaignEventsByLabel = (client_id, label_query) => {
 export const totalCampaignEvents = (client_id) => {
     return gql`
         query TotalCampaignClarificationEvents {
-            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: false}}) {
                 aggregate {
                 count(columns: id, distinct: true)
                 }
@@ -1275,7 +1275,7 @@ export const clientEventCount = (client_id) => {
 export const clientEvent = (client_id, limit=10, offset=0) => {
     return gql`
         query SailebotEvent {
-            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: false}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
                 body
                 cc
                 contact_id

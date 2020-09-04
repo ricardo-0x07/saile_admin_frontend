@@ -72,7 +72,7 @@ export const EventCard = ({ event, updateReload }) => {
     } = event;
     
     const toClarify=true
-    await updateEventMutation({
+    const results = await updateEventMutation({
       variables: {
           objects: {
             cc,
@@ -96,6 +96,7 @@ export const EventCard = ({ event, updateReload }) => {
           id
       }
     });
+    console.log("results: ", results);
     updateReload()
   }
   const insertBody = (body) => {
