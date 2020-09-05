@@ -374,10 +374,11 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                 <Query query={getCampaignContact(campaign_id, contact_id)} >
                   { ({data, loading}) => {
                     console.log('data: ', data)
-                    if (
+                  if (
                       loading ||
                       !data ||
                       !data.campaign_contact ||
+                      !data.campaign_contact.length > 0 ||
                       !data.campaign_contact
                     ) {
                       return null;
@@ -412,6 +413,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                         loading ||
                         !data ||
                         !data.campaign_contact ||
+                        !data.campaign_contact.length > 0 ||
                         !data.campaign_contact
                       ) {
                         return null;
@@ -437,6 +439,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                         loading ||
                         !data ||
                         !data.contact ||
+                        !data.contact.length > 0 ||
                         !data.contact
                       ) {
                         return null;
