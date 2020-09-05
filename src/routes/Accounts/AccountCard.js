@@ -43,28 +43,35 @@ export const AccountCard = ({ account,  campaign,  history, updateReload }) => {
     //     status: 'Remove'
     //   }
     // });       
-    // console.log("campaign_contacts_affected: ", campaign_contacts_affected)                 
+    // console.log("campaign_contacts_affected: ", campaign_contacts_affected)      
+    try {
+      const campaign_accounts_affected = await createUpdateCampaignAccountMutation({
+        variables: {
+          objects: 
+            {
+              campaign_id,
+              account_id,
+              is_delisted: true,
+              status: 'Remove'
+            }
+        }
+      });        
+      console.log("campaign_accounts_affected: ", campaign_accounts_affected)     
+      const schedule_accounts_affected = await deleteScheduleAccountMutation({
+        variables: {
+          campaign_id,
+          account_id,
+        }
+      });        
+      console.log("schedule_accounts_affected: ", schedule_accounts_affected)     
+      updateReload()           
+       
+    } catch (error) {
 
-    const campaign_accounts_affected = await createUpdateCampaignAccountMutation({
-      variables: {
-        objects: 
-          {
-            campaign_id,
-            account_id,
-            is_delisted: true,
-            status: 'Remove'
-          }
-      }
-    });        
-    console.log("campaign_accounts_affected: ", campaign_accounts_affected)     
-    const schedule_accounts_affected = await deleteScheduleAccountMutation({
-      variables: {
-        campaign_id,
-        account_id,
-      }
-    });        
-    console.log("schedule_accounts_affected: ", schedule_accounts_affected)     
-    updateReload()           
+      console.log('error: ', error)
+      updateReload() 
+    }           
+
   }
   return (
     <Composed>
