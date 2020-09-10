@@ -43,7 +43,7 @@ const accounts_csv_key_map = {
 const contacts_csv_key_map = {
   campaign_name: 'Campaign Name',
 
-  name: 'Account Name',
+  name: 'Account: Account Name',
   email_domain: 'Account: Email Domain',
 
   firstname: 'First Name',
@@ -54,11 +54,10 @@ const contacts_csv_key_map = {
   source: 'Source',
   linkedin: 'LinkedIn URL',
   phone: 'Phone',
-  // city:'',
-  // state:'',
-  // country:'',
-  industry: 'Industry',
-
+  city:'City',
+  state:'State',
+  country:'Country',
+  industry: 'Account: Vertical',
   status: 'Member Status',
   delisted_date: 'Remove/Optout Date',
 };

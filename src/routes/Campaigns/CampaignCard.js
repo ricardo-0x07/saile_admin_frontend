@@ -103,9 +103,14 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
               {/* <Typography>Campaign: {name}</Typography> */}
               {
                 name && 
-                <span>
-                  <Typography variant="h4" display="inline">Campaign: </Typography><Typography variant="h6"  display="inline">{name}</Typography>
-                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <span>
+                    <Typography variant="h4" display="inline">Name: </Typography><Typography variant="h6"  display="inline">{name}</Typography>
+                  </span>
+                  <span>
+                    <Typography variant="h6" display="inline">ID: </Typography><Typography variant="h6"  display="inline"># {campaign.id}</Typography>
+                  </span>              
+                </div>
               }
               {
                 to_run &&

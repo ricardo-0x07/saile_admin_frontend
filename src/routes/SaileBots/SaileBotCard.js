@@ -60,6 +60,10 @@ export const SaileBotCard = ({ sailebot, client,  history }) => {
             <CardContent>
               <Typography>{fullname}</Typography>
               <Typography>{email}</Typography>
+              {
+                sailebot &&
+                <Typography>ID: {sailebot.id}</Typography>
+              }
               <Typography>Email Service: {email_service}</Typography>
             </CardContent>
             <div style={{ display: 'flex', flexDirection: 'row' }} className={classes.root}>

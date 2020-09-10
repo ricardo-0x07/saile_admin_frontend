@@ -21,12 +21,14 @@ export const RequirementCard = ({ requirement,  campaign, sailebot,  history }) 
     launch_date,
     name,
     elasticity,
+    id
   } = requirement;
   return (
     <Card>
       <CardContent>
         <Typography>Name: {name}</Typography>
         <Typography>Elasticity: {elasticity}</Typography>
+        <Typography>ID: {id}</Typography>
         <Typography>
           Launch Date: <Moment format="YYYY-MMM-DD" date={launch_date !== null && launch_date }></Moment>
         </Typography>
