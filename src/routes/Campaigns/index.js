@@ -21,44 +21,60 @@ const useStyles = makeStyles(theme => ({
 
 const accounts_csv_key_map = {
   campaign_name: 'Campaign Name',
+
   status: 'Status',
-  industry: 'Account: Vertical',
-  name: 'Account: Account Name',
-  address: 'Account: Billing Street',
-  street: 'Account: Billing Street',
-  employees: 'Account: Employees',
-  phone: 'Account: Main Phone',
-  revenue: 'Account: Revenue ($mil)',
-  state  : 'Account: Billing State/Province',
-  website  : 'Account: Website',
+
+  industry: 'Industry',
+
+  name: 'Company Name for Emails',
+
+  address: 'Company Address',
+
+  street: 'Company Address',
+
+  employees: '# Employees',
+
+  phone: 'Corporate Phone',
+
+  revenue: 'Annual Revenue',
+
+  state  : 'Company State',
+
+  website  : 'Website',
+
   email_domain: 'Account: Email Domain',
+
   NAICS: 'Account: Primary US NAICS Code',
-  city: 'Account: Billing City',
-  country: 'Account: Billing Country',
+
+  city: 'Company City',
+
+  country: 'Company Country',
+
   // ex_id: 'Account: Account ID',
   d_u_n_s_number: 'Account: D-U-N-S® Number',
+
   postal_code: 'Account: Postal Code',
 };
 
 const contacts_csv_key_map = {
   campaign_name: 'Campaign Name',
 
-  name: 'Account: Account Name',
+  name: 'Company Name for Emails',
   email_domain: 'Account: Email Domain',
 
   firstname: 'First Name',
   lastname: 'Last Name',
-  email: 'Contact Email',
+  email: 'Email',
   title: 'Title',
   gender: 'Gender',
   source: 'Source',
-  linkedin: 'LinkedIn URL',
-  phone: 'Phone',
+  linkedin: 'Person Linkedin Url',
+  phone: 'First Phone',
   city:'City',
   state:'State',
   country:'Country',
-  industry: 'Account: Vertical',
-  status: 'Member Status',
+  industry: 'Industry',
+  status: 'Status',
   delisted_date: 'Remove/Optout Date',
 };
 

@@ -875,6 +875,19 @@ export const getClientCampaignAccounts = (client_id) => {
     `;
 }
 
+export const getCampaignAccount = (campaign_id, account_id) => {
+    return gql`
+        query GetClientCampaignAccounts {
+            campaign_account(where: {campaign_id: {_eq: ${campaign_id}}, account_id: {_eq: ${account_id}}}) {
+                id
+                campaign_id
+                account_id
+                is_delisted
+            }
+        }
+    `;
+}
+
 export const listContacts = (limit=10, offset=0, event_limit=10, event_offset=0) => {
     return gql`
         query ListContacts {
@@ -1192,6 +1205,7 @@ export const clientEventByLabel = (client_id, label_query, limit=10, offset=0) =
                 subject
                 sender
                 to
+                campaign_id
                 validated_intent
             }
         }

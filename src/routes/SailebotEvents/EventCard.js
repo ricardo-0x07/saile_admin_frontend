@@ -8,7 +8,8 @@ import Button from "@material-ui/core/Button";
 import Moment from 'react-moment';
 import { updateEvent } from "../../graphql/mutations";
 import { adopt } from 'react-adopt';
-import { Mutation } from "react-apollo";
+import { Mutation, Query } from "react-apollo";
+import { getContactById, getCampaignContact, getCampaignAccount } from "../../graphql/queries";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,6 +32,8 @@ export const EventCard = ({ event, updateReload }) => {
     body,
     date,
     cc,
+    contact_id,
+    campaign_id
   } = event;
   function createMarkup(body) {
     return {__html: body};
@@ -117,6 +120,8 @@ export const EventCard = ({ event, updateReload }) => {
     ),
   })
   // console.log(body.split("\n").slice(0,4))
+  console.log("contact_id: ", contact_id);
+  console.log("campaign_id: ", campaign_id);
   return (
     <Composed>
       {({ updateEventMutation  }) => {
@@ -128,6 +133,75 @@ export const EventCard = ({ event, updateReload }) => {
               {/* <Typography>
                 
               </Typography> */}
+              {
+                campaign_id && contact_id &&
+                <Query query={getContactById(contact_id)} >
+                  { ({data, loading}) => {
+                  if (
+                      loading ||
+                      !data ||
+                      !data.contact ||
+                      !data.contact.length > 0 ||
+                      !data.contact
+                    ) {
+                      return null;
+                    }
+                    console.log('getContactById data: ',  data)
+                    console.log('campaign_id: ', campaign_id)
+                    const { account_id } = data.contact[0]
+                    if (account_id === undefined) {
+                      return null;
+                    }
+
+                    return (
+                      <Query query={getCampaignAccount(campaign_id, account_id)} >
+                      { (campaignAccountQuery) => {
+                        console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
+                      if (
+                        campaignAccountQuery.loading ||
+                          !campaignAccountQuery.data ||
+                          !campaignAccountQuery.data.campaign_account ||
+                          !campaignAccountQuery.data.campaign_account.length > 0 ||
+                          !campaignAccountQuery.data.campaign_account
+                        ) {
+                          return null;
+                        }
+                        console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
+                        const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+    
+                        return (
+                        <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
+                        );
+                      }}
+                    </Query>                    );
+                  }}
+                </Query>
+                
+              }
+              {
+                campaign_id && contact_id &&
+                <Query query={getCampaignContact(campaign_id, contact_id)} >
+                  { ({data, loading}) => {
+                    console.log('getCampaignContact data: ', data)
+                  if (
+                      loading ||
+                      !data ||
+                      !data.campaign_contact ||
+                      !data.campaign_contact.length > 0 ||
+                      !data.campaign_contact
+                    ) {
+                      return null;
+                    }
+                    console.log('data: ', data)
+                    const { is_delisted } = data.campaign_contact[0]
+
+                    return (
+                    <Typography><strong>Contact ID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
+                    );
+                  }}
+                </Query>
+                
+              }
               <CardActions className={classes.root}>
                 <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                 <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>To clarify</Button>

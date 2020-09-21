@@ -14,7 +14,7 @@ import { getScheduleById } from "../../graphql/queries";
 
 export const ScheduleCard = ({ schedule, requirement,  campaign,  history, schedule_campaign_accounts_to_remove }) => {
   
-  const { name, no_targets_per_accounts, deploy_date, end_date } = schedule;
+  const { name, no_targets_per_accounts, deploy_date, end_date, id } = schedule;
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
   const addScheduleAccounts = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
@@ -126,6 +126,7 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
           <Card>
             <CardContent>
               <Typography>Name: {name}</Typography>
+              <Typography>Id: {id}</Typography>
               <Typography>Schedule Elasticity: {no_targets_per_accounts}</Typography>
               {
                 requirement && 
