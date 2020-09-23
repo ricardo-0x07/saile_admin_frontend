@@ -6,6 +6,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
+import * as moment from 'moment';
 // import {
 //   TextField,
 //   Button,
@@ -17,8 +18,8 @@ import Moment from 'react-moment';
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import { Mutation, Query } from "react-apollo";
-import { updateEvent, updateContact, updateSingleCampaignAccount, updateCampaignContact } from "../../graphql/mutations";
-import { getContactById, getCampaignContact } from "../../graphql/queries";
+import { updateEvent, updateContact, updateSingleCampaignAccount, updateCampaignContact, deleteEvent } from "../../graphql/mutations";
+import { getContactById, getCampaignContact, getCampaignAccount } from "../../graphql/queries";
 import { adopt } from 'react-adopt';
 import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
 import ContactSelect from "./ContactSelect";
@@ -84,6 +85,11 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
   }
 // updateCampaignContact
   const Composed = adopt({
+    deleteEventMutation: ({ render }) => (
+      <Mutation mutation={ deleteEvent } >
+        { render }
+      </Mutation> 
+    ),
     updateCampaignContactMutation: ({ render }) => (
       <Mutation mutation={ updateCampaignContact } >
         { render }
@@ -282,6 +288,33 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
     });
     updateReload()
   }
+  const _reListCampaignContact_ = async (updateCampaignContactMutation, deleteEventMutation) => {
+    const {
+      id,
+      contact_id,
+      campaign_id,
+    } = event;
+    const toClarify=false
+    console.log('contact_id: ', contact_id)
+    console.log('campaign_id: ', campaign_id)
+    await updateCampaignContactMutation({
+      variables: {
+          objects: {
+            is_delisted: false,
+            status: 'Active',
+          },
+          contact_id,
+          campaign_id,
+      }
+    });
+
+    await deleteEventMutation({
+      variables: {
+          id
+      }
+    });
+    updateReload()
+  }
   const _delistCampaignContact_ = async (updateCampaignContactMutation, updateEventMutation) => {
     const {
       cc,
@@ -359,7 +392,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
   
   return (
     <Composed>
-      {({ updateEventMutation, updateContactMutation, updateCampaignAccountMutation, updateCampaignContactMutation  }) => {
+      {({ updateEventMutation, updateContactMutation, updateCampaignAccountMutation, updateCampaignContactMutation, deleteEventMutation  }) => {
 
         return (
           <Card>
@@ -369,6 +402,52 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
               <Typography>
                 <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment>
               </Typography>
+              {
+                campaign_id && contact_id &&
+                <Query query={getContactById(contact_id)} >
+                  { ({data, loading}) => {
+                  if (
+                      loading ||
+                      !data ||
+                      !data.contact ||
+                      !data.contact.length > 0 ||
+                      !data.contact
+                    ) {
+                      return null;
+                    }
+                    console.log('getContactById data: ',  data)
+                    console.log('campaign_id: ', campaign_id)
+                    const { account_id } = data.contact[0]
+                    if (account_id === undefined) {
+                      return null;
+                    }
+
+                    return (
+                      <Query query={getCampaignAccount(campaign_id, account_id)} >
+                      { (campaignAccountQuery) => {
+                        console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
+                      if (
+                        campaignAccountQuery.loading ||
+                          !campaignAccountQuery.data ||
+                          !campaignAccountQuery.data.campaign_account ||
+                          !campaignAccountQuery.data.campaign_account.length > 0 ||
+                          !campaignAccountQuery.data.campaign_account
+                        ) {
+                          return null;
+                        }
+                        console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
+                        const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+    
+                        return (
+                          <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
+                        );
+                      }}
+                    </Query>                    
+                    );
+                  }}
+                </Query>
+                
+              }
               {
                 id && sailebot && sailebot.id && campaign_id && contact_id &&
                 <Query query={getCampaignContact(campaign_id, contact_id)} >
@@ -387,7 +466,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                     const { status, is_delisted} = data.campaign_contact[0]
 
                     return (
-                      <Typography><strong>Contact Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
+                      <Typography><strong>ContactID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
                     );
                   }}
                 </Query>
@@ -447,7 +526,69 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                       const contact = data.contact[0]
 
                       return (
-                        <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact)}>Remove Account</Button>
+                        <div style={{ flexDirection: 'row' }}>
+                          <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact)}>Remove Account</Button>
+                        </div>
+                      );
+                    }}
+                  </Query>
+                }
+                {
+                  id && sailebot && sailebot.id && campaign_id && contact_id &&
+                  <Query query={getContactById(contact_id)} >
+                    { ({data, loading}) => {
+                      if (
+                        loading ||
+                        !data ||
+                        !data.contact ||
+                        !data.contact.length > 0 ||
+                        !data.contact
+                      ) {
+                        return null;
+                      }
+                      const contact = data.contact[0]
+                      var now = moment()
+                      var startTime = moment(date)
+                      // var start = moment.utc(startTime, "HH:mm");
+                      console.log("now: ", now)
+                      console.log("startTime: ", startTime)
+                      var ready = startTime.add(2, "week") < now
+                      console.log("ready: ", ready)
+                      var AUTO_REPLY_SUBJECT_KEYWORDS = ["OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+                      var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
+                      console.log("subject: ", subject)
+                      console.log("isIn: ", isIn)
+
+                      return (
+                        <div style={{ flexDirection: 'row' }}>
+                          {
+                            contact && contact.account_id && ready && isIn &&
+                            <Query query={getCampaignAccount(campaign_id, contact.account_id)} >
+                              { (getCampaignAccountQuery) => {
+                                if (
+                                  getCampaignAccountQuery.loading ||
+                                  !getCampaignAccountQuery.data ||
+                                  !getCampaignAccountQuery.data.campaign_account ||
+                                  !getCampaignAccountQuery.data.campaign_account.length > 0 ||
+                                  !getCampaignAccountQuery.data.campaign_account
+                                ) {
+                                  return null;
+                                }
+                                const campaign_account = getCampaignAccountQuery.data.campaign_account[0]
+                                console.log("campaign_account: ", campaign_account)
+                                if (campaign_account.is_delisted) {
+                                  return null;
+                                }
+
+                                return (
+                                  <div>
+                                    <Button variant="contained" size="small" onClick={() =>  _reListCampaignContact_(updateCampaignContactMutation, deleteEventMutation) }>De-quarantee</Button>
+                                  </div>
+                                );
+                              }}
+                            </Query>
+                          }
+                        </div>
                       );
                     }}
                   </Query>

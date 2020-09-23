@@ -420,5 +420,13 @@ export const deleteCampaignContact = gql`
   }
 `;
 
+export const deleteEvent = gql`
+  mutation DeleteEvent( $id: Int ) {
+    delete_event(where: {id: {_eq: $id}}) {
+      affected_rows
+    }
+  }
+`;
+
 
 
