@@ -11,7 +11,6 @@ import CampaignPlusAccountsCSVReader from '../../components/CampaignPlusAccounts
 import CampaignPlusAccountsCSVReaderLegacy from '../../components/CampaignPlusAccountsCSVReaderLegacy'
 import CampaignPlusContactsCSVReader from '../../components/CampaignPlusContactsCSVReader'
 import CampaignPlusContactsCSVReaderLegacy from '../../components/CampaignPlusContactsCSVReaderLegacy'
-// import CampaignChart from './CampaignChart';
 
 const useStyles = makeStyles(theme => ({
   root: {
