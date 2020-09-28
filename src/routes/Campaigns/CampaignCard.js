@@ -12,7 +12,7 @@ import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 import Switch from '@material-ui/core/Switch';
 import { updateCampaign } from "../../graphql/mutations";
-import { countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs, totalCampaignAccounts, getCampaignAccountContactElastaicity } from "../../graphql/queries"
+import { countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs } from "../../graphql/queries"
 import CampaignChart from './CampaignChart';
 
 
