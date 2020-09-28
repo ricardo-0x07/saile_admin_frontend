@@ -1016,15 +1016,33 @@ export const totalCampaignClarificationEvents = (campaign_id) => {
 export const totalCampaignAccounts = (campaign_id) => {
     return gql`
         query TotalCampaignAccounts {
-            campaign_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}}) {
+            campaign_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}, is_delisted: {_eq: false}}) {
                 aggregate {
-                count(columns: id, distinct: true)
+                    count(columns: id, distinct: true)
+                }
+                nodes {
+                    account_id
+                    id
+                    campaign_id
                 }
             }
         }
     `;
 }
 
+export const getCampaignAccountContactElastaicity = (campaign_id, account_id, elasticity=4) => {
+    return gql`
+        query GetCampaignAccountContactElastaicity {
+            campaign(where: {id: {_eq: ${campaign_id}}}) {
+                campaign_contacts_aggregate(where: {account_id: {_eq: ${account_id}}, campaign_id: {_eq: ${campaign_id}}}, limit: ${elasticity}) {
+                    aggregate {
+                        count(columns: id, distinct: true)
+                    }
+                }
+            }
+        }
+    `;
+}
 
 export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0) => {
     return gql`
@@ -1365,8 +1383,14 @@ export const countCampaignAccounts = (campaign_id, is_delisted=false) => {
         query CountCampaignAccounts  {
             campaign_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}, is_delisted: {_eq: ${is_delisted}}}) {
                 aggregate {
-                count(columns: account_id, distinct: true)
+                    count(columns: account_id, distinct: true)
                 }
+                nodes {
+                    account_id
+                    id
+                    campaign_id
+                }
+
             }
         }
     `;

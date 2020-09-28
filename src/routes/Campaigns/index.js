@@ -8,7 +8,9 @@ import Button from "@material-ui/core/Button";
 import { adopt } from 'react-adopt';
 import { makeStyles } from '@material-ui/core/styles';
 import CampaignPlusAccountsCSVReader from '../../components/CampaignPlusAccountsCSVReader'
+import CampaignPlusAccountsCSVReaderLegacy from '../../components/CampaignPlusAccountsCSVReaderLegacy'
 import CampaignPlusContactsCSVReader from '../../components/CampaignPlusContactsCSVReader'
+import CampaignPlusContactsCSVReaderLegacy from '../../components/CampaignPlusContactsCSVReaderLegacy'
 // import CampaignChart from './CampaignChart';
 
 const useStyles = makeStyles(theme => ({
@@ -53,7 +55,7 @@ const accounts_csv_key_map = {
   // ex_id: 'Account: Account ID',
   d_u_n_s_number: 'Account: D-U-N-S® Number',
 
-  postal_code: 'Account: Postal Code',
+  postal_code: 'Company Postal Code',
 };
 
 const contacts_csv_key_map = {
@@ -116,8 +118,10 @@ const Campaigns = (props) => {
             {
               props.location.state && props.location.state.requirement && props.location.state.requirement.id && 
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <CampaignPlusAccountsCSVReader location={props.location} accounts_csv_key_map={accounts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'LEGACY Campaigns + Accounts'} sailebot={props.location.state.sailebot}/>
-                <CampaignPlusContactsCSVReader location={props.location} contacts_csv_key_map={contacts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'LEGACY Campaigns + Contacts'} sailebot={props.location.state.sailebot}/>
+                <CampaignPlusAccountsCSVReaderLegacy location={props.location} accounts_csv_key_map={accounts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'LEGACY Campaign Accounts'} sailebot={props.location.state.sailebot}/>
+                <CampaignPlusContactsCSVReaderLegacy location={props.location} contacts_csv_key_map={contacts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'LEGACY Campaign Contacts'} sailebot={props.location.state.sailebot}/>
+                <CampaignPlusAccountsCSVReader location={props.location} accounts_csv_key_map={accounts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'New Campaign Accounts'} sailebot={props.location.state.sailebot}/>
+                <CampaignPlusContactsCSVReader location={props.location} contacts_csv_key_map={contacts_csv_key_map} requirement_id={props.location.state.requirement.id} label={'New Campaign Contacts'} sailebot={props.location.state.sailebot}/>
               </div>
             }
             <div

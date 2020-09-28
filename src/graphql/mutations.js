@@ -152,9 +152,28 @@ export const createCampaignAccount = gql`
   }
 `;
 
-export const createUpdateCampaignAccount = gql`
+export const createUpdateCampaignAccountChangeStatus = gql`
   mutation InsertCampaignAccount($objects: [campaign_account_insert_input!]!) {
     insert_campaign_account(objects: $objects, on_conflict: {constraint: campaign_account_campaign_id_account_id_key, update_columns: [campaign_id, account_id, status, is_delisted]}) {
+      returning {
+        id
+        status
+        is_delisted
+        account_id
+        campaign_id
+        account { 
+          name
+          email_domain
+        }
+      }
+    }
+  }
+`;
+
+
+export const createUpdateCampaignAccount = gql`
+  mutation InsertCampaignAccount($objects: [campaign_account_insert_input!]!) {
+    insert_campaign_account(objects: $objects, on_conflict: {constraint: campaign_account_campaign_id_account_id_key, update_columns: [campaign_id, account_id, is_delisted]}) {
       returning {
         id
         status
@@ -190,9 +209,20 @@ export const createCampaignContact = gql`
   }
 `;
 
-export const createUpdateCampaignContact = gql`
+export const createUpdateCampaignContactChangeStatus = gql`
   mutation InsertCampaignContact($objects: [campaign_contact_insert_input!]!) {
     insert_campaign_contact(objects: $objects, on_conflict: {constraint: campaign_contact_campaign_id_contact_id_key, update_columns: [campaign_id, account_id, contact_id, is_delisted, status]}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+
+export const createUpdateCampaignContact = gql`
+  mutation InsertCampaignContact($objects: [campaign_contact_insert_input!]!) {
+    insert_campaign_contact(objects: $objects, on_conflict: {constraint: campaign_contact_campaign_id_contact_id_key, update_columns: [campaign_id, account_id, contact_id, is_delisted]}) {
       returning {
         id
       }

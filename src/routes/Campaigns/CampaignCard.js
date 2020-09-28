@@ -12,7 +12,7 @@ import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 import Switch from '@material-ui/core/Switch';
 import { updateCampaign } from "../../graphql/mutations";
-import { countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs } from "../../graphql/queries"
+import { countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs, totalCampaignAccounts, getCampaignAccountContactElastaicity } from "../../graphql/queries"
 import CampaignChart from './CampaignChart';
 
 
@@ -25,16 +25,16 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   console.log('StartDate: ', StartDate)
   const Composed = adopt({
     outboundEventLogsQuery: ({ render }) => (
-        <Query query={ inbox_event_logs(campaign.id, false, StartDate) } >
-          { render }
-        </Query> 
+      <Query query={ inbox_event_logs(campaign.id, false, StartDate) } >
+        { render }
+      </Query> 
     ),
     listCompanyDomainByIdQuery: ({ render }) => (
       <Query query={ listCompanyDomainById(campaign.company_domain_id) } >
         { render }
       </Query> 
-  ),
-  inboundEventLogsQuery: ({ render }) => (
+    ),
+    inboundEventLogsQuery: ({ render }) => (
       <Query query={ inbox_event_logs(campaign.id, true, StartDate) } >
         { render }
       </Query> 
@@ -48,8 +48,8 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
       <Query query={ countCampaignScheduleAccounts(campaign.id) } >
         { render }
       </Query> 
-  ),
-  updateCampaignMutation: ({ render }) => (
+    ),
+    updateCampaignMutation: ({ render }) => (
     <Mutation mutation={ updateCampaign } >
       { render }
     </Mutation> 
@@ -96,6 +96,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
         console.log('outboundEventLogsQuery: ', outboundEventLogsQuery)
         console.log('countCampaignAccountsQuery: ', countCampaignAccountsQuery)
         console.log('listCompanyDomainByIdQuery: ', listCompanyDomainByIdQuery)
+        
         const campany_domain = listCompanyDomainByIdQuery && listCompanyDomainByIdQuery.data && listCompanyDomainByIdQuery.data.company_domain.length > 0 ? listCompanyDomainByIdQuery.data.company_domain[0] : null;
         return (
           <Card>
@@ -134,6 +135,10 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                   <Typography>Elasticity: {requirement.elasticity}</Typography>
                   <Typography>Campaign Accounts: {countCampaignAccounts}</Typography>
                   <Typography>Campaign Scheduled Accounts: {countCampaignScheduleAccounts}</Typography>
+                  {
+                    // countCampaignAccounts && 
+                    // <Typography>Campaign Elasticity: {countCampaignAccounts}</Typography>
+                  }
                 </CardContent>
                 <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
                   <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-campaign', {campaign, requirement, sailebot})}>Edit</Button>
