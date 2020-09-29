@@ -41,6 +41,7 @@ import Accounts from './Accounts'
 import ScheduleAccounts from './ScheduleAccounts'
 import Contacts from './Contacts'
 import Events from './Events'
+import CampaignContactEvents from './CampaignContactEvents'
 import SailebotEvents from './SailebotEvents'
 import Clarifications from './Clarifications';
 import Templates from './Templates'
@@ -255,6 +256,11 @@ function Routes() {
                             exact
                             path='/app/events-by-contact' 
                             component={Events}
+                        />
+                        <Route
+                            exact
+                            path='/app/events-by-campaign-contact' 
+                            component={CampaignContactEvents}
                         />
                         <Route
                             exact

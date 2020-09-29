@@ -47,7 +47,7 @@ const Events = (props) => {
     ), 
     eventsQuery: props.location.state && props.location.state.client && props.location.state.client.id && props.location.state.label ?
     ({ render }) => (
-      <Query query={clientEventByLabel(props.location.state.client.id, props.location.state.label, limit, (page-1) * limit, !props.location.state.label === 'refferal_introduction')} >
+      <Query query={clientEventByLabel(props.location.state.client.id, props.location.state.label, limit, (page-1) * limit, props.location.state.label !== 'refferal_introduction')} >
         { render }
       </Query>
     )
@@ -78,6 +78,8 @@ const Events = (props) => {
           console.log('totalCampaignEventsQuery: ', totalCampaignEventsQuery)
           total =  Math.ceil(totalCampaignEventsQuery.data.event_aggregate.aggregate.count/limit)
         }
+        console.log('total: ', total)
+        console.log('props.location.state.label: ', props.location.state.label)
 
         return (
           <div className={classes.root}>
@@ -93,6 +95,7 @@ const Events = (props) => {
                 eventsQuery.data.event.map(x => (
                   <EventCard 
                     event={x} name={x.name} key={x.id} history={props.history} 
+                    client={props.location.state.client}
                     updateReload={() => {
                       eventsQuery.refetch();
                       totalCampaignEventsQuery.refetch()

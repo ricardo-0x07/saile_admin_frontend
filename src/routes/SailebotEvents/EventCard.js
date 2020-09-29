@@ -6,11 +6,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Moment from 'react-moment';
-import { updateEvent } from "../../graphql/mutations";
+import { updateEvent, updateCampaignContact } from "../../graphql/mutations";
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 import { getContactById, getCampaignContact, getCampaignAccount/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
-
+// import CampaignContactEvents from '../CampaignContactEvents';
+import * as moment from 'moment';
 const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const EventCard = ({ event, updateReload }) => {
+export const EventCard = ({ event, updateReload, client, history }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     showBody: false,
@@ -53,6 +54,29 @@ export const EventCard = ({ event, updateReload }) => {
   //     </React.Fragment>
   //   );
   // }
+  const _followupCampaignContact_ = async (updateCampaignContactMutation, refetch) => {
+    const {
+
+      contact_id,
+      campaign_id,
+
+    } = event;
+    console.log('contact_id: ', contact_id)
+    console.log('campaign_id: ', campaign_id)
+    await updateCampaignContactMutation({
+      variables: {
+          objects: {
+            to_followup: true,
+            is_delisted: false,
+            next_date: moment().format('YYYY-MM-DD'),
+          },
+          contact_id,
+          campaign_id,
+      }
+    });
+    refetch()
+    updateReload()
+  }
   const dismissClarification = (updateEventMutation) => async () => {
     const {
       cc,
@@ -118,13 +142,18 @@ export const EventCard = ({ event, updateReload }) => {
           { render }
         </Mutation> 
     ),
+    updateCampaignContactMutation: ({ render }) => (
+      <Mutation mutation={ updateCampaignContact } >
+        { render }
+      </Mutation> 
+    ),
   })
   // console.log(body.split("\n").slice(0,4))
   console.log("contact_id: ", contact_id);
   console.log("campaign_id: ", campaign_id);
   return (
     <Composed>
-      {({ updateEventMutation  }) => {
+      {({ updateEventMutation, updateCampaignContactMutation  }) => {
         return (
           <Card>
             <CardContent>
@@ -155,25 +184,26 @@ export const EventCard = ({ event, updateReload }) => {
 
                     return (
                       <Query query={getCampaignAccount(campaign_id, account_id)} >
-                      { (campaignAccountQuery) => {
-                        console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
-                      if (
-                        campaignAccountQuery.loading ||
-                          !campaignAccountQuery.data ||
-                          !campaignAccountQuery.data.campaign_account ||
-                          !campaignAccountQuery.data.campaign_account.length > 0 ||
-                          !campaignAccountQuery.data.campaign_account
-                        ) {
-                          return null;
-                        }
-                        console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
-                        const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
-    
-                        return (
-                        <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
-                        );
-                      }}
-                    </Query>                    );
+                        { (campaignAccountQuery) => {
+                          console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
+                        if (
+                          campaignAccountQuery.loading ||
+                            !campaignAccountQuery.data ||
+                            !campaignAccountQuery.data.campaign_account ||
+                            !campaignAccountQuery.data.campaign_account.length > 0 ||
+                            !campaignAccountQuery.data.campaign_account
+                          ) {
+                            return null;
+                          }
+                          console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
+                          const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+      
+                          return (
+                            <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
+                          );
+                        }}
+                      </Query>                    
+                    );
                   }}
                 </Query>
                 
@@ -205,6 +235,66 @@ export const EventCard = ({ event, updateReload }) => {
               <CardActions className={classes.root}>
                 <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                 <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>To clarify</Button>
+                <Button  variant="contained" size="small" onClick={() => history.push('/app/events-by-campaign-contact', {client, campaign_id: event.campaign_id, contact_id: event.contact_id })}>Contact Events</Button>
+                {
+                  label === "refferal_introduction" && 
+                  campaign_id && contact_id &&
+                  <Query query={getCampaignContact(campaign_id, contact_id)} >
+                    { ({data, loading, refetch }) => {
+                      if (
+                        loading ||
+                        !data ||
+                        !data.campaign_contact ||
+                        !data.campaign_contact.length > 0 ||
+                        !data.campaign_contact
+                      ) {
+                        return null;
+                      }
+                      const { to_followup, next_date, is_delisted, account_id } = data.campaign_contact[0]
+                      console.log("to_followup: ", to_followup);
+                      console.log("next_date: ", next_date);
+                      console.log("(to_followup): ", (to_followup));
+                      console.log("(next_date !== null): ", (next_date !== null));
+                      console.log(" is_delisted === true: ",  is_delisted === true);
+
+                      if ((to_followup === true && next_date !== null)) {
+
+                        return null
+                      }
+
+                      return (
+                        <Query query={getCampaignAccount(campaign_id, account_id)} >
+                          { (campaignAccountQuery) => {
+                            console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
+                          if (
+                            campaignAccountQuery.loading ||
+                              !campaignAccountQuery.data ||
+                              !campaignAccountQuery.data.campaign_account ||
+                              !campaignAccountQuery.data.campaign_account.length > 0 ||
+                              !campaignAccountQuery.data.campaign_account
+                            ) {
+                              return null;
+                            }
+                            console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
+                            const campaign_account = campaignAccountQuery.data.campaign_account[0]
+                            if (is_delisted && campaign_account && campaign_account.is_delisted) {
+                              return null
+                            }        
+                            return (
+                              <Button variant="contained" size="small" onClick={() => {
+                                if (to_followup === false || to_followup === undefined || next_date === null) {
+                                  _followupCampaignContact_(updateCampaignContactMutation, refetch)
+                                }
+                              }}>Followup Contact</Button>
+                            );
+                          }}
+                        </Query>                    
+                      );
+  
+                    }}
+                  </Query>
+                  
+                }
               </CardActions>
               {
                 state.showBody &&
