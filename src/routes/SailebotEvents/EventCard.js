@@ -9,7 +9,7 @@ import Moment from 'react-moment';
 import { updateEvent } from "../../graphql/mutations";
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
-import { getContactById, getCampaignContact, getCampaignAccount } from "../../graphql/queries";
+import { getContactById, getCampaignContact, getCampaignAccount/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
 
 const useStyles = makeStyles(theme => ({
   root: {

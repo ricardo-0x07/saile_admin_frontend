@@ -47,7 +47,7 @@ const Events = (props) => {
     ), 
     eventsQuery: props.location.state && props.location.state.client && props.location.state.client.id && props.location.state.label ?
     ({ render }) => (
-      <Query query={clientEventByLabel(props.location.state.client.id, props.location.state.label, limit, (page-1) * limit)} >
+      <Query query={clientEventByLabel(props.location.state.client.id, props.location.state.label, limit, (page-1) * limit, !props.location.state.label === 'refferal_introduction')} >
         { render }
       </Query>
     )

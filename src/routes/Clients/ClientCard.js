@@ -33,6 +33,11 @@ export const ClientCard = ({ client,  history }) => {
         { render }
       </Query>
     ),
+    referralIntroductionEventCountQuery: ({ render }) => (
+      <Query query={clientEventCountByLabel(client.id, "refferal_introduction")} >
+        { render }
+      </Query>
+    ),
     clientEventCountQuery: ({ render }) => (
       <Query query={clientEventCount(client.id)} >
         { render }
@@ -42,7 +47,7 @@ export const ClientCard = ({ client,  history }) => {
 
   return (
     <Composed>
-      {({ actionableEventCountQuery, referralEventCountQuery, clientEventCountQuery }) => {
+      {({ actionableEventCountQuery, referralEventCountQuery, clientEventCountQuery, referralIntroductionEventCountQuery }) => {
         return (
           <Card>
             <CardContent>
@@ -67,6 +72,12 @@ export const ClientCard = ({ client,  history }) => {
                   referralEventCountQuery.data.event_aggregate &&
                   referralEventCountQuery.data.event_aggregate.aggregate &&
                   <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, label: 'refferal' })}>Referral Events: <br/> {referralEventCountQuery.data.event_aggregate.aggregate.count}</Button>
+                }
+                {
+                  referralIntroductionEventCountQuery.data && 
+                  referralIntroductionEventCountQuery.data.event_aggregate &&
+                  referralIntroductionEventCountQuery.data.event_aggregate.aggregate &&
+                  <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, label: 'refferal_introduction' })}>Referral Introduction Events: <br/> {referralIntroductionEventCountQuery.data.event_aggregate.aggregate.count}</Button>
                 }
                 {
                   actionableEventCountQuery.data && 
