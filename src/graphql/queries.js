@@ -1261,10 +1261,10 @@ export const clientEventByCampaignContact = (client_id, contact_id, campaign_id)
 
 
 
-export const totalCampaignEventsByLabel = (client_id, label_query) => {
+export const totalCampaignEventsByLabel = (client_id, label_query, is_inbound=false) => {
     return gql`
         query TotalCampaignClarificationEvents {
-            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}, to_clarify: {_eq: false}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: ${is_inbound}}, to_clarify: {_eq: false}}) {
                 aggregate {
                     count(columns: id, distinct: true)
                 }
@@ -1283,10 +1283,10 @@ export const totalCampaignEvents = (client_id) => {
         }
     `;
 }
-export const clientEventCountByLabel = (client_id, label_query) => {
+export const clientEventCountByLabel = (client_id, label_query, is_inbound=false) => {
     return gql`
         query ClientEventCountByLabel {
-            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: false}, to_clarify: {_eq: false}}) {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: ${is_inbound}}, to_clarify: {_eq: false}}) {
                 aggregate {
                     count(columns: id, distinct: true)
                 }

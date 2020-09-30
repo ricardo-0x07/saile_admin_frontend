@@ -36,7 +36,7 @@ const Events = (props) => {
   })
   return (
     <Composed>
-      {({ eventsSubscription: {data, loading} }) => {
+      {({ eventsSubscription: {data, loading, refetch} }) => {
         console.log('campaignContactevents props: ', props)
         console.log('campaignContactevents data: ', data)
         console.log('campaignContactevents loading: ', loading)
@@ -56,18 +56,18 @@ const Events = (props) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateColumns: "repeat(1, 1fr)",
                 gridGap: 10
               }}
             >
               {
                 props.location.state && props.location.state.contact_id && props.location.state.client.id  && props.location.state.campaign_id ?
                 data.event.filter(item => item.contact_id === props.location.state.contact_id ).map(x => (
-                  <EventCard event={x} name={x.name} key={x.id} history={props.history} />
+                  <EventCard event={x} name={x.name} key={x.id} history={props.history} updateReload={refetch}/>
                 ))
                 :
                 data.event.filter(item => item ).map(x => (
-                  <EventCard event={x} name={x.name} key={x.id}  history={props.history} />
+                  <EventCard event={x} name={x.name} key={x.id}  history={props.history} updateReload={refetch}/>
                 ))
               }
             </div>

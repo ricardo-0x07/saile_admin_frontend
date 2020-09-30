@@ -29,7 +29,7 @@ export const ClientCard = ({ client,  history }) => {
       </Query>
     ),
     referralEventCountQuery: ({ render }) => (
-      <Query query={clientEventCountByLabel(client.id, "refferal_thanks")} >
+      <Query query={clientEventCountByLabel(client.id, "refferal", true)} >
         { render }
       </Query>
     ),

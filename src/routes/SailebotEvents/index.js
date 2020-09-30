@@ -36,7 +36,7 @@ const Events = (props) => {
   const Composed = adopt({
     totalCampaignEventsQuery: props.location.state && props.location.state.client && props.location.state.client.id && props.location.state.label ?
     ({ render }) => (
-      <Query query={totalCampaignEventsByLabel(props.location.state.client.id, props.location.state.label)} >
+      <Query query={totalCampaignEventsByLabel(props.location.state.client.id, props.location.state.label, props.location.state.label !== 'refferal_introduction')} >
         { render }
       </Query>
     )

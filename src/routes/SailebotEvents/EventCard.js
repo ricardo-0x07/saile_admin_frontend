@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Moment from 'react-moment';
-import { updateEvent, updateCampaignContact } from "../../graphql/mutations";
+import { updateEvent, updateCampaignContact, deleteEvent } from "../../graphql/mutations";
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 import { getContactById, getCampaignContact, getCampaignAccount/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
