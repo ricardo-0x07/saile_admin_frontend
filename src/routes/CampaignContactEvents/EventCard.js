@@ -68,7 +68,7 @@ export const EventCard = ({ event, updateReload }) => {
       contact_id,
       campaign_id,
     } = event;
-    const toClarify=false
+    // const toClarify=false
     console.log('contact_id: ', contact_id)
     console.log('campaign_id: ', campaign_id)
     await updateCampaignContactMutation({
@@ -119,7 +119,7 @@ export const EventCard = ({ event, updateReload }) => {
               <CardActions className={classes.root}>
                 <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                 {
-                  label === 'sent_neutral_outbound' &&
+                  (label === 'sent_neutral_outbound'|| label === 'sent_neutral_followup') &&
                   <Button variant="contained" color="secondary" size="small" onClick={() =>  _reListCampaignContact_(updateCampaignContactMutation, deleteEventMutation) }>Delete Neutral Event</Button>
                 }
               </CardActions>
