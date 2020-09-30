@@ -10,7 +10,7 @@ import { updateEvent, updateCampaignContact } from "../../graphql/mutations";
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 import { getContactById, getCampaignContact, getCampaignAccount/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
-// import CampaignContactEvents from '../CampaignContactEvents';
+import CampaignContactEvents from '../CampaignContactEvents';
 import * as moment from 'moment';
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,6 +24,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     showBody: false,
+    showCampaignContactEvents: false,
   });
   const {
     sender,
@@ -41,6 +42,9 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   }
   const handleChange = async () => {
     await setState({ ...state, showBody: !state.showBody });
+  }
+  const handleShowCampaignContactEvents = async () => {
+    await setState({ ...state, showCampaignContactEvents: !state.showCampaignContactEvents });
   }
   // const insertBody = (body) => {
   //   return (
@@ -233,9 +237,10 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                 
               }
               <CardActions className={classes.root}>
-                <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
-                <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>To clarify</Button>
-                <Button  variant="contained" size="small" onClick={() => history.push('/app/events-by-campaign-contact', {client, campaign_id: event.campaign_id, contact_id: event.contact_id })}>Contact Events</Button>
+                <Button variant="contained" size="small" color={state.showBody ? "secondary" :  "default"} onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
+                <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>
+                <Button variant="contained" size="small"  onClick={dismissClarification(updateEventMutation)}>To clarify</Button>
+                {/* <Button  variant="contained" size="small" onClick={() => history.push('/app/events-by-campaign-contact', {client, campaign_id: event.campaign_id, contact_id: event.contact_id })}>Contact Events</Button> */}
                 {
                   label === "refferal_introduction" && 
                   campaign_id && contact_id &&
@@ -299,6 +304,10 @@ export const EventCard = ({ event, updateReload, client, history }) => {
               {
                 state.showBody &&
                 insertBody(body)
+              }
+              {
+                client && campaign_id && contact_id && state.showCampaignContactEvents &&
+                <CampaignContactEvents client={client} contact_id={contact_id} campaign_id={campaign_id}/>
               }
             </CardContent>
           </Card>    

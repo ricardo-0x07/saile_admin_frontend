@@ -21,9 +21,20 @@ const Events = (props) => {
   console.log('campaignContactevents props: ', props);
   const classes = useStyles();
   const Composed = adopt({
-    eventsSubscription: props.location.state && props.location.state.client && props.location.state.contact_id && props.location.state.client.id  && props.location.state.campaign_id ?
+    eventsSubscription: (props.location && props.locationprops.location.state && props.location.state.client && props.location.state.contact_id && props.location.state.client.id  && props.location.state.campaign_id) 
+    || (props.client && props.contact_id && props.client.id  && props.campaign_id)?
     ({ render }) => (
-      <Query query={clientEventByCampaignContact(props.location.state.client.id, props.location.state.contact_id, props.location.state.campaign_id)} >
+      <Query query={
+        clientEventByCampaignContact(
+          (props.location && props.location.state && props.location.state.client) 
+          ? props.location.state.client.id 
+          : props.client.id,
+          ( props.location && props.location.state &&  props.location.state.contact_id) 
+          ? props.location.state.contact_id 
+          : props.contact_id, 
+          (props.location && props.location.state && props.location.state.campaign_id) 
+          ? props.location.state.campaign_id 
+          : props.campaign_id)} >
         { render }
       </Query>
     )
@@ -48,11 +59,11 @@ const Events = (props) => {
         ) {
           return null;
         }
-
+        const contact_id = (props.location && props.location.state && props.location.state.contact_id) ? props.location.state.contact_id : props.contact_id ? props.contact_id : null;
 
         return (
           <div className={classes.root}>
-            <Title>Events</Title>
+            <Title> {contact_id ? "ContactId: " + contact_id : ''} Events</Title>
             <div
               style={{
                 display: "grid",
@@ -61,8 +72,9 @@ const Events = (props) => {
               }}
             >
               {
-                props.location.state && props.location.state.contact_id && props.location.state.client.id  && props.location.state.campaign_id ?
-                data.event.filter(item => item.contact_id === props.location.state.contact_id ).map(x => (
+                (props.location && props.location.state && props.location.state.contact_id && props.location.state.client.id  && props.location.state.campaign_id )
+                || (props.contact_id && props.client.id  && props.campaign_id ) ?
+                data.event.filter(item => (props.location && item.contact_id === props.location.state.contact_id) || item.contact_id === props.contact_id ).map(x => (
                   <EventCard event={x} name={x.name} key={x.id} history={props.history} updateReload={refetch}/>
                 ))
                 :
