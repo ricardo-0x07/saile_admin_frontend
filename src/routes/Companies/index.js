@@ -24,6 +24,7 @@ const Companies = (props) => {
     query={listCompanies(20)}
     >
       {({ data, loading }) => {
+        console.log('props: ', props)
         console.log('data: ', data)
         console.log('loading: ', loading)
         if (

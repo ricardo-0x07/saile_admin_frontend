@@ -171,7 +171,8 @@ function Routes() {
       );
     }
 
-    const AppLayout = () => {
+    const AppLayout = (props) => {
+        console.log("AppLayout props: ", props)
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -215,7 +216,10 @@ function Routes() {
                         <Route
                             exact
                             path='/app' 
-                            component={Companies}
+                            // component={Companies}
+                            render={(routeProps) => (
+                                <Companies {...routeProps} {...props} />
+                            )}
                         />
                         <Route
                             exact
@@ -225,7 +229,10 @@ function Routes() {
                         <Route
                             exact
                             path='/app/companies' 
-                            component={Companies}
+                            // component={Companies}
+                            render={(routeProps) => (
+                                <Companies {...routeProps} {...props} />
+                            )}
                         />
                         <Route
                             exact
@@ -405,7 +412,10 @@ function Routes() {
                         <Route
                             exact
                             path='/app/schedules-by-campaign' 
-                            component={Schedules}
+                            // component={Schedules}
+                            render={(routeProps) => (
+                                <Schedules {...routeProps} {...props} />
+                            )}
                         />
                         <Route
                             exact

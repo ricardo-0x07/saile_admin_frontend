@@ -163,79 +163,81 @@ export const EventCard = ({ event, updateReload, client, history }) => {
             <CardContent>
               <Typography><strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
               <Typography><strong>Subject:</strong> {subject} <strong>Cc:</strong> {cc} <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment></Typography>
-              {/* <Typography>
-                
-              </Typography> */}
               {
-                campaign_id && contact_id &&
-                <Query query={getContactById(contact_id)} >
-                  { ({data, loading}) => {
-                  if (
-                      loading ||
-                      !data ||
-                      !data.contact ||
-                      !data.contact.length > 0 ||
-                      !data.contact
-                    ) {
-                      return null;
-                    }
-                    console.log('getContactById data: ',  data)
-                    console.log('campaign_id: ', campaign_id)
-                    const { account_id } = data.contact[0]
-                    if (account_id === undefined) {
-                      return null;
-                    }
+                <Typography>
+                {
+                  campaign_id && contact_id &&
+                  <Query query={getContactById(contact_id)} >
+                    { ({data, loading}) => {
+                    if (
+                        loading ||
+                        !data ||
+                        !data.contact ||
+                        !data.contact.length > 0 ||
+                        !data.contact
+                      ) {
+                        return null;
+                      }
+                      console.log('getContactById data: ',  data)
+                      console.log('campaign_id: ', campaign_id)
+                      const { account_id } = data.contact[0]
+                      if (account_id === undefined) {
+                        return null;
+                      }
 
-                    return (
-                      <Query query={getCampaignAccount(campaign_id, account_id)} >
-                        { (campaignAccountQuery) => {
-                          console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
-                        if (
-                          campaignAccountQuery.loading ||
-                            !campaignAccountQuery.data ||
-                            !campaignAccountQuery.data.campaign_account ||
-                            !campaignAccountQuery.data.campaign_account.length > 0 ||
-                            !campaignAccountQuery.data.campaign_account
-                          ) {
-                            return null;
-                          }
-                          console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
-                          const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
-      
-                          return (
-                            <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
-                          );
-                        }}
-                      </Query>                    
-                    );
-                  }}
-                </Query>
-                
-              }
-              {
-                campaign_id && contact_id &&
-                <Query query={getCampaignContact(campaign_id, contact_id)} >
-                  { ({data, loading}) => {
-                    console.log('getCampaignContact data: ', data)
-                  if (
-                      loading ||
-                      !data ||
-                      !data.campaign_contact ||
-                      !data.campaign_contact.length > 0 ||
-                      !data.campaign_contact
-                    ) {
-                      return null;
-                    }
-                    console.log('data: ', data)
-                    const { is_delisted } = data.campaign_contact[0]
+                      return (
+                        <Query query={getCampaignAccount(campaign_id, account_id)} >
+                          { (campaignAccountQuery) => {
+                            console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
+                          if (
+                            campaignAccountQuery.loading ||
+                              !campaignAccountQuery.data ||
+                              !campaignAccountQuery.data.campaign_account ||
+                              !campaignAccountQuery.data.campaign_account.length > 0 ||
+                              !campaignAccountQuery.data.campaign_account
+                            ) {
+                              return null;
+                            }
+                            console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
+                            const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+        
+                            return (
+                              <span><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'} </span>
+                            );
+                          }}
+                        </Query>                    
+                      );
+                    }}
+                  </Query>
+                  
+                }
+                {
+                  campaign_id && contact_id &&
+                  <Query query={getCampaignContact(campaign_id, contact_id)} >
+                    { ({data, loading}) => {
+                      console.log('getCampaignContact data: ', data)
+                    if (
+                        loading ||
+                        !data ||
+                        !data.campaign_contact ||
+                        !data.campaign_contact.length > 0 ||
+                        !data.campaign_contact
+                      ) {
+                        return null;
+                      }
+                      console.log('data: ', data)
+                      const { is_delisted } = data.campaign_contact[0]
 
-                    return (
-                    <Typography><strong>Contact ID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
-                    );
-                  }}
-                </Query>
-                
+                      return (
+                      <span><strong>Contact ID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</span>
+                      );
+                    }}
+                  </Query>
+                  
+                }                
+                </Typography>
               }
+
               <CardActions className={classes.root}>
                 <Button variant="contained" size="small" color={state.showBody ? "secondary" :  "default"} onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                 <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>

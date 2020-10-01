@@ -10,11 +10,53 @@ import { adopt } from 'react-adopt';
 import { listAvailableCampaignAccounts, listShallowScheduleAccounts } from "../../graphql/subscription";
 import { createScheduleAccount, updateCampaignAccount, deleteScheduleAccount } from "../../graphql/mutations";
 import { getScheduleById } from "../../graphql/queries";
+import gql from 'graphql-tag';
+// import { wait } from "@testing-library/react";
 
+export const ScheduleCard = ({ schedule, requirement,  campaign,  history, schedule_campaign_accounts_to_remove, apolloClient }) => {
+  const [data, updateData] = React.useState();
+  const { name, no_targets_per_accounts, deploy_date, end_date, id, campaign_id } = schedule;
+  const { elasticity } = requirement;
+  console.log('elasticity: ', elasticity);
 
-export const ScheduleCard = ({ schedule, requirement,  campaign,  history, schedule_campaign_accounts_to_remove }) => {
+  const getScheduledContactsCount = () => {
+    return schedule.schedule_accounts.reduce(  async (dataP, curr) => {
+      const data = await dataP;
+      // console.log('data: ', data);
+      const { account_id } = curr;
+      const response = await apolloClient.query({
+        query: gql`
+          query MyQuery($account_id:Int!, $campaign_id:Int!, $elasticity:Int!) {
+            campaign_contact(where: {account_id: {_eq: $account_id}, is_delisted: {_eq: false}, campaign_id: {_eq: $campaign_id}}, limit: $elasticity, order_by: {id: asc}) {
+              contact_id
+            }
+          }
+        `,
+        variables: {
+          account_id: account_id,
+          campaign_id: campaign_id,
+          elasticity: elasticity
+        }
+      })
+      // console.log('response.data: ', response.data);
+      if(response.data && response.data.campaign_contact && response.data.campaign_contact.length) {
+        return data.concat(response.data.campaign_contact);
+      } else {
+        return data;
+      }
+    }, [])
+  }
+
+  React.useEffect(() => {
+    const getData = async () => {
+      const resp = await getScheduledContactsCount();
+      // const json = await resp.json()
+      updateData(resp);
+    }
+    getData();
+  }, []);
+
   
-  const { name, no_targets_per_accounts, deploy_date, end_date, id } = schedule;
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
   const addScheduleAccounts = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
@@ -73,6 +115,8 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
       console.log('_objects_.length: ', _objects_.length);
     }
   }
+
+
   const Composed = adopt({
     createScheduleAccountMutation: ({ render }) => (
         <Mutation
@@ -100,7 +144,11 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
         {render}
       </Query> 
     ),
+    // total_campaign_contacts: GetScheduledContactsCount()
   })
+  // const total_campaign_contacts = 0
+
+  
   const ComposedAddAccount = adopt({
     listCampaignAccountsSubscription: ({ render }) => (
       <Subscription subscription={listAvailableCampaignAccounts(campaign.id, false)} >
@@ -118,9 +166,6 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
   return (
     <Composed>
       {({ createScheduleAccountMutation, updateCampaignAccountMutation, getScheduleByIdQuery, deleteScheduleAccountMutation }) => {
-        console.log('getScheduleByIdQuery: ', getScheduleByIdQuery);
-        console.log('getScheduleByIdQuery: ', getScheduleByIdQuery);
-        console.log('getScheduleByIdQuery: ', getScheduleByIdQuery);
 
         return (
           <Card>
@@ -142,6 +187,14 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
                 </Typography>
               }
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
+              {
+                data && data.length >0 &&
+                <div>
+                  <Typography>Number of Contacts: {data && data.length ? data.length : 0 }</Typography>
+                  <Typography>Average Elasticity: {data && schedule.schedule_accounts && schedule.schedule_accounts.length > 0 && data.length > 0 ? (data.length/schedule.schedule_accounts.length).toFixed(2) : 0 }</Typography>
+                </div>
+              }
+              
             </CardContent>
             <CardActions>
               <Button size="small" onClick={() => history.push('/app/manage-schedule', {schedule, campaign})}>Edit</Button>

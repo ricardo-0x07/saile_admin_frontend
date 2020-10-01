@@ -51,6 +51,7 @@ export const ClientCard = ({ client,  history }) => {
         return (
           <Card>
             <CardContent>
+              <Typography>ClientId: {client.id}</Typography>
               <Typography>Client: {firstname} {lastname}</Typography>
               <Typography>Company: {company && company.name ? company.name : ''}</Typography>
             </CardContent>
