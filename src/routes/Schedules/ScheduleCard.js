@@ -54,7 +54,7 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
       updateData(resp);
     }
     getData();
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
@@ -161,7 +161,6 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
       </Subscription> 
     ),
   })
-  console.log('schedule_campaign_accounts_to_remove: ', schedule_campaign_accounts_to_remove);
 
   return (
     <Composed>
