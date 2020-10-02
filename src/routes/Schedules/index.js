@@ -83,9 +83,9 @@ const Schedules = (props) => {
               }}
             >
               {
-                props.location.state && props.location.state.campaign  && props.location.state.campaign ?
+                props.location.state && props.location.state.campaign  && props.location.state.campaign && props.location.state.sailebot ?
                 data.schedule.filter(item => item.campaign_id === props.location.state.campaign.id ).map(x => (
-                  <ScheduleCard apolloClient={props.client} schedule_campaign_accounts_to_remove={listDelistedSchedulesCampaignAccountsQuery.data.schedule} schedule={x} accounts_per_schedule={accounts_per_schedule} campaign={props.location.state.campaign} requirement={props.location.state.requirement} name={x.name} key={x.id} history={props.history}/>
+                  <ScheduleCard apolloClient={props.client} schedule_campaign_accounts_to_remove={listDelistedSchedulesCampaignAccountsQuery.data.schedule} sailebot={props.location.state.sailebot} schedule={x} accounts_per_schedule={accounts_per_schedule} campaign={props.location.state.campaign} requirement={props.location.state.requirement} name={x.name} key={x.id} history={props.history}/>
                 ))
                 :
                 data.schedule.filter(item => item ).map(x => (

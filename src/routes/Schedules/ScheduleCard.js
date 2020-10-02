@@ -26,12 +26,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export const ScheduleCard = ({ schedule, requirement,  campaign,  history, schedule_campaign_accounts_to_remove, apolloClient }) => {
+export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  history, schedule_campaign_accounts_to_remove, apolloClient }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     data: [],
     showDownload: false,
   });
+  const contact_ids = [...new Set(state.data.map(item => item.contact_id))]
   const {data, showDownload} = state;
   const handleShowDownload = async () => {
     await setState({ ...state, showDownload: !showDownload });
@@ -41,27 +42,42 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
   console.log('elasticity: ', elasticity);
 
   const getScheduledContactsCount = () => {
-    return schedule.schedule_accounts.reduce(  async (dataP, curr) => {
+    const schedule_accounts_ids = [...new Set(schedule.schedule_accounts.map(item => item.account_id))]
+    return schedule_accounts_ids.reduce(  async (dataP, account_id) => {
       const data = await dataP;
-      // console.log('data: ', data);
-      const { account_id } = curr;
       const response = await apolloClient.query({
         query: gql`
-          query MyQuery($account_id:Int!, $campaign_id:Int!, $elasticity:Int!) {
-            campaign_contact(where: {account_id: {_eq: $account_id}, is_delisted: {_eq: false}, campaign_id: {_eq: $campaign_id}}, limit: $elasticity, order_by: {id: asc}) {
+          query MyQuery($account_id:Int!, $campaign_id:Int!, $schedule_id:Int!, $client_id:Int!, $elasticity:Int!) {
+            campaign_contacts_view(where: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}, schedule_id: {_eq: $schedule_id}, client_id: {_eq: $client_id}, unsubscribed: {_eq: false}, campaign_contact_is_delisted: {_eq: false}, campaign_account_is_delisted: {_eq: false}}, limit: $elasticity, order_by: {contact_id: asc}) {
+              account_id
+              campaign_account_is_delisted
+              campaign_account_last_delisted_date
+              campaign_contact_delisted_date
+              campaign_contact_is_delisted
+              campaign_id
+              client_id
               contact_id
+              deploy_date
+              id
+              next_date
+              schedule_id
+              status
+              to_followup
+              unsubscribed
             }
           }
         `,
         variables: {
           account_id: account_id,
           campaign_id: campaign_id,
-          elasticity: elasticity
+          elasticity: elasticity,
+          schedule_id: schedule.id,
+          client_id: sailebot.client_id
         }
       })
       // console.log('response.data: ', response.data);
-      if(response.data && response.data.campaign_contact && response.data.campaign_contact.length) {
-        return data.concat(response.data.campaign_contact);
+      if(response.data && response.data.campaign_contacts_view && response.data.campaign_contacts_view.length) {
+        return data.concat(response.data.campaign_contacts_view);
       } else {
         return data;
       }
@@ -210,10 +226,10 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
               }
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
               {
-                data && data.length >0 ?
+                data && data.length >0 && contact_ids && contact_ids.length > 0?
                 <div>
-                  <Typography>Number of Contacts: {data && data.length ? data.length : 0 }</Typography>
-                  <Typography>Average Elasticity: {data && schedule.schedule_accounts && schedule.schedule_accounts.length > 0 && data.length > 0 ? (data.length/schedule.schedule_accounts.length).toFixed(2) : 0 }</Typography>
+                  <Typography>Number of Contacts: {data && data.length ? contact_ids.length : 0 }</Typography>
+                  <Typography>Average Elasticity: {data && schedule.schedule_accounts && schedule.schedule_accounts.length > 0 && data.length > 0 ? (contact_ids.length/schedule.schedule_accounts.length).toFixed(2) : 0 }</Typography>
                 </div>
                 :
                 <CircularProgress color="secondary" />
