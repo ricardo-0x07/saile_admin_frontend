@@ -210,11 +210,13 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
               }
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
               {
-                data && data.length >0 &&
+                data && data.length >0 ?
                 <div>
                   <Typography>Number of Contacts: {data && data.length ? data.length : 0 }</Typography>
                   <Typography>Average Elasticity: {data && schedule.schedule_accounts && schedule.schedule_accounts.length > 0 && data.length > 0 ? (data.length/schedule.schedule_accounts.length).toFixed(2) : 0 }</Typography>
                 </div>
+                :
+                <CircularProgress color="secondary" />
               }
 
             </CardContent>
@@ -242,11 +244,8 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
                 </ComposedAddAccount>                
               }
               {
-                !showDownload &&  data && data.length >0 
-                ?
+                !showDownload &&  data && data.length >0 &&
                 <Button size="small" onClick={handleShowDownload}>Request Data</Button>
-                :
-                <CircularProgress  color="primary" />
               }
               {
                 showDownload && accounts && accounts.length > 0 &&
@@ -269,7 +268,7 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
                           ?
                           <CSVLink
                             data={data.account}
-                            filename={"schedule_accounts.csv"}
+                            filename={`${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_schedule_accounts.csv`}
                             className="btn btn-primary"
                             target="_blank"
                           >
