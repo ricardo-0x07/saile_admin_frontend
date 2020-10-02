@@ -472,6 +472,29 @@ export const ListAccounts  = gql`
     }
 `;
 
+export const listAccountsByList  =  gql`
+    query ListAccounts($list:[Int!]) {
+        account(where: {id: {_in: $list}}) {
+            id
+            name
+            email_domain
+            website
+            phone
+            revenue
+            state
+            address
+            city
+            country
+            domain
+            email
+            employees
+            fax
+            NAICS
+        }
+    }
+`;
+
+
 
 export const nonCampaignAccounts = (campaign_id) => {
     return gql`

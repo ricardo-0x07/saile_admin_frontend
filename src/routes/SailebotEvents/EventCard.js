@@ -233,7 +233,6 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                       );
                     }}
                   </Query>
-                  
                 }                
                 </Typography>
               }

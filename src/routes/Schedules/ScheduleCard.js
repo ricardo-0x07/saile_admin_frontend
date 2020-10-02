@@ -4,17 +4,38 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
+
 import { Subscription, Mutation, Query } from "react-apollo";
 import Moment from 'react-moment';
 import { adopt } from 'react-adopt';
 import { listAvailableCampaignAccounts, listShallowScheduleAccounts } from "../../graphql/subscription";
 import { createScheduleAccount, updateCampaignAccount, deleteScheduleAccount } from "../../graphql/mutations";
-import { getScheduleById } from "../../graphql/queries";
+import { getScheduleById, listAccountsByList } from "../../graphql/queries";
 import gql from 'graphql-tag';
+import { CSVLink } from "react-csv";
 // import { wait } from "@testing-library/react";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
+  },
+}));
+
 
 export const ScheduleCard = ({ schedule, requirement,  campaign,  history, schedule_campaign_accounts_to_remove, apolloClient }) => {
-  const [data, updateData] = React.useState();
+  const classes = useStyles();
+  const [state, setState] = React.useState({
+    data: [],
+    showDownload: false,
+  });
+  const {data, showDownload} = state;
+  const handleShowDownload = async () => {
+    await setState({ ...state, showDownload: !showDownload });
+  }
   const { name, no_targets_per_accounts, deploy_date, end_date, id, campaign_id } = schedule;
   const { elasticity } = requirement;
   console.log('elasticity: ', elasticity);
@@ -51,7 +72,7 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
     const getData = async () => {
       const resp = await getScheduledContactsCount();
       // const json = await resp.json()
-      updateData(resp);
+      setState({ ...state, data: resp });
     }
     getData();
   }, []);// eslint-disable-line react-hooks/exhaustive-deps
@@ -165,6 +186,8 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
   return (
     <Composed>
       {({ createScheduleAccountMutation, updateCampaignAccountMutation, getScheduleByIdQuery, deleteScheduleAccountMutation }) => {
+        const accounts = schedule.schedule_accounts.map(({account_id}) => account_id);
+        console.log('showDownload: ', showDownload);
 
         return (
           <Card>
@@ -193,7 +216,7 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
                   <Typography>Average Elasticity: {data && schedule.schedule_accounts && schedule.schedule_accounts.length > 0 && data.length > 0 ? (data.length/schedule.schedule_accounts.length).toFixed(2) : 0 }</Typography>
                 </div>
               }
-              
+
             </CardContent>
             <CardActions>
               <Button size="small" onClick={() => history.push('/app/manage-schedule', {schedule, campaign})}>Edit</Button>
@@ -218,6 +241,49 @@ export const ScheduleCard = ({ schedule, requirement,  campaign,  history, sched
                   }
                 </ComposedAddAccount>                
               }
+              {
+                !showDownload &&  data && data.length >0 
+                ?
+                <Button size="small" onClick={handleShowDownload}>Request Data</Button>
+                :
+                <CircularProgress  color="primary" />
+              }
+              {
+                showDownload && accounts && accounts.length > 0 &&
+                <Query query={listAccountsByList} variables={{list: accounts}}>
+                  { ({data, loading, error}) => {
+                  if (
+                      loading ||
+                      !data ||
+                      !data.account ||
+                      !data.account.length > 0 ||
+                      !data.account
+                    ) {
+                      return null;
+                    }
+
+                    return (
+                      <div className={classes.root}>
+                        {
+                          !loading && data && data.account && data.account.length > 0 
+                          ?
+                          <CSVLink
+                            data={data.account}
+                            filename={"schedule_accounts.csv"}
+                            className="btn btn-primary"
+                            target="_blank"
+                          >
+                            Download CSV
+                          </CSVLink>
+                          :
+                          <CircularProgress color="secondary" />
+
+                        }
+                      </div>
+                    );
+                  }}
+                </Query>
+              }                
 
             </CardActions>
           </Card>
