@@ -237,7 +237,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
 
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => history.push('/app/manage-schedule', {schedule, campaign})}>Edit</Button>
+              <Button size="small" onClick={() => history.push('/app/manage-schedule', {schedule, campaign, requirement, sailebot})}>Edit</Button>
               <Button size="small" onClick={() => history.push('/app/accounts-by-schedule', {schedule})}>View Schedule Accounts</Button>
               {
                 getScheduleByIdQuery.data !== undefined && getScheduleByIdQuery.data.schedule.length > 0 && getScheduleByIdQuery.data.schedule[0] !== undefined && getScheduleByIdQuery.data.schedule[0].schedule_accounts.length > 0 && 
@@ -284,7 +284,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                           ?
                           <CSVLink
                             data={data.account}
-                            filename={`${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_schedule_accounts.csv`}
+                            filename={`${campaign.name ? campaign.name : 'campaign'}_${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_schedule${schedule ? schedule.id : ''}_schedule_accounts.csv`}
                             className="btn btn-primary"
                             target="_blank"
                           >

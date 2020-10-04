@@ -58,6 +58,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ManageScheduleForm = (props) => {
+    console.log('ManageScheduleForm props: ', props);
     const classes = useStyles();
     let initialValues = {
         name: '',
@@ -137,7 +138,7 @@ const ManageScheduleForm = (props) => {
                                 }
                       
                                 
-                                props.history.push('/app/schedules-by-campaign', {campaign: props.location.state.campaign})
+                                props.history.push('/app/campaigns-by-requirement', {campaign: props.location.state.campaign, requirement: props.location.state.requirement, sailebot: props.location.state.sailebot})
                             }
                         }
                     >

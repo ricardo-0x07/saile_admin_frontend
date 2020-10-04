@@ -74,7 +74,7 @@ const Schedules = (props) => {
         return (
           <div className={classes.root}>
             <Title>Schedules</Title>
-            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-schedule', {campaign: props.location.state.campaign})}>Add Schedule</Button>
+            <Button variant="contained" size="small" onClick={() => props.history.push('/app/manage-schedule', {campaign: props.location.state.campaign, requirement: props.location.state.requirement, sailebot: props.location.state.sailebot})}>Add Schedule</Button>
             <div
               style={{
                 display: "grid",
