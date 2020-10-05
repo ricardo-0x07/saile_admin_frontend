@@ -552,7 +552,7 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                       // var start = moment.utc(startTime, "HH:mm");
                       console.log("now: ", now)
                       console.log("startTime: ", startTime)
-                      var ready = startTime.add(2, "week") < now
+                      var ready = startTime.add(1, "week") < now
                       console.log("ready: ", ready)
                       var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
                       var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
