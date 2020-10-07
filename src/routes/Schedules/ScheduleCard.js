@@ -260,7 +260,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                 </ComposedAddAccount>                
               }
               {
-                !showDownload &&  data && data.length >0 &&
+                !showDownload &&
                 <Button size="small" onClick={handleShowDownload}>Request Data</Button>
               }
               {
