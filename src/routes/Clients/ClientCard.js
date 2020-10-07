@@ -63,6 +63,10 @@ export const ClientCard = ({ client,  history }) => {
               </CardActions>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {
+                  client &&
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/clarifications-by-campaign', {client, name: 'Client'})}>Clarifications</Button>
+                }
+                {
                   clientEventCountQuery.data && 
                   clientEventCountQuery.data.event_aggregate &&
                   clientEventCountQuery.data.event_aggregate.aggregate &&
@@ -86,6 +90,7 @@ export const ClientCard = ({ client,  history }) => {
                   actionableEventCountQuery.data.event_aggregate.aggregate &&
                   <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/events-by-client', {client, label: 'actionable_opportunity' })}>Actionable Events: <br/> {actionableEventCountQuery.data.event_aggregate.aggregate.count}</Button>
                 }
+
               </CardActions>
             </div>
           </Card>

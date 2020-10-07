@@ -1025,6 +1025,19 @@ export const getCampaignContact = (campaign_id, contact_id) => {
         }
     `;
 }
+
+export const totalClientClarificationEvents = (client_id) => {
+    return gql`
+        query TotalClientClarificationEvents {
+            event_aggregate(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: true}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+
 export const totalCampaignClarificationEvents = (campaign_id) => {
     return gql`
         query TotalCampaignClarificationEvents {
@@ -1095,6 +1108,35 @@ export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0)
         }
     `;
 }
+
+export const listClientClarificationEvents = (client_id, limit=10, offset=0) => {
+    return gql`
+        query ListClientClarificationEvents{
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
+                body
+                cc
+                date
+                id
+                label
+                sender
+                subject
+                body
+                contact_id
+                date
+                nlu_input_text
+                nlu_json_response
+                selected_intent
+                validated_json_response
+                validated_intent
+                campaign_id
+                is_inbound
+                to_clarify
+                to
+            }
+        }
+    `;
+}
+
 export const listClarificationEvents = (limit=10, offset=0) => {
     return gql`
         query ListContactClarificationEvents{
@@ -1122,6 +1164,32 @@ export const listClarificationEvents = (limit=10, offset=0) => {
         }
     `;
 }
+export const getCampaignSaileBot = (campaign_id) => {
+    return gql`
+        query GetCampaignSaileBot {
+            sailebot(where: {requirements: {campaigns: {id: {_eq: ${campaign_id}}}}}) {
+                client_id
+                email
+                fullname
+                id
+                name
+                no_targets
+                phone
+                title
+                role
+                company_name
+                signature
+                firstname
+                lastname
+                smtp_login
+                smtp_password
+                email_service
+            }
+        }
+    `;
+}
+
+
 export const listClientSaileBots = (client_id) => {
     return gql`
         query ListClientSaileBots {

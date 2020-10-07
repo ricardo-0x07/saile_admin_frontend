@@ -161,7 +161,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
         return (
           <Card>
             <CardContent>
-              <Typography><strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
+              <Typography><strong>EventId: </strong>{event.id} <strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
               <Typography><strong>Subject:</strong> {subject} <strong>Cc:</strong> {cc} <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment></Typography>
               {
                 <Typography>

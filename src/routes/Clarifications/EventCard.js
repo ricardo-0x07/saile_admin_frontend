@@ -19,7 +19,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import { Mutation, Query } from "react-apollo";
 import { updateEvent, updateContact, updateSingleCampaignAccount, updateCampaignContact, deleteEvent } from "../../graphql/mutations";
-import { getContactById, getCampaignContact, getCampaignAccount } from "../../graphql/queries";
+import { getContactById, getCampaignContact, getCampaignAccount, getCampaignSaileBot } from "../../graphql/queries";
 import { adopt } from 'react-adopt';
 import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
 import ContactSelect from "./ContactSelect";
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const EventCard = ({ event, sailebot, updateReload }) => {
+export const EventCard = ({ event, updateReload }) => {
   const [state, setState] = React.useState({
     showBody: false,
   });
@@ -449,168 +449,192 @@ export const EventCard = ({ event, sailebot, updateReload }) => {
                 
               }
               {
-                id && sailebot && sailebot.id && campaign_id && contact_id &&
-                <Query query={getCampaignContact(campaign_id, contact_id)} >
-                  { ({data, loading}) => {
-                    console.log('data: ', data)
-                  if (
-                      loading ||
-                      !data ||
-                      !data.campaign_contact ||
-                      !data.campaign_contact.length > 0 ||
-                      !data.campaign_contact
-                    ) {
-                      return null;
-                    }
-                    console.log('data: ', data)
-                    const { status, is_delisted} = data.campaign_contact[0]
-
-                    return (
-                      <Typography><strong>ContactID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
-                    );
-                  }}
-                </Query>
-                
-              }
-              <CardActions className={classes.root}>
-                <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
-                <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Accept & Dismiss</Button>
-                <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
-                {
-                  id && sailebot && sailebot.id && contact_id &&
-                  <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
-                }
-                {
-                  id && sailebot && sailebot.id && contact_id &&
-                  <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create AO</Button>
-                }
-                {
-                  id && sailebot && sailebot.id && campaign_id && contact_id &&
-                  <Query query={getCampaignContact(campaign_id, contact_id)} >
-                    { ({data, loading}) => {
-                      if (
-                        loading ||
-                        !data ||
-                        !data.campaign_contact ||
-                        !data.campaign_contact.length > 0 ||
-                        !data.campaign_contact
+                id && campaign_id &&
+                <Query query={getCampaignSaileBot(campaign_id)}>
+                   { (getCampaignSaileBotQuery) => {
+                    console.log('getCampaignSaileBotQuery.data: ', getCampaignSaileBotQuery.data)
+                    if (
+                        getCampaignSaileBotQuery.loading ||
+                        !getCampaignSaileBotQuery.data ||
+                        !getCampaignSaileBotQuery.data.sailebot ||
+                        !getCampaignSaileBotQuery.data.sailebot.length > 0 ||
+                        !getCampaignSaileBotQuery.data.sailebot
                       ) {
                         return null;
                       }
-                      const { is_delisted } = data.campaign_contact[0]
-
-                      if (is_delisted) {
-                        return null
-                      }
-
+                      const sailebot = getCampaignSaileBotQuery.data.sailebot[0];
                       return (
-                        <Button variant="contained" size="small" onClick={() => _delistCampaignContact_(updateCampaignContactMutation, updateEventMutation)}>Remove Contact</Button>
-                      );
-                    }}
-                  </Query>
-                  
-                }
-                {
-                  id && sailebot && sailebot.id && campaign_id && contact_id &&
-                  <Query query={getContactById(contact_id)} >
-                    { ({data, loading}) => {
-                      if (
-                        loading ||
-                        !data ||
-                        !data.contact ||
-                        !data.contact.length > 0 ||
-                        !data.contact
-                      ) {
-                        return null;
-                      }
-                      const contact = data.contact[0]
-
-                      return (
-                        <div style={{ flexDirection: 'row' }}>
-                          <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact)}>Remove Account</Button>
-                        </div>
-                      );
-                    }}
-                  </Query>
-                }
-                {
-                  id && sailebot && sailebot.id && campaign_id && contact_id &&
-                  <Query query={getContactById(contact_id)} >
-                    { ({data, loading}) => {
-                      if (
-                        loading ||
-                        !data ||
-                        !data.contact ||
-                        !data.contact.length > 0 ||
-                        !data.contact
-                      ) {
-                        return null;
-                      }
-                      const contact = data.contact[0]
-                      var now = moment()
-                      var startTime = moment(date)
-                      // var start = moment.utc(startTime, "HH:mm");
-                      console.log("now: ", now)
-                      console.log("startTime: ", startTime)
-                      var ready = startTime.add(1, "week") < now
-                      console.log("ready: ", ready)
-                      var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
-                      var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
-                      console.log("subject: ", subject)
-                      console.log("isIn: ", isIn)
-
-                      return (
-                        <div style={{ flexDirection: 'row' }}>
+                        <React.Fragment>
                           {
-                            contact && contact.account_id && ready && isIn &&
-                            <Query query={getCampaignAccount(campaign_id, contact.account_id)} >
-                              { (getCampaignAccountQuery) => {
-                                if (
-                                  getCampaignAccountQuery.loading ||
-                                  !getCampaignAccountQuery.data ||
-                                  !getCampaignAccountQuery.data.campaign_account ||
-                                  !getCampaignAccountQuery.data.campaign_account.length > 0 ||
-                                  !getCampaignAccountQuery.data.campaign_account
+                            id && sailebot && sailebot.id && campaign_id && contact_id &&
+                            <Query query={getCampaignContact(campaign_id, contact_id)} >
+                              { ({data, loading}) => {
+                                console.log('data: ', data)
+                              if (
+                                  loading ||
+                                  !data ||
+                                  !data.campaign_contact ||
+                                  !data.campaign_contact.length > 0 ||
+                                  !data.campaign_contact
                                 ) {
                                   return null;
                                 }
-                                const campaign_account = getCampaignAccountQuery.data.campaign_account[0]
-                                console.log("campaign_account: ", campaign_account)
-                                if (campaign_account.is_delisted) {
-                                  return null;
-                                }
+                                console.log('data: ', data)
+                                const { status, is_delisted} = data.campaign_contact[0]
 
                                 return (
-                                  <div>
-                                    <Button variant="contained" size="small" onClick={() =>  _reListCampaignContact_(updateCampaignContactMutation, deleteEventMutation) }>De-quarantee</Button>
-                                  </div>
+                                  <Typography><strong>ContactID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
                                 );
                               }}
                             </Query>
+                            
                           }
-                        </div>
+                          <CardActions className={classes.root}>
+                            <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
+                            <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Accept & Dismiss</Button>
+                            <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
+                            {
+                              id && sailebot && sailebot.id && contact_id &&
+                              <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
+                            }
+                            {
+                              id && sailebot && sailebot.id && contact_id &&
+                              <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create AO</Button>
+                            }
+                            {
+                              id && sailebot && sailebot.id && campaign_id && contact_id &&
+                              <Query query={getCampaignContact(campaign_id, contact_id)} >
+                                { ({data, loading}) => {
+                                  if (
+                                    loading ||
+                                    !data ||
+                                    !data.campaign_contact ||
+                                    !data.campaign_contact.length > 0 ||
+                                    !data.campaign_contact
+                                  ) {
+                                    return null;
+                                  }
+                                  const { is_delisted } = data.campaign_contact[0]
+
+                                  if (is_delisted) {
+                                    return null
+                                  }
+
+                                  return (
+                                    <Button variant="contained" size="small" onClick={() => _delistCampaignContact_(updateCampaignContactMutation, updateEventMutation)}>Remove Contact</Button>
+                                  );
+                                }}
+                              </Query>
+                              
+                            }
+                            {
+                              id && sailebot && sailebot.id && campaign_id && contact_id &&
+                              <Query query={getContactById(contact_id)} >
+                                { ({data, loading}) => {
+                                  if (
+                                    loading ||
+                                    !data ||
+                                    !data.contact ||
+                                    !data.contact.length > 0 ||
+                                    !data.contact
+                                  ) {
+                                    return null;
+                                  }
+                                  const contact = data.contact[0]
+
+                                  return (
+                                    <div style={{ flexDirection: 'row' }}>
+                                      <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact)}>Remove Account</Button>
+                                    </div>
+                                  );
+                                }}
+                              </Query>
+                            }
+                            {
+                              id && sailebot && sailebot.id && campaign_id && contact_id &&
+                              <Query query={getContactById(contact_id)} >
+                                { ({data, loading}) => {
+                                  if (
+                                    loading ||
+                                    !data ||
+                                    !data.contact ||
+                                    !data.contact.length > 0 ||
+                                    !data.contact
+                                  ) {
+                                    return null;
+                                  }
+                                  const contact = data.contact[0]
+                                  var now = moment()
+                                  var startTime = moment(date)
+                                  // var start = moment.utc(startTime, "HH:mm");
+                                  console.log("now: ", now)
+                                  console.log("startTime: ", startTime)
+                                  var ready = startTime.add(1, "week") < now
+                                  console.log("ready: ", ready)
+                                  var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+                                  var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
+                                  console.log("subject: ", subject)
+                                  console.log("isIn: ", isIn)
+
+                                  return (
+                                    <div style={{ flexDirection: 'row' }}>
+                                      {
+                                        contact && contact.account_id && ready && isIn &&
+                                        <Query query={getCampaignAccount(campaign_id, contact.account_id)} >
+                                          { (getCampaignAccountQuery) => {
+                                            if (
+                                              getCampaignAccountQuery.loading ||
+                                              !getCampaignAccountQuery.data ||
+                                              !getCampaignAccountQuery.data.campaign_account ||
+                                              !getCampaignAccountQuery.data.campaign_account.length > 0 ||
+                                              !getCampaignAccountQuery.data.campaign_account
+                                            ) {
+                                              return null;
+                                            }
+                                            const campaign_account = getCampaignAccountQuery.data.campaign_account[0]
+                                            console.log("campaign_account: ", campaign_account)
+                                            if (campaign_account.is_delisted) {
+                                              return null;
+                                            }
+
+                                            return (
+                                              <div>
+                                                <Button variant="contained" size="small" onClick={() =>  _reListCampaignContact_(updateCampaignContactMutation, deleteEventMutation) }>De-quarantee</Button>
+                                              </div>
+                                            );
+                                          }}
+                                        </Query>
+                                      }
+                                    </div>
+                                  );
+                                }}
+                              </Query>
+                              
+                            }
+                            {
+                              id && sailebot && sailebot.id && !contact_id &&
+                              
+                              <ContactSelect
+                                    placeholder='Contact by Email'
+                                    name='contact'
+                                    handleSelectChange={handleSelectChange}
+                                    variant="outlined"
+                                    event_id={id}
+                                    // sailebot={props.location.state.sailebot}
+                              />  
+                            }            
+                            {
+                              // contact_id &&
+                              // <Button variant="contained" size="small" onClick={unsubscribeContact(updateContactMutation)}>Globally Unsubscribe Contact</Button>
+                            }
+                          </CardActions>
+
+                        </React.Fragment>
                       );
-                    }}
-                  </Query>
-                  
-                }
-                {
-                  id && sailebot && sailebot.id && !contact_id &&
-                  
-                  <ContactSelect
-                        placeholder='Contact by Email'
-                        name='contact'
-                        handleSelectChange={handleSelectChange}
-                        variant="outlined"
-                        event_id={id}
-                        // sailebot={props.location.state.sailebot}
-                  />  
-                }            
-                {
-                  // contact_id &&
-                  // <Button variant="contained" size="small" onClick={unsubscribeContact(updateContactMutation)}>Globally Unsubscribe Contact</Button>
-                }
-              </CardActions>
+  
+                   }}
+                </Query>
+              }
               {
                 state.showBody &&
                 insertBody(body)

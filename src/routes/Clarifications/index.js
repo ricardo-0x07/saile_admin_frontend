@@ -3,7 +3,7 @@ import * as React from "react";
 import { Query } from "react-apollo";
 import Pagination from '@material-ui/lab/Pagination';
 import { EventCard } from "./EventCard";
-import { listClarificationEvents, listCampaignClarificationEvents, totalCampaignClarificationEvents } from "../../graphql/queries";
+import { listClarificationEvents, listClientClarificationEvents, listCampaignClarificationEvents, totalCampaignClarificationEvents, totalClientClarificationEvents } from "../../graphql/queries";
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const Events = (props) => {
+  console.log("props: ", props)
 
   const classes = useStyles();
   const limit = 5;
@@ -40,14 +41,28 @@ const Events = (props) => {
   //   })
   // };
   const Composed = adopt({
-    totalCampaignClarificationEventsSubscription: ({ render }) => (
+    totalCampaignClarificationEventsSubscription: ({ render }) => props.location.state.campaign && props.location.state.campaign.id !== undefined
+    ? (
       <Query query={totalCampaignClarificationEvents(props.location.state.campaign.id)} >
+        { render }
+      </Query>
+    )
+    :
+    (
+      <Query query={totalClientClarificationEvents(props.location.state.client.id)} >
         { render }
       </Query>
     ), 
     eventsSubscription: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
       <Query query={listCampaignClarificationEvents(props.location.state.campaign.id, limit, (page-1) * limit)} >
+        { render }
+      </Query>
+    )
+    :
+    props.location.state && props.location.state.client && props.location.state.client.id ?
+    ({ render }) => (
+      <Query query={listClientClarificationEvents(props.location.state.client.id, limit, (page-1) * limit)} >
         { render }
       </Query>
     )
@@ -79,7 +94,7 @@ const Events = (props) => {
 
         return (
           <div className={classes.root}>
-            <Title>Clarifications</Title>
+            <Title>{props.location && props.location.state && props.location.state.name ? props.location.state.name : ''} Clarifications</Title>
             <div
               style={{
                 display: "grid",
@@ -88,12 +103,12 @@ const Events = (props) => {
               }}
             >
               {
-                props.location.state && props.location.state.campaign  && props.location.state.campaign ?
-                data.event.filter(item => item.campaign_id === props.location.state.campaign.id ).map(x => (
+                props.location && props.location.state && (props.location.state.campaign || props.location.state.client) ?
+                data.event.map(x => (
                   <EventCard updateReload={() => {
                     refetch();
                     totalCampaignClarificationEventsSubscription.refetch()
-                  }} event={x} name={x.name} key={x.id} history={props.history} campaign={props.location.state.campaign} sailebot={props.location.state.sailebot}/>
+                  }} event={x} name={x.name} key={x.id} history={props.history}  />
                 ))
                 :
                 data.event.filter(item => item ).map(x => (

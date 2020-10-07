@@ -56,7 +56,7 @@ const Clients = (props) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateColumns: "repeat(2, 1fr)",
                 gridGap: 10
               }}
             >
