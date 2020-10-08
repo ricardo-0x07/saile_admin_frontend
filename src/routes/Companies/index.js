@@ -21,7 +21,7 @@ const Companies = (props) => {
   const classes = useStyles();
   return (
     <Query
-    query={listCompanies(20)}
+    query={listCompanies(100)}
     >
       {({ data, loading }) => {
         console.log('props: ', props)

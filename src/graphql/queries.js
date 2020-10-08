@@ -1084,7 +1084,7 @@ export const getCampaignAccountContactElastaicity = (campaign_id, account_id, el
 export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0) => {
     return gql`
         query ListCampaignClarificationEvents{
-            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
+            event(where: {campaign_id: {_eq: ${campaign_id}}, to_clarify: {_eq: true}, subject: {_nlike: "%mymailwarm%"}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
                 body
                 cc
                 date
@@ -1112,7 +1112,7 @@ export const listCampaignClarificationEvents = (campaign_id, limit=10, offset=0)
 export const listClientClarificationEvents = (client_id, limit=10, offset=0) => {
     return gql`
         query ListClientClarificationEvents{
-            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: true}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: true}, subject: {_nlike: "%mymailwarm%"}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
                 body
                 cc
                 date
@@ -1140,7 +1140,7 @@ export const listClientClarificationEvents = (client_id, limit=10, offset=0) => 
 export const listClarificationEvents = (limit=10, offset=0) => {
     return gql`
         query ListContactClarificationEvents{
-            event(where: { to_clarify: {_eq: true} }, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+            event(where: { to_clarify: {_eq: true}, subject: {_nlike: "%mymailwarm%"} }, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
                 body
                 cc
                 date
