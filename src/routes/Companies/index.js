@@ -19,6 +19,8 @@ const useStyles = makeStyles(theme => ({
 
 const Companies = (props) => {
   const classes = useStyles();
+
+  
   return (
     <Query
     query={listCompanies(100)}

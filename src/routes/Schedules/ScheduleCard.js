@@ -153,6 +153,24 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
     }
   }
 
+  const wind_request_form_json = {
+    "Timestamp": new Date(Date.now()).toLocaleString("en-US", {timeZone: 'US/Eastern'}),
+    "Sailebot Name": sailebot.fullname || '',
+    "Sailebot Number": sailebot.id || '',
+    "Company Name": sailebot.company_name || '',
+    "Company Industry": '',
+    "Campaign Name": campaign.name || '',
+    "Company Data Source if known": '',
+    "Contracted Actionable Opportunities": '',
+    "Shortfall Previous Month?": '',
+    "Current Month Shortfall": '',
+    "Ideal Decision-Makers": requirement.titles.replace('{','').replace('}','') || '',
+    "Decision-Maker Location?": campaign.timezone || '',
+  }
+  console.log("sailebot: ", sailebot)
+  console.log("requirement: ", requirement)
+  console.log("campaign: ", campaign)
+  console.log("wind_request_form_json: ", wind_request_form_json)
 
   const Composed = adopt({
     createScheduleAccountMutation: ({ render }) => (
@@ -276,20 +294,31 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                     ) {
                       return null;
                     }
+                    console.log("data.account: ", data.account)
 
                     return (
                       <div className={classes.root}>
                         {
                           !loading && data && data.account && data.account.length > 0 
                           ?
-                          <CSVLink
-                            data={data.account}
-                            filename={`${campaign.name ? campaign.name : 'campaign'}_${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_schedule${schedule ? schedule.id : ''}_schedule_accounts.csv`}
-                            className="btn btn-primary"
-                            target="_blank"
-                          >
-                            Download CSV
-                          </CSVLink>
+                          <React.Fragment>
+                            <CSVLink
+                              data={data.account}
+                              filename={`${campaign.name ? campaign.name : 'campaign'}_${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_schedule${schedule ? schedule.id : ''}_schedule_accounts.csv`}
+                              className="btn btn-primary"
+                              target="_blank"
+                            >
+                              Download Data CSV
+                            </CSVLink>
+                            <CSVLink
+                              data={[wind_request_form_json]}
+                              filename={`${campaign.name ? campaign.name : 'campaign'}_${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_schedule${schedule ? schedule.id : ''}_wind_contacts_request.csv`}
+                              className="btn btn-primary"
+                              target="_blank"
+                            >
+                              Download Wind Request CSV
+                            </CSVLink> 
+                          </React.Fragment>
                           :
                           <CircularProgress color="secondary" />
 

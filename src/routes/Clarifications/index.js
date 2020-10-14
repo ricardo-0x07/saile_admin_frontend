@@ -7,7 +7,7 @@ import { listClarificationEvents, listClientClarificationEvents, listCampaignCla
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
-// import { createreferral } from '../../utils/rest_api'
+// import { getCampaignECSDeployments } from '../../utils/rest_api'
 
 const useStyles = makeStyles(theme => ({
   root: {

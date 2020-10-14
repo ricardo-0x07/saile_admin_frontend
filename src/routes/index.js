@@ -55,6 +55,7 @@ import { ADMIN_SECRET_HEADER_KEY } from '../actions/types'
 import Unsubscribe from './Unsubscribe';
 import Confirmation from './Unsubscribe/confirmation';
 import Companies from './Companies';
+import Deployments from './Deployments';
 // import { Link } from 'react-router-dom';
 
 
@@ -221,6 +222,14 @@ function Routes() {
                                 <Companies {...routeProps} {...props} />
                             )}
                         />
+                        <Route
+                            exact
+                            path='/app/deployments' 
+                            component={Deployments}
+                            // render={(routeProps) => (
+                            //     <Deployments {...routeProps} {...props} />
+                            // )}
+                        />                        
                         <Route
                             exact
                             path='/app/clients' 

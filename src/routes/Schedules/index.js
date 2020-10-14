@@ -78,7 +78,7 @@ const Schedules = (props) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateColumns: "repeat(1, 1fr)",
                 gridGap: 10
               }}
             >

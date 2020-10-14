@@ -9,6 +9,8 @@ import {
     FormGroup,
 
 } from '@material-ui/core';
+import TimezoneSimpleSelect from './TimezoneSimpleSelect';
+
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
@@ -189,14 +191,15 @@ const ManageScheduleForm = (props) => {
                                             onChange={handleChange}
                                             value={values.status  || ''}
                                         />
-                                        <TextField
+                                        {/* <TextField
                                             name="timezone"
                                             label="Timezone" 
                                             variant="filled" 
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.timezone  || ''}
-                                        />
+                                        /> */}
+                                        <TimezoneSimpleSelect label="Timezone" name="timezone" onChange={handleChange} value={values.timezone || ''}/>
                                     </FormGroup>
                                 </FormControl>
                                 <Button variant="contained" type='submit'>Submit</Button>

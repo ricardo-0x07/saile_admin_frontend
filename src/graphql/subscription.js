@@ -172,6 +172,7 @@ export const GET_ALL_CAMPAIGNS = gql`
             requirement_id
             run_status
             is_running
+            timezone
             to_run
             status_message
             schedules {
@@ -261,6 +262,7 @@ export const listCampaigns = (limit) => {
             to_run
             status_message
             smtp_login
+            timezone
             smtp_password
             email_service
             wait_days
@@ -282,6 +284,7 @@ export const listRequirementCampaigns = (requirement_id) => {
             is_running
             to_run
             status_message
+            timezone
             schedules {
                 campaign_id
                 daily_outbound_limit

@@ -399,9 +399,10 @@ export const EventCard = ({ event, updateReload }) => {
             <CardContent>
               <Typography><strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
               <Typography><strong>Subject:</strong> {subject} <strong>Cc:</strong> {cc}</Typography>
-              <Typography>
-                <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment>
-              </Typography>
+              <Typography><strong>Event ID:</strong> {event.id || ''} <strong>Campaign id:</strong> {event.campaign_id || ''} <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment></Typography>
+              {/* <Typography>
+                
+              </Typography> */}
               {
                 campaign_id && contact_id &&
                 <Query query={getContactById(contact_id)} >

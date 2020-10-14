@@ -54,6 +54,7 @@ export const ClientCard = ({ client,  history }) => {
               <Typography>ClientId: {client.id}</Typography>
               <Typography>Client: {firstname} {lastname}</Typography>
               <Typography>Company: {company && company.name ? company.name : ''}</Typography>
+              <Typography>City: {client && client.city ? client.city : ''}</Typography>
             </CardContent>
             <div style={{ display: 'flex', flexDirection: 'row' }} className={classes.root}>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>

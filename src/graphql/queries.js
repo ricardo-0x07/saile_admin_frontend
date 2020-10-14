@@ -138,6 +138,17 @@ export const listEmailOptions = () => {
     `;
 }
 
+export const listTimezones = () => {
+    return gql`
+        query ListTimezones {
+            timezone {
+                description
+                value
+            }
+        }
+    `;
+}
+
 export const GET_ALL_SAILEBOTS = gql`
     query ListSaileBots($limit: Int, $offset: Int) {
         sailebot(limit: $limit, offset: $offset) {
@@ -224,6 +235,7 @@ export const GET_ALL_CAMPAIGNS = gql`
             id
             name
             requirement_id
+            timezone
             schedules {
                 campaign_id
                 daily_outbound_limit
@@ -593,6 +605,7 @@ export const listCampaigns = (limit=10, offset=0) => {
             smtp_login
             smtp_password
             email_service
+            timezone
             wait_days
             company_domain_id
         }
@@ -1229,6 +1242,7 @@ export const listRequirementCampaigns = (requirement_id) => {
             is_running
             to_run
             status_message
+            timezone
             smtp_login
             smtp_password
             email_service
@@ -1239,6 +1253,29 @@ export const listRequirementCampaigns = (requirement_id) => {
 `;
 }
 
+export const getCampaign = (campaign_id) => {
+    return gql`
+    query getCampaign {
+        campaign(where: {id: {_eq: ${campaign_id}}}) {
+            accounts_per_schedule
+            description
+            id
+            name
+            requirement_id
+            run_status
+            is_running
+            to_run
+            status_message
+            smtp_login
+            smtp_password
+            email_service
+            wait_days
+            timezone
+            company_domain_id
+        }
+    }
+`;
+}
 
 export const listClientCampaigns = (client_id) => {
     return gql`
@@ -1255,6 +1292,7 @@ export const listClientCampaigns = (client_id) => {
             status_message
             smtp_login
             smtp_password
+            timezone
             email_service
             wait_days
             company_domain_id

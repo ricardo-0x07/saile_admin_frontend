@@ -13,6 +13,7 @@ import { Mutation, Query } from "react-apollo";
 import { createCampaign, updateCampaign } from "../../graphql/mutations";
 import CompanyDomainSimpleSelect from './CompanyDomainSimpleSelect';
 import EmailServiceSimpleSelect from './EmailServiceSimpleSelect';
+import TimezoneSimpleSelect from './TimezoneSimpleSelect';
 import Switch from '@material-ui/core/Switch';
 import { getCompanyByRequirementId } from "../../graphql/queries";
 
@@ -52,6 +53,7 @@ const ManageCampaignForm = (props) => {
         smtp_login: '',
         smtp_password: '',
         email_service: '',
+        timezone: '',
         wait_days: 0
 };
     if ( props.location.state && props.location.state.campaign) {
@@ -110,6 +112,7 @@ const ManageCampaignForm = (props) => {
                                             id,
                                             smtp_login,
                                             smtp_password,
+                                            timezone,
                                             email_service,
                                             wait_days,
                                             company_domain_id
@@ -130,6 +133,7 @@ const ManageCampaignForm = (props) => {
                                                             smtp_login,
                                                             smtp_password,
                                                             email_service,
+                                                            timezone,
                                                             wait_days: Number(wait_days),
                                                             company_domain_id
                                                         },
@@ -151,6 +155,7 @@ const ManageCampaignForm = (props) => {
                                                             smtp_login,
                                                             smtp_password,
                                                             email_service,
+                                                            timezone,
                                                             wait_days: Number(wait_days),
                                                             company_domain_id
                                                         }
@@ -201,6 +206,7 @@ const ManageCampaignForm = (props) => {
                                                         value={values.wait_days  || ''}
                                                     />
                                                     <EmailServiceSimpleSelect label="Email Service" name="email_service" onChange={handleChange} value={values.email_service || 'mailgun'}/>
+                                                    <TimezoneSimpleSelect label="Timezone" name="timezone" onChange={handleChange} value={values.timezone || ''}/>
                                                     <TextField
                                                         name="smtp_login"
                                                         label="Gmail sailebot email address" 
