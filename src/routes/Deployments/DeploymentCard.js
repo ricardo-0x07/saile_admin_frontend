@@ -129,7 +129,7 @@ export const DeploymentCard = ({ service,  history }) => {
                       ?
                       <Button variant="contained" color="secondary"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id, desiredCount: 0})}>Stop ECS Service</Button>
                       :
-                      <Button variant="contained" color="secondary"   style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id, desiredCount: 1})}>Run ECS Service</Button>
+                      <Button variant="contained" color="default"   style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id, desiredCount: 1})}>Run ECS Service</Button>
   
                     }
                   </React.Fragment>
