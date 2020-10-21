@@ -96,7 +96,8 @@ export default class FileUpload extends Component {
                                 id="fileUpload"
                                 onChange={e => {
                                     this.setState({
-                                        filesToUpload: e.target.files
+                                        filesToUpload: e.target.files,
+                                        uploadSuccess: undefined
                                     });
                                 }}
                             />
