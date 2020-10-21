@@ -81,6 +81,7 @@ const contacts_csv_key_map = {
 
 
 const Campaigns = (props) => {
+  console.log("Campaigns props: ", props)
   const classes = useStyles();
   const Composed = adopt({
     campaignsSubscription: props.location.state && props.location.state.requirement && props.location.state.requirement.id ?

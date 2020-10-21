@@ -1033,7 +1033,11 @@ export const getCampaignContact = (campaign_id, contact_id) => {
                 is_delisted
                 next_date
                 to_followup
+                # is_undeliverable
                 status
+                contact {
+                    is_undeliverable
+                }
             }
         }
     `;

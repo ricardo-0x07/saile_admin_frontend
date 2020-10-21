@@ -3036,6 +3036,13 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.7.7.tgz#1628e6461ba8cc9b53196dfeaeec7b07fa6eea99"
   integrity sha512-Uo4chgKbnPNlxQwoFmYIwctkQVkMMmsAoGGU4JKwLuvBefF0pCq4FybNSnfkfRCpC7ZW7kttcC/TrRtAJsvGtg==
 
+"@types/papaparse@^5.0.4":
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/@types/papaparse/-/papaparse-5.2.4.tgz#6aa662b08df84fd1dc34db37860005e9127457f3"
+  integrity sha512-oxwvNgW/RwtGsU/TOlV1zwBfozuyav0BotfCt0mX83nk87tePauU7N7shjI7uCBaPTEVip/F6XLfvs+Bk8M5HQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -3512,6 +3519,11 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   integrity sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==
   dependencies:
     color-convert "^1.9.0"
+
+any-base@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/any-base/-/any-base-1.1.0.tgz#ae101a62bc08a597b4c9ab5b7089d456630549fe"
+  integrity sha512-uMgjozySS8adZZYePpaWs8cxB9/kdzmpX6SgJZ+wbz1K5eYk5QMYDVJaZKhxyIHUdnnJkfR7SVgStgH7LkGUyg==
 
 anymatch@^2.0.0:
   version "2.0.0"
@@ -4058,6 +4070,13 @@ axios@^0.19.0:
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   dependencies:
     follow-redirects "1.5.10"
+
+axios@^0.20.0:
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.20.0.tgz#057ba30f04884694993a8cd07fa394cff11c50bd"
+  integrity sha512-ANA4rr2BDcmmAQLOKft2fufrtuvlqR+cXNNinUmvfeSNCOF98PZL+7M/v1zIdGo7OLjEA9J2gXJL+j4zGsl0bA==
+  dependencies:
+    follow-redirects "^1.10.0"
 
 axobject-query@^2.0.2:
   version "2.1.2"
@@ -5196,7 +5215,7 @@ crypto-browserify@^3.11.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
-crypto-js@^3.3.0:
+crypto-js@^3.1.9-1, crypto-js@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
   integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
@@ -6674,6 +6693,11 @@ follow-redirects@^1.0.0:
   integrity sha512-4eyLK6s6lH32nOvLLwlIOnr9zrL8Sm+OvW4pVTJNoXeGzYIkHVf+pADQi+OJ0E67hiuSLezPVPyBcIZO50TmmQ==
   dependencies:
     debug "^3.0.0"
+
+follow-redirects@^1.10.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
+  integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
 
 for-in@^0.1.3:
   version "0.1.8"
@@ -9958,6 +9982,11 @@ papaparse@^5.1.1:
   resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.1.1.tgz#1da66a039f80e2db43a1226b0bf44106451e9a2d"
   integrity sha512-KPkW4GNQxunmYTeJIjHFrvilcNuHBWrfgbyvmagEmfGOA4hnP1WIkPbv4yABhj1Nam3as4w+7MBiI27BntwqVg==
 
+papaparse@^5.2.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.3.0.tgz#ab1702feb96e79ab4309652f36db9536563ad05a"
+  integrity sha512-Lb7jN/4bTpiuGPrYy4tkKoUS8sTki8zacB5ke1p5zolhcSE4TlWgrlsxjrDTbG/dFVh07ck7X36hUf/b5V68pg==
+
 parallel-transform@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/parallel-transform/-/parallel-transform-1.2.0.tgz#9049ca37d6cb2182c3b1d2c720be94d14a5814fc"
@@ -11216,6 +11245,14 @@ react-app-polyfill@^1.0.6:
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
 
+react-aws-s3@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-aws-s3/-/react-aws-s3-1.3.0.tgz#b65c7968c5a6bf838ff68df491cb10be0d5992cd"
+  integrity sha512-aN0h2QeK2P3XTIGs+boA9CJlSkoR8RzEFXW6CSSl526nC/cqpKHLKvDHmbfvQ6N225Q+pbK7VQIhgBVk5KbJkQ==
+  dependencies:
+    crypto-js "^3.1.9-1"
+    short-uuid "^3.1.0"
+
 react-bootstrap@^1.0.0-beta.17:
   version "1.0.0-beta.17"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.0.0-beta.17.tgz#09d4789633b2fb24d408fa493b4a80a496e87c82"
@@ -11361,12 +11398,13 @@ react-overlays@^2.1.0:
     uncontrollable "^7.0.0"
     warning "^4.0.3"
 
-react-papaparse@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-papaparse/-/react-papaparse-2.1.1.tgz#189d40bca46cf9f719132389cd2e2fd22b7a563d"
-  integrity sha512-PkvNu0BFXVdDFUAD8sr88iesLtmozWNpzXfs7Z+4HOl7DetDfkp3xP8DtRPnW7kxvRzgUvgRFSKUTslRsklXeQ==
+react-papaparse@^3.9.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/react-papaparse/-/react-papaparse-3.9.0.tgz#3709e9e7f358c339c7081110973bc4b057dcbf84"
+  integrity sha512-iSQs4U6hCUKxXUSLTgh0aLiPxtiPxT2tY4P0X02+n8KIkEo3xg6vTh/IXgLyWcu7277txafZ1Y+6jLPKBX2YyA==
   dependencies:
-    papaparse "^5.1.1"
+    "@types/papaparse" "^5.0.4"
+    papaparse "^5.2.0"
 
 react-redux@^7.2.0:
   version "7.2.0"
@@ -12364,6 +12402,14 @@ shellwords@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
+
+short-uuid@^3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/short-uuid/-/short-uuid-3.1.1.tgz#3ff427074b5fa7822c3793994d18a7a82e2f73a4"
+  integrity sha512-7dI69xtJYpTIbg44R6JSgrbDtZFuZ9vAwwmnF/L0PinykbFrhQ7V8omKsQcVw1TP0nYJ7uQp1PN6/aVMkzQFGQ==
+  dependencies:
+    any-base "^1.1.0"
+    uuid "^3.3.2"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"

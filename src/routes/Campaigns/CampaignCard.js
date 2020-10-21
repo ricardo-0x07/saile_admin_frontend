@@ -17,6 +17,9 @@ import CampaignChart from './CampaignChart';
 import { describeService, updateService, deployCampaign } from '../../utils/rest_api'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
+import WindResponseFileUpload from './WindResponseFileUpload'
+import ProcessApolloAccountsFileUpload from './ProcessApolloAccountsFileUpload'
+
 // import { makeStyles } from '@material-ui/core/styles';
 // import { blue } from '@material-ui/core/colors';
 
@@ -195,6 +198,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                   </span>              
                 </div>
               } 
+
               {
                 to_run &&
                 <CampaignChart inbound_data={inboundEventLogsQuery.loading ? [] : inboundEventLogsQuery.data}  outbound_data={outboundEventLogsQuery.loading ? [] : outboundEventLogsQuery.data}></CampaignChart>
@@ -240,6 +244,23 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                   <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-template', {campaign, requirement, sailebot})}>Add Template</Button>
                   <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-schedule', {campaign, requirement, sailebot})}>Add Schedule</Button>
                   <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-account', {campaign, requirement, sailebot})}>Add Account</Button>
+                  {
+                    window.location.hostname === "localhost" && name &&
+                    <div style={{ display: 'flex', flexDirection: 'column'}}>
+                      <WindResponseFileUpload 
+                        campaign_name={name}
+                        name={ 
+                          `Process Apollo Contacts`
+                        }
+                      />                  
+                      <ProcessApolloAccountsFileUpload 
+                        campaign_name={name}
+                        name={ 
+                          `Process Apollo Accounts`
+                        }
+                      />
+                    </div>
+                  }
                 </CardActions>
                 <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
                   <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign, requirement})}>View Templates</Button>

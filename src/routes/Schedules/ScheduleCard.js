@@ -15,6 +15,10 @@ import { createScheduleAccount, updateCampaignAccount, deleteScheduleAccount } f
 import { getScheduleById, listAccountsByList } from "../../graphql/queries";
 import gql from 'graphql-tag';
 import { CSVLink } from "react-csv";
+import FileUpload from '../../components/FileUpload'
+// import { jsonToCSV } from 'react-papaparse'
+
+
 // import { wait } from "@testing-library/react";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -318,6 +322,11 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                             >
                               Download Wind Request CSV
                             </CSVLink> 
+                            <FileUpload 
+                              name={ 
+                                `${campaign.name ? "Campaign: "+campaign.name+ " " : ""} ${campaign && campaign.id? 'CampaignId: '+campaign.id+ " " :  ""} ${schedule && schedule.id? 'ScheduleId:'+schedule.id+ " " :  ""} Wind Request`
+                              }
+                            />
                           </React.Fragment>
                           :
                           <CircularProgress color="secondary" />
@@ -328,7 +337,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                   }}
                 </Query>
               }                
-
+              
             </CardActions>
           </Card>
 

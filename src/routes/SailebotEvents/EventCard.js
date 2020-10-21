@@ -151,6 +151,11 @@ export const EventCard = ({ event, updateReload, client, history }) => {
         { render }
       </Mutation> 
     ),
+    // contactQuery: ({ render }) => (
+    //   <Query query={getCampaignContact(campaign_id, contact_id)} >
+    //     { render}
+    //   </Query>
+    // ),
   })
   // console.log(body.split("\n").slice(0,4))
   console.log("contact_id: ", contact_id);
@@ -161,7 +166,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
         return (
           <Card>
             <CardContent>
-              <Typography><strong>EventId: </strong>{event.id} <strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
+              <Typography><strong>CampaignId: </strong>{event.campaign_id || ''}<strong> EventId: </strong>{event.id} <strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
               <Typography><strong>Subject:</strong> {subject} <strong>Cc:</strong> {cc} <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment></Typography>
               {
                 <Typography>
@@ -227,9 +232,12 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                       }
                       console.log('data: ', data)
                       const { is_delisted } = data.campaign_contact[0]
+                      const { is_undeliverable } = data.campaign_contact[0].contact ? data.campaign_contact[0].contact : { is_undeliverable: undefined }
+                      console.log('is_undeliverable: ', is_undeliverable)
+
 
                       return (
-                      <span><strong>Contact ID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</span>
+                      <span><strong>Contact ID: {contact_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'} <strong>Deliverable:</strong> {is_undeliverable ? 'Undeliverable' : 'Deliverable'}</span>
                       );
                     }}
                   </Query>

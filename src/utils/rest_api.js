@@ -23,6 +23,34 @@ const update_service_stage_lambda_api_endpoint = "https://7854mzxicj.execute-api
 const deploy_campaign_stage_lambda_api_endpoint = "https://irsx06k6ef.execute-api.us-west-2.amazonaws.com/Stage/"
 const list_services_campaign_ids_stage_lambda_api_endpoint = "https://awhqm7cmrh.execute-api.us-west-2.amazonaws.com/Stage";
 
+const send_wind_request_lambda_api_endpoint = "https://6pil30vlr1.execute-api.us-west-2.amazonaws.com/Stage";
+
+const process_wind_response_api_endpoint = "https://v6fsig7yj9.execute-api.us-west-2.amazonaws.com/Stage";
+const process_apollo_accounts_api_endpoint = "https://ntmjes5dx4.execute-api.us-west-2.amazonaws.com/Stage";
+
+export const processApolloAccounts = apollo_accounts => {
+    return fetch(process_apollo_accounts_api_endpoint, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(apollo_accounts)
+    })
+};
+export const processWindResponse = wind_response => {
+    return fetch(process_wind_response_api_endpoint, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(wind_response)
+    })
+};
+
+export const sendWindRequest = request => {
+    return fetch(send_wind_request_lambda_api_endpoint, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(request)
+    })
+};
+
 export const getECSServicesCampaignIds = () => {
     return fetch(list_services_campaign_ids_stage_lambda_api_endpoint, {
         method: 'GET',

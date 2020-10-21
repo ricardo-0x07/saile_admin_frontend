@@ -192,7 +192,7 @@ export default class CSVReader1 extends Component {
                           lineHeight: 2.2,
                         }}
                       >
-                        {file.name}
+                        {file && file.name ? file.name : ""}
                       </div>
                     </aside>
                   </>

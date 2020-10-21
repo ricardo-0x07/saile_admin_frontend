@@ -31,7 +31,7 @@ const DatePickerField = ({ field, form, ...other }) => {
                 // disablePast
                 name={field.name}
                 value={field.value}
-                format="ddd/MMM/YYYY"
+                format="YYYY-MM-DD"
                 helperText={currentError}
                 label={field.label}
                 error={Boolean(currentError)}
@@ -64,13 +64,13 @@ const ManageScheduleForm = (props) => {
     const classes = useStyles();
     let initialValues = {
         name: '',
-        daily_outbound_limit: '',
-        no_targets_per_accounts: '',
+        daily_outbound_limit: 4,
+        no_targets_per_accounts: 5,
         deploy_date:  new Date() ,
         end_date:  new Date() ,
-        status: '',
-        timezone: '',
-        accounts_per_schedule: null
+        status: 'Active',
+        timezone: props.location.state && props.location.state.campaign && props.location.state.campaign.id ? props.location.state.campaign.timezone : '',
+        accounts_per_schedule: 50
     };
     if ( props.location.state && props.location.state.schedule) {
         initialValues = props.location.state.schedule
