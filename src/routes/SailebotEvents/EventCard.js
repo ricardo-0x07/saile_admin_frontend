@@ -249,6 +249,10 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                 <Button variant="contained" size="small" color={state.showBody ? "secondary" :  "default"} onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                 <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>
                 <Button variant="contained" size="small"  onClick={dismissClarification(updateEventMutation)}>To clarify</Button>
+                {
+                  window.location.hostname === "localhost" &&
+                  <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
+                }
                 {/* <Button  variant="contained" size="small" onClick={() => history.push('/app/events-by-campaign-contact', {client, campaign_id: event.campaign_id, contact_id: event.contact_id })}>Contact Events</Button> */}
                 {
                   label === "refferal_introduction" && 

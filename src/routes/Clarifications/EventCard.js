@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const EventCard = ({ event, updateReload }) => {
+export const EventCard = ({ event, updateReload, history }) => {
   const [state, setState] = React.useState({
     showBody: false,
   });
@@ -551,6 +551,11 @@ export const EventCard = ({ event, updateReload }) => {
                                 }}
                               </Query>
                             }
+                            {
+                              window.location.hostname === "localhost" &&
+                              <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
+                            }
+
                             {
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
                               <Query query={getContactById(contact_id)} >

@@ -562,7 +562,7 @@ export const searchAccounts = (search_term, campaign_id, client_id) => {
 export const listAvailableCampaignAccounts = (campaign_id, limit=100, is_scheduled=false, is_delisted=false) => {
     return gql`
     query ListAvailableCampaignAccounts {
-        campaign_account(limit:${limit}, offset: 0, where: {campaign_id: {_eq: ${campaign_id}}, is_scheduled: {_eq: ${is_scheduled}}, is_delisted: {_eq: ${is_delisted}}}) {
+        campaign_account(limit:${limit}, offset: 0, where: {campaign_id: {_eq: ${campaign_id}}, is_delisted: {_eq: ${is_delisted}}}) {
             account {
                     NAICS
                     city

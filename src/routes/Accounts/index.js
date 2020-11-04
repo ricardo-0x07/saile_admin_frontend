@@ -315,6 +315,7 @@ const Accounts = (props) => {
                 _data.campaign_account.map(x => (
                   <AccountCard
                     account={x.account}
+                    id={x.id}
                     name={x.account.name}
                     key={x.account.id}
                     status={x.status}
@@ -330,6 +331,7 @@ const Accounts = (props) => {
                 _data.account.filter(item => item ).map(x => (
                   <AccountCard 
                     account={x}
+                    id={x.id}
                     name={x.name}
                     key={x.id} 
                     history={props.history}

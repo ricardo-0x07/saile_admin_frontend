@@ -56,6 +56,7 @@ import Unsubscribe from './Unsubscribe';
 import Confirmation from './Unsubscribe/confirmation';
 import Companies from './Companies';
 import Deployments from './Deployments';
+import ManageEvent from './ManageEvent'
 // import { Link } from 'react-router-dom';
 
 
@@ -377,6 +378,11 @@ function Routes() {
                             exact
                             path='/app/manage-domain' 
                             component={ManageDomain}
+                        />
+                        <Route
+                            exact
+                            path='/app/manage-event' 
+                            component={ManageEvent}
                         />
                         <Route
                             exact

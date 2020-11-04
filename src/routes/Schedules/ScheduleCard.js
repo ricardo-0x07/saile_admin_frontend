@@ -88,6 +88,33 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
     }, [])
   }
 
+  const getCampaignContactsCount = (campaign_accounts) => {
+    const campaign_accounts_ids = [...new Set(campaign_accounts.map(item => item.account_id))]
+    return campaign_accounts_ids.reduce(  async (dataP, account_id) => {
+      const data = await dataP;
+      const response = await apolloClient.query({
+        query: gql`
+          query MyQuery($account_id:Int!, $campaign_id:Int!) {
+            campaign_contact_aggregate(where: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}, is_delisted: {_eq: false} }) {
+              aggregate {
+                count(columns: id, distinct: true)
+              }
+            }
+          }
+        `,
+        variables: {
+          account_id: account_id,
+          campaign_id: campaign_id
+        }
+      })
+      if(response.data && response.data.campaign_contact_aggregate.aggregate && response.data.campaign_contact_aggregate.aggregate.count && response.data.campaign_contact_aggregate.aggregate.count > 0) {
+        return data.concat([account_id]);
+      } else {
+        return data;
+      }
+    }, [])
+  }
+
   React.useEffect(() => {
     const getData = async () => {
       const resp = await getScheduledContactsCount();
@@ -105,29 +132,43 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
     const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
     const schedule_id = schedule.id
     const campaign_id = schedule.campaign_id
+    const campaign_accounts_some = await getCampaignContactsCount(campaign_accounts)
+    console.log('campaign_accounts_some: ', campaign_accounts_some);
+    let pre_process = campaign_accounts.filter(acc => campaign_accounts_some.includes(acc.account_id))
+    console.log('pre_process.length: ', pre_process.length);
+    let pre_process_2 = pre_process.filter(acc => !schedule_accounts.includes(acc.account_id) )
+    console.log('pre_process_2: ', pre_process_2);
+    console.log('schedule_accounts.includes(241945): ', schedule_accounts.includes(241945));
+    console.log('campaign_accounts_some.includes(241945): ', campaign_accounts_some.includes(241945));
+    console.log('campaign_accounts.map(acc =>acc.account_id).includes(241945): ', campaign_accounts.map(acc =>acc.account_id).includes(241945));
     
-    const processed = campaign_accounts.filter(acc => !schedule_accounts.includes(acc.account_id) ).splice(0,accounts_to_add).map( ( account ) => {
+    const processed = pre_process_2.splice(0,accounts_to_add).map( ( account ) => {
       return {
         account_id: account.account_id,
         schedule_id,
         campaign_id
       };
     })
+    console.log('processed: ', processed);
 
 
-    await createScheduleAccountMutation({
-      variables: {
-        objects: processed
-      }
-    });
-
-    const schedule_account_ids = campaign_accounts.map( acc => acc.id);
-    await updateCampaignAccountMutation({
-      variables: {
-        objects: {is_scheduled: true},
-        id_list: schedule_account_ids
-      }
-    });
+    if (processed.length > 0) {
+      await createScheduleAccountMutation({
+        variables: {
+          objects: processed
+        }
+      });
+  
+      const schedule_account_ids = campaign_accounts.map( acc => acc.id);
+      await updateCampaignAccountMutation({
+        variables: {
+          objects: {is_scheduled: true},
+          id_list: schedule_account_ids
+        }
+      });
+      console.log('schedule_account_ids: ', schedule_account_ids);
+  
+    }
 
   }
   const no_schedule_accounts = schedule.schedule_accounts ? schedule.schedule_accounts.length : 0
