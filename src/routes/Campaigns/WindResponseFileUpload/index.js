@@ -1,18 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import * as styles from "./FileUpload.module.css";
-// import { fallbackExchangeIO } from "urql";
-import { sendWindRequest, processWindResponse } from "../../../utils/rest_api";
-const template = `
-<pre>
-Team,
 
-Kindly assist with the attached wind request
 
-Regards,
-Clive
-</pre>
-`;
 export default class FileUpload extends Component {
     state = {
         filesToUpload: [],

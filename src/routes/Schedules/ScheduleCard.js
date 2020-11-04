@@ -132,6 +132,36 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
     const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
     const schedule_id = schedule.id
     const campaign_id = schedule.campaign_id
+    
+    const processed = campaign_accounts.filter(acc => !schedule_accounts.includes(acc.account_id) ).splice(0,accounts_to_add).map( ( account ) => {
+      return {
+        account_id: account.account_id,
+        schedule_id,
+        campaign_id
+      };
+    })
+
+
+    await createScheduleAccountMutation({
+      variables: {
+        objects: processed
+      }
+    });
+
+    const schedule_account_ids = campaign_accounts.map( acc => acc.id);
+    await updateCampaignAccountMutation({
+      variables: {
+        objects: {is_scheduled: true},
+        id_list: schedule_account_ids
+      }
+    });
+
+  }
+  const addScheduleAccountsTactical = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
+    const campaign_accounts = listCampaignAccountsSubscription.data && listCampaignAccountsSubscription.data.campaign_account ? listCampaignAccountsSubscription.data.campaign_account : []
+    const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
+    const schedule_id = schedule.id
+    const campaign_id = schedule.campaign_id
     const campaign_accounts_some = await getCampaignContactsCount(campaign_accounts)
     console.log('campaign_accounts_some: ', campaign_accounts_some);
     let pre_process = campaign_accounts.filter(acc => campaign_accounts_some.includes(acc.account_id))
@@ -312,11 +342,18 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                   {({ listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription }) => 
                     (
                       !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
-                      <Button size="small" onClick={() => {
-                        if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
-                          addScheduleAccounts(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
-                        }
-                      }}>Assign Accounts</Button>
+                      <React.Fragment>
+                        <Button size="small" onClick={() => {
+                          if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
+                            addScheduleAccounts(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
+                          }
+                        }}>Assign Accounts</Button>
+                        <Button size="small" onClick={() => {
+                          if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
+                            addScheduleAccountsTactical(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
+                          }
+                        }}>Assign Accounts, Tactical</Button>
+                      </React.Fragment>
                       : null
                     )
                   }

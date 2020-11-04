@@ -7,14 +7,13 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import * as moment from 'moment';
-// import {
-//   TextField,
-//   Button,
-//   FormLabel,
-//   FormControl,
-//   FormGroup,
-//   FormControlLabel,
-// } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import { Mutation, Query } from "react-apollo";
@@ -34,11 +33,19 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
     },
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 export const EventCard = ({ event, updateReload, history }) => {
   const [state, setState] = React.useState({
     showBody: false,
+    delay: 7
   });
   const classes = useStyles();
 
@@ -83,7 +90,68 @@ export const EventCard = ({ event, updateReload, history }) => {
       console.log('createActionableOpportunity error: ', error)
     }
   }
-// updateCampaignContact
+  const _followupCampaignContact_ = async (updateCampaignContactMutation, updateEventMutation, delay=7) => {
+    const {
+      cc,
+      date,
+      id,
+      label,
+      sender,
+      subject,
+      body,
+      contact_id,
+      nlu_input_text,
+      nlu_json_response,
+      selected_intent,
+      validated_json_response,
+      validated_intent,
+      campaign_id,
+      is_inbound,
+      to_clarify,
+      to,
+    } = event;
+    console.log('contact_id: ', contact_id)
+    console.log('campaign_id: ', campaign_id)
+    await updateCampaignContactMutation({
+      variables: {
+          objects: {
+            to_followup: true,
+            is_delisted: false,
+            next_date: moment().add(delay, '7').format('YYYY-MM-DD'),
+          },
+          contact_id,
+          campaign_id,
+      }
+    });
+    const toClarify=false
+    await updateEventMutation({
+      variables: {
+          objects: {
+            cc,
+            date,
+            id,
+            label: 'followup',
+            sender,
+            subject,
+            body,
+            contact_id,
+            nlu_input_text,
+            nlu_json_response,
+            selected_intent,
+            validated_json_response,
+            validated_intent,
+            campaign_id,
+            is_inbound,
+            to_clarify: toClarify,
+            to,
+          },
+          id
+      }
+    });
+    // refetch()
+    updateReload()
+  }
+  // updateCampaignContact
   const Composed = adopt({
     deleteEventMutation: ({ render }) => (
       <Mutation mutation={ deleteEvent } >
@@ -114,54 +182,12 @@ export const EventCard = ({ event, updateReload, history }) => {
   const handleChange = async () => {
     await setState({ ...state, showBody: !state.showBody });
   }
-  const dismissClarification = (updateEventMutation) => async () => {
-    const {
-      cc,
-      date,
-      id,
-      label,
-      sender,
-      subject,
-      body,
-      contact_id,
-      nlu_input_text,
-      nlu_json_response,
-      selected_intent,
-      validated_json_response,
-      validated_intent,
-      campaign_id,
-      is_inbound,
-      to_clarify,
-      to,
-    } = event;
-    
-    const toClarify=false
-    await updateEventMutation({
-      variables: {
-          objects: {
-            cc,
-            date,
-            id,
-            label,
-            sender,
-            subject,
-            body,
-            contact_id,
-            nlu_input_text,
-            nlu_json_response,
-            selected_intent,
-            validated_json_response,
-            validated_intent,
-            campaign_id,
-            is_inbound,
-            to_clarify: toClarify,
-            to,
-          },
-          id
-      }
-    });
-    updateReload()
+
+  const handleDelayChange = async (event) => {
+    console.log("event.target.value:  ", event.target.value)
+    await setState({ ...state, delay: Number(event.target.value) });
   }
+
 
   const noResponseClarification = (updateEventMutation) => async () => {
     const {
@@ -417,7 +443,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                       return null;
                     }
                     console.log('getContactById data: ',  data)
-                    console.log('campaign_id: ', campaign_id)
+                    console.log("state.delay: ", state.delay)
                     const { account_id } = data.contact[0]
                     if (account_id === undefined) {
                       return null;
@@ -454,6 +480,11 @@ export const EventCard = ({ event, updateReload, history }) => {
                 <Query query={getCampaignSaileBot(campaign_id)}>
                    { (getCampaignSaileBotQuery) => {
                     console.log('getCampaignSaileBotQuery.data: ', getCampaignSaileBotQuery.data)
+
+                    var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Automatische Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+                    var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
+                    console.log("subject: ", subject)
+                    console.log("isIn: ", isIn)
                     if (
                         getCampaignSaileBotQuery.loading ||
                         !getCampaignSaileBotQuery.data ||
@@ -492,7 +523,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                           }
                           <CardActions className={classes.root}>
                             <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
-                            <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Accept & Dismiss</Button>
+                            {/* <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Accept & Dismiss</Button> */}
                             <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
                             {
                               id && sailebot && sailebot.id && contact_id &&
@@ -526,7 +557,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                                   );
                                 }}
                               </Query>
-                              
+                             
                             }
                             {
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
@@ -555,6 +586,34 @@ export const EventCard = ({ event, updateReload, history }) => {
                               window.location.hostname === "localhost" &&
                               <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
                             }
+                            {
+                              !isIn &&
+                              <React.Fragment>
+                                <FormControl className={classes.formControl}>
+                                  <InputLabel id="demo-simple-select-label">Folloup period</InputLabel>
+                                  <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={state.delay}
+                                    onChange={handleDelayChange}
+                                  >
+                                    <MenuItem value={7}>One Week</MenuItem>
+                                    <MenuItem value={14}>Two Weeks</MenuItem>
+                                    <MenuItem value={21}>Three Weeks</MenuItem>
+                                    <MenuItem value={28}>Four Weeks</MenuItem>
+                                    <MenuItem value={42}>Six Weeks</MenuItem>
+                                    <MenuItem value={56}>Two Months</MenuItem>
+                                    <MenuItem value={112}>Four Months</MenuItem>
+                                    <MenuItem value={168}>Six Months</MenuItem>
+                                  </Select>
+                                </FormControl>
+                                <Button variant="contained" size="small" onClick={() => {
+                                    if (state.delay) {
+                                      _followupCampaignContact_(updateCampaignContactMutation, updateEventMutation, state.delay)
+                                    }
+                                }}>Followup Contact</Button>                                
+                              </React.Fragment>
+                            }
 
                             {
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
@@ -577,7 +636,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                                   console.log("startTime: ", startTime)
                                   var ready = startTime.add(1, "week") < now
                                   console.log("ready: ", ready)
-                                  var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+                                  var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Automatische Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
                                   var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
                                   console.log("subject: ", subject)
                                   console.log("isIn: ", isIn)

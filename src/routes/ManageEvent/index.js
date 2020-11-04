@@ -30,6 +30,7 @@ const ManageEventForm = (props) => {
     let initialValues = {
         subject: '',
         body: '',
+        label: '',
     };
     if ( props.location.state && props.location.state.event) {
         initialValues = props.location.state.event
@@ -69,12 +70,13 @@ const ManageEventForm = (props) => {
                     <Formik
                         initialValues={initialValues}
                         onSubmit={
-                            async ({ subject, body, id }) => {
+                            async ({ subject, label, body, id }) => {
                                 if (id) {
                                     await mutation({
                                         variables: {
                                             objects: {
                                                 id,
+                                                label,
                                                 subject,
                                                 body,
                                             },
@@ -98,6 +100,14 @@ const ManageEventForm = (props) => {
                                             {insertBody('Body', values.body_html_text  || '')}
                                         </div>
                                         : <FormGroup aria-label="position" >
+                                            <TextField
+                                                name="label"
+                                                label="Label" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.label  || ''}
+                                            />
                                             <TextField
                                                 name="subject"
                                                 label="Subject" 
