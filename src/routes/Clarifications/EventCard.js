@@ -90,7 +90,7 @@ export const EventCard = ({ event, updateReload, history }) => {
       console.log('createActionableOpportunity error: ', error)
     }
   }
-  const _followupCampaignContact_ = async (updateCampaignContactMutation, updateEventMutation, delay=7) => {
+  const _followupCampaignContact_ = async (updateCampaignContactMutation, deleteEventMutation, updateEventMutation, delay=7) => {
     const {
       cc,
       date,
@@ -117,37 +117,50 @@ export const EventCard = ({ event, updateReload, history }) => {
           objects: {
             to_followup: true,
             is_delisted: false,
-            next_date: moment().add(delay, '7').format('YYYY-MM-DD'),
+            status: 'Active',
+            next_date: moment().add(delay, 'd').format('YYYY-MM-DD'),
           },
           contact_id,
           campaign_id,
       }
     });
     const toClarify=false
-    await updateEventMutation({
-      variables: {
-          objects: {
-            cc,
-            date,
-            id,
-            label: 'followup',
-            sender,
-            subject,
-            body,
-            contact_id,
-            nlu_input_text,
-            nlu_json_response,
-            selected_intent,
-            validated_json_response,
-            validated_intent,
-            campaign_id,
-            is_inbound,
-            to_clarify: toClarify,
-            to,
-          },
-          id
-      }
-    });
+    var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Automatisch antwoord", "Risposta Non al computer", "Risposta automatica", "Automatische Antwort", "Automatische_Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+    var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
+    console.log("subject: ", subject)
+    console.log("isIn: ", isIn)
+    if (!isIn) {
+      await updateEventMutation({
+        variables: {
+            objects: {
+              cc,
+              date,
+              id,
+              label: 'followup',
+              sender,
+              subject,
+              body,
+              contact_id,
+              nlu_input_text,
+              nlu_json_response,
+              selected_intent,
+              validated_json_response,
+              validated_intent,
+              campaign_id,
+              is_inbound,
+              to_clarify: toClarify,
+              to,
+            },
+            id
+        }
+      });        
+    } else {
+      await deleteEventMutation({
+        variables: {
+            id
+        }
+      });        
+    }
     // refetch()
     updateReload()
   }
@@ -481,7 +494,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                    { (getCampaignSaileBotQuery) => {
                     console.log('getCampaignSaileBotQuery.data: ', getCampaignSaileBotQuery.data)
 
-                    var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Automatische Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+                    var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Automatisch antwoord", "Risposta Non al computer", "Risposta automatica", "Automatische Antwort", "Automatische_Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
                     var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
                     console.log("subject: ", subject)
                     console.log("isIn: ", isIn)
@@ -587,7 +600,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                               <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
                             }
                             {
-                              !isIn &&
+                              // !isIn &&
                               <React.Fragment>
                                 <FormControl className={classes.formControl}>
                                   <InputLabel id="demo-simple-select-label">Folloup period</InputLabel>
@@ -602,14 +615,18 @@ export const EventCard = ({ event, updateReload, history }) => {
                                     <MenuItem value={21}>Three Weeks</MenuItem>
                                     <MenuItem value={28}>Four Weeks</MenuItem>
                                     <MenuItem value={42}>Six Weeks</MenuItem>
-                                    <MenuItem value={56}>Two Months</MenuItem>
+                                    <MenuItem value={56}>Eight Weeks</MenuItem>
+                                    <MenuItem value={70}>Ten Weeks</MenuItem>
+                                    <MenuItem value={84}>Twelve Weeks</MenuItem>
                                     <MenuItem value={112}>Four Months</MenuItem>
                                     <MenuItem value={168}>Six Months</MenuItem>
+                                    <MenuItem value={252}>Nine Months</MenuItem>
+                                    <MenuItem value={336}>Twelve Months</MenuItem>
                                   </Select>
                                 </FormControl>
                                 <Button variant="contained" size="small" onClick={() => {
                                     if (state.delay) {
-                                      _followupCampaignContact_(updateCampaignContactMutation, updateEventMutation, state.delay)
+                                      _followupCampaignContact_(updateCampaignContactMutation, deleteEventMutation, updateEventMutation, state.delay)
                                     }
                                 }}>Followup Contact</Button>                                
                               </React.Fragment>
@@ -636,7 +653,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                                   console.log("startTime: ", startTime)
                                   var ready = startTime.add(1, "week") < now
                                   console.log("ready: ", ready)
-                                  var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Automatische Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+                                  var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Automatisch antwoord", "Risposta Non al computer", "Risposta automatica", "Automatische Antwort", "Automatische_Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
                                   var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
                                   console.log("subject: ", subject)
                                   console.log("isIn: ", isIn)
