@@ -98,7 +98,6 @@ export const EventCard = ({ event, updateReload, history }) => {
       label,
       sender,
       subject,
-      body,
       contact_id,
       nlu_input_text,
       nlu_json_response,
@@ -133,21 +132,7 @@ export const EventCard = ({ event, updateReload, history }) => {
       await updateEventMutation({
         variables: {
             objects: {
-              cc,
-              date,
-              id,
               label: 'followup',
-              sender,
-              subject,
-              body,
-              contact_id,
-              nlu_input_text,
-              nlu_json_response,
-              selected_intent,
-              validated_json_response,
-              validated_intent,
-              campaign_id,
-              is_inbound,
               to_clarify: toClarify,
               to,
             },
@@ -210,7 +195,6 @@ export const EventCard = ({ event, updateReload, history }) => {
       label,
       sender,
       subject,
-      body,
       contact_id,
       nlu_input_text,
       nlu_json_response,
@@ -227,21 +211,7 @@ export const EventCard = ({ event, updateReload, history }) => {
     await updateEventMutation({
       variables: {
           objects: {
-            cc,
-            date,
-            id,
             label: 'no_response',
-            sender,
-            subject,
-            body,
-            contact_id,
-            nlu_input_text,
-            nlu_json_response,
-            selected_intent,
-            validated_json_response,
-            validated_intent,
-            campaign_id,
-            is_inbound,
             to_clarify: toClarify,
             to,
           },
@@ -275,7 +245,6 @@ export const EventCard = ({ event, updateReload, history }) => {
       label,
       sender,
       subject,
-      body,
       contact_id,
       nlu_input_text,
       nlu_json_response,
@@ -304,21 +273,6 @@ export const EventCard = ({ event, updateReload, history }) => {
     await updateEventMutation({
       variables: {
           objects: {
-            cc,
-            date,
-            id,
-            label,
-            sender,
-            subject,
-            body,
-            contact_id,
-            nlu_input_text,
-            nlu_json_response,
-            selected_intent,
-            validated_json_response,
-            validated_intent,
-            campaign_id,
-            is_inbound,
             to_clarify: toClarify,
             to,
           },
@@ -362,7 +316,6 @@ export const EventCard = ({ event, updateReload, history }) => {
       label,
       sender,
       subject,
-      body,
       contact_id,
       nlu_input_text,
       nlu_json_response,
@@ -392,23 +345,7 @@ export const EventCard = ({ event, updateReload, history }) => {
     await updateEventMutation({
       variables: {
           objects: {
-            cc,
-            date,
-            id,
-            label,
-            sender,
-            subject,
-            body,
-            contact_id,
-            nlu_input_text,
-            nlu_json_response,
-            selected_intent,
-            validated_json_response,
-            validated_intent,
-            campaign_id,
-            is_inbound,
             to_clarify: toClarify,
-            to,
           },
           id
       }
@@ -601,6 +538,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                             }
                             {
                               // !isIn &&
+                              id && sailebot && sailebot.id && campaign_id && contact_id &&
                               <React.Fragment>
                                 <FormControl className={classes.formControl}>
                                   <InputLabel id="demo-simple-select-label">Folloup period</InputLabel>
