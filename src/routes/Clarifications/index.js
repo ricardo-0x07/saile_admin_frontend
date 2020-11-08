@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const Events = (props) => {
-  console.log("props: ", props)
+  console.log("clarifications props: ", props)
 
   const classes = useStyles();
   const limit = 5;
@@ -108,14 +108,14 @@ const Events = (props) => {
                   <EventCard updateReload={() => {
                     refetch();
                     totalCampaignClarificationEventsSubscription.refetch()
-                  }} event={x} name={x.name} key={x.id} history={props.history}  />
+                  }} event={x} name={x.name} key={x.id} history={props.history}  apolloClient={props.client}/>
                 ))
                 :
                 data.event.filter(item => item ).map(x => (
                   <EventCard updateReload={() => {
                     refetch();
                     totalCampaignClarificationEventsSubscription.refetch()
-                  }} event={x} name={x.name} key={x.id}  history={props.history} />
+                  }} event={x} name={x.name} key={x.id}  history={props.history} apolloClient={props.client}/>
                 ))
               }
             </div>

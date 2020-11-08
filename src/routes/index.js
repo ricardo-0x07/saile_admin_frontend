@@ -289,10 +289,17 @@ function Routes() {
                             path='/app/events-by-client' 
                             component={SailebotEvents}
                         />
-                        <Route
+                        {/* <Route
                             exact
                             path='/app/clarifications-by-campaign' 
                             component={Clarifications}
+                        /> */}
+                        <Route
+                            exact
+                            path='/app/clarifications-by-campaign' 
+                            render={(routeProps) => (
+                                <Clarifications {...routeProps} {...props} />
+                            )}
                         />
                         <Route
                             exact

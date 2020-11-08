@@ -13512,6 +13512,11 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
+validate.js@^0.13.1:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/validate.js/-/validate.js-0.13.1.tgz#b58bfac04a0f600a340f62e5227e70d95971e92a"
+  integrity sha512-PnFM3xiZ+kYmLyTiMgTYmU7ZHkjBZz2/+F0DaALc/uUtVzdCt1wAosvYJ5hFQi/hz8O4zb52FQhHZRC+uVkJ+g==
+
 validator@^12.2.0:
   version "12.2.0"
   resolved "https://registry.yarnpkg.com/validator/-/validator-12.2.0.tgz#660d47e96267033fd070096c3b1a6f2db4380a0a"

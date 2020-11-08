@@ -294,7 +294,7 @@ export const createContact = gql`
 
 export const createUpdateContact = gql`
   mutation InsertContact( $objects: [contact_insert_input!]! ) {
-    insert_contact(objects: $objects, on_conflict: {constraint: contact_email_key, update_columns: [email, firstname, lastname, title]}) {
+    insert_contact(objects: $objects, on_conflict: {constraint: contact_email_key, update_columns: [email]}) {
       returning {
         id
         account_id

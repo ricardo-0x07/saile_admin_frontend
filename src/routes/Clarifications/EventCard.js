@@ -22,6 +22,7 @@ import { getContactById, getCampaignContact, getCampaignAccount, getCampaignSail
 import { adopt } from 'react-adopt';
 import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
 import ContactSelect from "./ContactSelect";
+import AddCampaignContact from './AddCampaignContact';
 
 
 // const actionable_opportunity_clarification_lambda_api_endpoint = "https://8xbo18ydk7.execute-api.us-west-2.amazonaws.com/Prod/"
@@ -42,10 +43,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const EventCard = ({ event, updateReload, history }) => {
+export const EventCard = ({ event, updateReload, history, apolloClient }) => {
   const [state, setState] = React.useState({
     showBody: false,
-    delay: 7
+    delay: 7,
+    showcontactForm: false
   });
   const classes = useStyles();
 
@@ -180,6 +182,10 @@ export const EventCard = ({ event, updateReload, history }) => {
   const handleChange = async () => {
     await setState({ ...state, showBody: !state.showBody });
   }
+  const toggleContactForm = async () => {
+    await setState({ ...state, showcontactForm: !state.showcontactForm });
+  }
+    
 
   const handleDelayChange = async (event) => {
     console.log("event.target.value:  ", event.target.value)
@@ -548,6 +554,8 @@ export const EventCard = ({ event, updateReload, history }) => {
                                     value={state.delay}
                                     onChange={handleDelayChange}
                                   >
+                                    <MenuItem value={2}>Two Days</MenuItem>
+                                    <MenuItem value={3}>Three Days</MenuItem>
                                     <MenuItem value={7}>One Week</MenuItem>
                                     <MenuItem value={14}>Two Weeks</MenuItem>
                                     <MenuItem value={21}>Three Weeks</MenuItem>
@@ -631,6 +639,7 @@ export const EventCard = ({ event, updateReload, history }) => {
                               </Query>
                               
                             }
+
                             {
                               id && sailebot && sailebot.id && !contact_id &&
                               
@@ -655,10 +664,49 @@ export const EventCard = ({ event, updateReload, history }) => {
                    }}
                 </Query>
               }
+
+
+
               {
                 state.showBody &&
-                insertBody(body)
+                <React.Fragment>
+                  {
+                    insertBody(body)
+                  }
+                  <Button variant="contained" size="small" onClick={toggleContactForm}>{!state.showcontactForm ? "Show Contact Form" : "Hide Contact Form"}</Button>
+                </React.Fragment>
               }
+              {
+                state.showcontactForm && campaign_id && contact_id &&
+                <Query query={getContactById(contact_id)} >
+                  { ({data, loading}) => {
+                    if (
+                      loading ||
+                      !data ||
+                      !data.contact ||
+                      !data.contact.length > 0 ||
+                      !data.contact
+                    ) {
+                      return null;
+                    }
+                    const contact = data.contact[0]
+                    var now = moment()
+                    var startTime = moment(date)
+                    // var start = moment.utc(startTime, "HH:mm");
+                    console.log("contact: ", contact)
+
+                    return (
+                      <div style={{ flexDirection: 'row' }}>
+                        {
+                          contact && contact.account_id && 
+                          <AddCampaignContact closeForm={toggleContactForm} account_id={contact.account_id} campaign_id={campaign_id} apolloClient={apolloClient}/>
+                        }
+                      </div>
+                    );
+                  }}
+                </Query>
+              }
+
             </CardContent>
           </Card>    
         );
