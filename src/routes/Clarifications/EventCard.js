@@ -677,7 +677,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                 </React.Fragment>
               }
               {
-                state.showcontactForm && campaign_id && contact_id &&
+                state.showcontactForm && campaign_id && contact_id?
                 <Query query={getContactById(contact_id)} >
                   { ({data, loading}) => {
                     if (
@@ -699,12 +699,17 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                       <div style={{ flexDirection: 'row' }}>
                         {
                           contact && contact.account_id && 
-                          <AddCampaignContact closeForm={toggleContactForm} account_id={contact.account_id} campaign_id={campaign_id} apolloClient={apolloClient}/>
+                          <AddCampaignContact closeForm={toggleContactForm} account_id={contact !== undefined && contact.account_id !== undefined ? contact.account_id : undefined} campaign_id={campaign_id} apolloClient={apolloClient}/>
                         }
                       </div>
                     );
                   }}
                 </Query>
+                :
+                state.showcontactForm && campaign_id ?
+                <AddCampaignContact closeForm={toggleContactForm} account_id={ undefined} campaign_id={campaign_id} apolloClient={apolloClient}/>
+                : null
+
               }
 
             </CardContent>
