@@ -592,7 +592,7 @@ export const listAvailableCampaignAccounts = (campaign_id, limit=100, is_schedul
 export const listCampaigns = (limit=10, offset=0) => {
     return gql`
     query ListCampaigns {
-        campaign(limit:${limit}, offset:${offset}) {
+        campaign(limit:${limit}, offset:${offset}, order_by: {id: asc}) {
             accounts_per_schedule
             description
             id
@@ -1236,7 +1236,7 @@ export const listClientSaileBots = (client_id) => {
 export const listRequirementCampaigns = (requirement_id) => {
     return gql`
     query ListCampaigns {
-        campaign(where: {requirement_id: {_eq: ${requirement_id}}}) {
+        campaign(where: {requirement_id: {_eq: ${requirement_id}}}, order_by: {id: asc}) {
             accounts_per_schedule
             description
             id
