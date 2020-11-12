@@ -6,11 +6,12 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import {
   FormControlLabel,
+  Switch
 } from '@material-ui/core';
 import moment from 'moment';
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
-import Switch from '@material-ui/core/Switch';
+// import Switch from '@material-ui/core/Switch';
 import { updateCampaign } from "../../graphql/mutations";
 import { countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs } from "../../graphql/queries"
 import CampaignChart from './CampaignChart';
@@ -232,6 +233,8 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                       <Typography >Desired Count: {"desiredCount" in service ? service["desiredCount"] : ""}</Typography>
                       <Typography >Pending Count: {"pendingCount" in service ? service["pendingCount"] : ""}</Typography>
                       <Typography >Running Count: {"runningCount" in service ? service["runningCount"] : ""}</Typography>
+                      <Typography >Task Definition: {"taskDefinition" in service ? service["taskDefinition"] : ""}</Typography>
+                      <Typography >Task Revision: {"taskDefinition" in service ? service["taskDefinition"].split(':')[service["taskDefinition"].split(':').length-1] : ""}</Typography>
                     </div>
                   }
                   {
@@ -298,7 +301,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                         {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                           Open simple dialog
                         </Button> */}
-                        <SimpleDialog open={open} onClose={handleClose} onConfirm={() => _deployCampaign_({campaign_id: campaign.id, client_id: sailebot.client_id, sailebot_id: sailebot.id, requirement_id: requirement.id, MAILGUNDOMAIN: campany_domain.name, MAILGUNHOST: campany_domain.name, timezone: timezone})}/>
+                        <SimpleDialog open={open} onClose={handleClose} onConfirm={() => _deployCampaign_({campaign_id: campaign.id, client_id: sailebot.client_id, sailebot_id: sailebot.id, requirement_id: requirement.id, MAILGUNDOMAIN: campany_domain.name, MAILGUNHOST: campany_domain.name, timezone: timezone, updateTask: true})}/>
 
                       </React.Fragment>
                       

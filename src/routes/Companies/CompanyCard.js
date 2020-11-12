@@ -4,12 +4,18 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-// import { adopt } from 'react-adopt';
-// import { Query } from "react-apollo";
+import {
+  FormControlLabel,
+  Switch
+} from '@material-ui/core';
+import { adopt } from 'react-adopt';
+import { Mutation } from "react-apollo";
 
 // import { companyEventCountByLabel, companyEventCount } from "../../graphql/queries";
 
 import { makeStyles } from '@material-ui/core/styles';
+import { updateCompany } from "../../graphql/mutations";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,29 +27,44 @@ const useStyles = makeStyles(theme => ({
 
 export const CompanyCard = ({ company,  history }) => {
   const classes = useStyles();
+  const [state, setState] = React.useState({
+    to_suppress: company.to_suppress,
+  });
   const {name, id } = company;
-  // const Composed = adopt({
-  //   actionableEventCountQuery: ({ render }) => (
-  //     <Query query={companyEventCountByLabel(company.id, "actionable_opportunity")} >
-  //       { render }
-  //     </Query>
-  //   ),
-  //   referralEventCountQuery: ({ render }) => (
-  //     <Query query={companyEventCountByLabel(company.id, "refferal_thanks")} >
-  //       { render }
-  //     </Query>
-  //   ),
-  //   companyEventCountQuery: ({ render }) => (
-  //     <Query query={companyEventCount(company.id)} >
-  //       { render }
-  //     </Query>
-  //   ),
-  // })
+  // const { to_suppress } = state;
 
+  const Composed = adopt({
+    updateCompanyMutation: ({ render }) => (
+      <Mutation mutation={ updateCompany } >
+        { render }
+      </Mutation> 
+      ),  
+  })
+  const handleChange = (updateCompanyMutation) => async (event) => {
+    const { id } = company;
+    console.log('event.target.name: ', event.target.name)
+    console.log('event.target.value: ', event.target.value)
+    console.log('event.target.checked: ', event.target.checked)
+    const to_suppress = event.target.checked
+    await setState({ ...state, [event.target.name]: to_suppress });
+    console.log('to_suppress: ', to_suppress)
+    console.log('state: ', state)
+    // updateCompanyMutation
+    await updateCompanyMutation({
+      variables: {
+          objects: {
+              id,
+              to_suppress,
+          },
+          id
+      }
+  });
+
+  };
   return (
-    // <Composed>
-    //   {({ actionableEventCountQuery, referralEventCountQuery, companyEventCountQuery }) => {
-    //     return (
+    <Composed>
+      {({ updateCompanyMutation }) => {
+        return (
           <Card>
             <CardContent>
               <Typography>Company ID: {id}</Typography>
@@ -55,6 +76,17 @@ export const CompanyCard = ({ company,  history }) => {
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-client', {company})}>Add Client</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/clients-by-company', {company})}>View Clients</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/domains-by-company', {company})}>View Domains</Button>
+                <FormControlLabel
+                    control={
+                      <Switch
+                        checked={state.to_suppress}
+                        onChange={handleChange(updateCompanyMutation)}
+                        name="to_suppress"
+                        color="primary"
+                      />
+                    }
+                    label="Suppression?"
+                  />
               </CardActions>
               {/* <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {
@@ -78,8 +110,8 @@ export const CompanyCard = ({ company,  history }) => {
               </CardActions> */}
             </div>
           </Card>
-    //     );
-    //   }}
-    // </Composed>
+        );
+      }}
+    </Composed>
   );
 };

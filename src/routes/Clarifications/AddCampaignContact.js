@@ -253,36 +253,36 @@ const ManageContactForm = (props) => {
                                         })
                                         console.log('mutation_response.data: ', mutation_response.data);
                                     }    
-                                    // if(
-                                    //     campaign_id 
-                                    //     && referrer_response !== null && referrer_response !== undefined  
-                                    //     && referrer_response.data && referrer_response.data.contact && referrer_response.data.contact.length > 0 && referrer_response.data.contact[0].id 
-                                    //     && response.data && response.data.contact && response.data.contact.length > 0 && response.data.contact[0].id
-                                    // ) {
-                                    //     const contact = response.data.contact[0]
-                                    //     const referrer = referrer_response.data.contact[0]
-                                    //     const referree_id = contact.id;
-                                    //     const referrer_id = referrer.id;
-                                    //     const referral_mutation_response = await apolloClient.mutate({
-                                    //         mutation: gql`
-                                    //         mutation InsertCampaignContact($objects: [campaign_contact_insert_input!]!) {
-                                    //             insert_campaign_referral(objects: $objects, on_conflict: {constraint: campaign_referral_referree_id_referrer_id_campaign_id_key, update_columns: [campaign_id, referree_id, referrer_id]}) {
-                                    //             returning {
-                                    //               id
-                                    //             }
-                                    //           }
-                                    //         }
-                                    //       `,
-                                    //         variables: {
-                                    //             objects: {
-                                    //                 campaign_id,
-                                    //                 referree_id,
-                                    //                 referrer_id      
-                                    //             }
-                                    //         }
-                                    //     })
-                                    //     console.log('referral_mutation_response.data: ', referral_mutation_response.data);
-                                    // }    
+                                    if(
+                                        campaign_id 
+                                        && referrer_response !== null && referrer_response !== undefined  
+                                        && referrer_response.data && referrer_response.data.contact && referrer_response.data.contact.length > 0 && referrer_response.data.contact[0].id 
+                                        && response.data && response.data.contact && response.data.contact.length > 0 && response.data.contact[0].id
+                                    ) {
+                                        const contact = response.data.contact[0]
+                                        const referrer = referrer_response.data.contact[0]
+                                        const referree_id = contact.id;
+                                        const referrer_id = referrer.id;
+                                        const referral_mutation_response = await apolloClient.mutate({
+                                            mutation: gql`
+                                            mutation InsertCampaignContact($objects: [campaign_referral_insert_input!]!) {
+                                                insert_campaign_referral(objects: $objects, on_conflict: {constraint: campaign_referral_referree_id_referrer_id_campaign_id_key, update_columns: [campaign_id, referree_id, referrer_id]}) {
+                                                returning {
+                                                  id
+                                                }
+                                              }
+                                            }
+                                          `,
+                                            variables: {
+                                                objects: {
+                                                    campaign_id,
+                                                    referree_id,
+                                                    referrer_id      
+                                                }
+                                            }
+                                        })
+                                        console.log('referral_mutation_response.data: ', referral_mutation_response.data);
+                                    }    
                                     // // insert_campaign_referral
                                 }
                                 // const createUpdateCampaignContact = 

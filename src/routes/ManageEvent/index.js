@@ -29,6 +29,7 @@ const ManageEventForm = (props) => {
     const classes = useStyles();
     let initialValues = {
         subject: '',
+        cc: '',
         body: '',
         label: '',
     };
@@ -70,7 +71,7 @@ const ManageEventForm = (props) => {
                     <Formik
                         initialValues={initialValues}
                         onSubmit={
-                            async ({ subject, label, body, id }) => {
+                            async ({ subject, label, body, cc, id }) => {
                                 if (id) {
                                     await mutation({
                                         variables: {
@@ -78,6 +79,7 @@ const ManageEventForm = (props) => {
                                                 id,
                                                 label,
                                                 subject,
+                                                cc,
                                                 body,
                                             },
                                             id
@@ -107,6 +109,14 @@ const ManageEventForm = (props) => {
                                                 margin="normal" 
                                                 onChange={handleChange}
                                                 value={values.label  || ''}
+                                            />
+                                            <TextField
+                                                name="cc"
+                                                label="CC" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.cc  || ''}
                                             />
                                             <TextField
                                                 name="subject"

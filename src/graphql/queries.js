@@ -122,6 +122,7 @@ export const listCompanies = (limit) => {
                 phone
                 created_at
                 updated_at
+                to_suppress
             }
         }
     `;
