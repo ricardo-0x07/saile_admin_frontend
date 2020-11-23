@@ -1346,7 +1346,7 @@ export const listSailebotRequirements = (sailebot_id, campaign_limit=10, campaig
 export const clientEventByLabel = (client_id, label_query, limit=10, offset=0, is_inbound=true) => {
     return gql`
         query ClientEventByLabel {
-            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: ${is_inbound}}, to_clarify: {_eq: false}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: ${is_inbound}}, to_clarify: {_eq: false}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
                 body
                 cc
                 contact_id
@@ -1471,7 +1471,7 @@ export const clientEventCount = (client_id) => {
 export const clientEvent = (client_id, limit=10, offset=0) => {
     return gql`
         query SailebotEvent {
-            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: false}}, limit: ${limit}, offset: ${offset}, order_by: {date: desc}) {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, to_clarify: {_eq: false}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
                 body
                 cc
                 contact_id

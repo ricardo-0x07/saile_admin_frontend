@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { adopt } from 'react-adopt';
 import { Query } from "react-apollo";
 import { getCampaign } from "../../graphql/queries";
-import { describeService, updateService } from '../../utils/rest_api'
+import { describeService, updateService/*, deployCampaign*/ } from '../../utils/rest_api'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 export const DeploymentCard = ({ service,  history }) => {
   const classes = useStyles();
-  const { campaign_id } = service;
+  const { campaign_id, cpu, memory } = service;
 
   const [state, setState] = React.useState({
     service_data: {},
@@ -40,6 +40,13 @@ export const DeploymentCard = ({ service,  history }) => {
     console.log("services: ", services);
     return "services" in services && services["services"].length > 0  ? services["services"][0] : {}
   }
+  // const _deployCampaign_ = async (params) => {
+  //   console.log("params: ", params);
+  //   await deployCampaign(params);
+  //   let services = await describeService({ campaign_id});
+  //   services = await services.json()
+  //   setState({ ...state, service: "services" in services && services["services"].length > 0  ? services["services"][0] : {} });
+  // }
   React.useEffect(() => {
     const getData = async () => {
       const resp = await getService();
@@ -93,8 +100,8 @@ export const DeploymentCard = ({ service,  history }) => {
               {/* <Typography>Desired Status: {desiredStatus}</Typography> */}
               {/* <Typography>Last Status: {lastStatus}</Typography> */}
               {/* <Typography>Launch Type: {launchType}</Typography> */}
-              {/* <Typography>Memory: {memory}</Typography> */}
-              {/* <Typography>CPU: {cpu}</Typography> */}
+              <Typography>Memory: {memory}</Typography>
+              <Typography>CPU: {cpu}</Typography>
               {
                 getCampaignQuery.data && !getCampaignQuery.loading && getCampaignQuery.data.campaign.length > 0 &&
                 <React.Fragment>
@@ -129,7 +136,13 @@ export const DeploymentCard = ({ service,  history }) => {
                       ?
                       <Button variant="contained" color="secondary"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id, desiredCount: 0})}>Stop ECS Service</Button>
                       :
+                      <React.Fragment>
                       <Button variant="contained" color="default"   style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id, desiredCount: 1})}>Run ECS Service</Button>
+                          {
+                            // window.location.hostname === "localhost" && timezone && requirement && requirement.id && sailebot && sailebot.client_id && campaign && campaign.id && campany_domain && campany_domain.name &&
+                            // <Button variant="contained" color="secondary"   style={{ width: '100%', marginBottom: '1rem'}} size="small"  onClick={() => _deployCampaign_({NEW_TASK: "NEW_TASK", campaign_id: campaign_id, client_id: sailebot.client_id, sailebot_id: sailebot.id, requirement_id: requirement.id, MAILGUNDOMAIN: campany_domain.name, MAILGUNHOST: campany_domain.name, timezone: timezone, updateTask: true})}>Update Task</Button>
+                          }
+                      </React.Fragment>
   
                     }
                   </React.Fragment>

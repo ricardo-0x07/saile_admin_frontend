@@ -876,7 +876,7 @@ export const totalCampaignClarificationEvents = (campaign_id) => {
 export const listContactEvents = (contact_id, limit=10, offset=0, event_limit=10, event_offset=0) => {
     return gql`
         subscription ListContactEvents {
-            event(where: {contact_id: {_eq: ${contact_id}}}, limit: ${limit}, offset: ${offset}) {
+            event(where: {contact_id: {_eq: ${contact_id}}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
                 body
                 cc
                 date

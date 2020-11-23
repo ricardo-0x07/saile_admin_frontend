@@ -288,9 +288,18 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                       {
                         service["desiredCount"] > 0 
                         ?
-                        <Button variant="contained" color="secondary"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id: campaign.id, desiredCount: 0})}>Stop ECS Service</Button>
+                        <React.Fragment>
+                          <Button variant="contained" color="secondary"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id: campaign.id, desiredCount: 0})}>Stop ECS Service</Button>
+
+                        </React.Fragment>
                         :
-                        <Button variant="contained" color="default"   style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id: campaign.id, desiredCount: 1})}>Run ECS Service</Button>
+                        <React.Fragment>
+                          <Button variant="contained" color="default"   style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => runECSService({campaign_id: campaign.id, desiredCount: 1})}>Run ECS Service</Button>
+                          {
+                            window.location.hostname === "localhost" && timezone && requirement && requirement.id && sailebot && sailebot.client_id && campaign && campaign.id && campany_domain && campany_domain.name &&
+                            <Button variant="contained" color="secondary"   style={{ width: '100%', marginBottom: '1rem'}} size="small"  onClick={() => _deployCampaign_({NEW_TASK: "NEW_TASK", campaign_id: campaign.id, client_id: sailebot.client_id, sailebot_id: sailebot.id, requirement_id: requirement.id, MAILGUNDOMAIN: campany_domain.name, MAILGUNHOST: campany_domain.name, timezone: timezone, updateTask: true})}>Update Task</Button>
+                          }
+                        </React.Fragment>
     
                       }
                     </React.Fragment>

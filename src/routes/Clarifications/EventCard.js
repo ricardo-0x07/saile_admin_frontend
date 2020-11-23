@@ -226,6 +226,22 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
     });
     updateReload()
   }
+  const dismissClarification = (updateEventMutation) => async () => {
+    const {
+      id,
+    } = event;
+    
+    const toClarify=false
+    await updateEventMutation({
+      variables: {
+          objects: {
+            to_clarify: toClarify,
+          },
+          id
+      }
+    });
+    updateReload()
+  }
   const unsubscribeContact = (updateContactMutation) => async () => {
     const toClarify=false
     await updateContactMutation({
@@ -479,7 +495,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                           }
                           <CardActions className={classes.root}>
                             <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
-                            {/* <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Accept & Dismiss</Button> */}
+                            <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Dismiss</Button>
                             <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
                             {
                               id && sailebot && sailebot.id && contact_id &&

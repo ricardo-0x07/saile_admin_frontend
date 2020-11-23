@@ -8,7 +8,8 @@ import {
     FormLabel,
     FormControl,
     FormGroup,
-    // FormControlLabel,
+    FormControlLabel,
+    Switch
 } from '@material-ui/core';
 import gql from 'graphql-tag';
 import * as Yup from 'yup';
@@ -43,7 +44,19 @@ export const Checkbox = ({ ...props }) => {
 const ManageContactForm = (props) => {
     const classes = useStyles();
 
+    const [state, setState] = React.useState({
+        to_refer: false,
+      }); 
+    const handleToReferChange = async (event) => {
+        console.log('event.target.name: ', event.target.name)
+        console.log('event.target.value: ', event.target.value)
+        console.log('event.target.checked: ', event.target.checked)
+        const to_refer = event.target.checked
+        await setState({ ...state, [event.target.name]: to_refer });
+        console.log('to_refer: ', to_refer)
+        console.log('state: ', state)
     
+    };
     let initialValues = {
         bounce_type: '',
         email: '',
@@ -252,13 +265,17 @@ const ManageContactForm = (props) => {
                                             }
                                         })
                                         console.log('mutation_response.data: ', mutation_response.data);
-                                    }    
+                                    }  
+                                    const { to_refer }  = state;   
+
                                     if(
                                         campaign_id 
+                                        && to_refer
                                         && referrer_response !== null && referrer_response !== undefined  
                                         && referrer_response.data && referrer_response.data.contact && referrer_response.data.contact.length > 0 && referrer_response.data.contact[0].id 
                                         && response.data && response.data.contact && response.data.contact.length > 0 && response.data.contact[0].id
                                     ) {
+                                        console.log("to_refer: ", to_refer)
                                         const contact = response.data.contact[0]
                                         const referrer = referrer_response.data.contact[0]
                                         const referree_id = contact.id;
@@ -346,6 +363,17 @@ const ManageContactForm = (props) => {
                                             value={values.referrer_email === null ? '' : values.referrer_email }
                                         />
                                         {errors.referrer_email ? <div style={{color: 'red'}}>{errors.referrer_email}</div> : null}
+                                        <FormControlLabel
+                                            control={
+                                            <Switch
+                                                checked={state.to_refer}
+                                                onChange={handleToReferChange}
+                                                name="to_refer"
+                                                color="primary"
+                                            />
+                                            }
+                                            label="Refer?"
+                                        />
                                     </FormGroup>
                                 </FormControl>
                                 <Button variant="contained" type='submit' disabled={values.email === '' || values.email === undefined || isValid === false || isValidating === true}>Submit</Button>
