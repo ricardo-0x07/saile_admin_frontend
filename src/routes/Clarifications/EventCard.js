@@ -395,7 +395,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
         return (
           <Card>
             <CardContent>
-              <Typography><strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
+              <Typography><strong>Label: </strong><span style={{backgroundColor: label === 'actionable_opportunity'? 'red' : 'orange'}}>{label}</span> <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
               <Typography><strong>Subject:</strong> {subject} <strong>Cc:</strong> {cc}</Typography>
               <Typography><strong>Event ID:</strong> {event.id || ''} <strong>Campaign id:</strong> {event.campaign_id || ''} <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment></Typography>
               {/* <Typography>
