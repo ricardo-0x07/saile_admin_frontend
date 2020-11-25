@@ -2,7 +2,7 @@ import * as React from "react";
 import { Query } from "react-apollo";
 import { connect } from 'react-redux';
 import { ClientCard } from "./ClientCard";
-import { listClients, listCompanyUserClients } from "../../graphql/queries";
+import { /*listClients,*/ listCompanyUserClients, listNullCompanyIdClients } from "../../graphql/queries";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,7 +30,7 @@ const Clients = (props) => {
     )
     :
     ({ render }) => (
-      <Query query={listClients(10) } >
+      <Query query={listNullCompanyIdClients(10) } >
         { render }
       </Query>
     ),

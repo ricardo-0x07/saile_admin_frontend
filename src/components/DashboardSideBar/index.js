@@ -19,11 +19,17 @@ export default function DashboardSideBar (props) {
     return (
         <List >
           <div>
-          <ListItem button  component={RouterLink} to="/app/companies">
-            <ListItemIcon>
+            <ListItem button  component={RouterLink} to="/app/companies">
+              <ListItemIcon>
                 <BusinessIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="Companies" />
+            </ListItem>
+            <ListItem button  component={RouterLink} to="/app/clients">
+              <ListItemIcon>
+                <BusinessIcon style={{ color: '#43485a' }}/>
+              </ListItemIcon>
+              <ListItemText primary="New Clients" />
             </ListItem>
             {
               window.location.hostname === "localhost" &&

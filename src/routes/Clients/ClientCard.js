@@ -61,6 +61,7 @@ export const ClientCard = ({ client,  history }) => {
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-client', {client})}>Edit</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-sailebot', {client})}>Add SaileBot</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/sailebots-by-client', {client})}>View SaileBots</Button>
+                <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/questionnaires-by-client', {client})}>View Questionnaires</Button>
               </CardActions>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {

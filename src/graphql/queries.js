@@ -23,6 +23,35 @@ export const GET_ALL_CLIENTS =gql`
     }
 }
 `;
+export const listNullCompanyIdClients = (limit) => {
+    return gql`
+        query ListClients {
+            client(where: {company_id: {_is_null: true}}, limit: ${limit}, offset: 0) {
+                NAICS
+                address
+                city
+                country
+                created_at
+                domain
+                email
+                email_domain
+                employees
+                id
+                is_company
+                name
+                phone
+                revenue
+                state
+                updated_at
+                website
+                firstname
+                lastname
+                company_id
+            }
+        }
+    `;
+}
+
 export const listClients = (limit) => {
     return gql`
         query ListClients {
@@ -1484,6 +1513,70 @@ export const clientEvent = (client_id, limit=10, offset=0) => {
                 sender
                 to
                 validated_intent
+            }
+        }
+    `;
+}
+
+export const clientPersonalityQuestionnaire = (client_id) => {
+    return gql`
+        query clientPersonalityQuestionnaireQuery {
+            personality_questionnaire(where: {client_id: {_eq: ${client_id}}}) {
+                business_acumen
+                cc_email
+                cc_name
+                cc_title
+                city
+                client_id
+                created_at
+                email
+                gender
+                hobbies
+                hometown
+                id
+                industry_time
+                interests
+                know_about_me
+                name
+                phone
+                places_travelled
+                role_time
+                timezone
+                title
+                updated_at
+            }
+        }
+    `;
+}
+
+export const clientProductQuestionnaire = (client_id) => {
+    return gql`
+        query clientProductQuestionnaireQuery {
+            product_questionnaire(where: {client_id: {_eq: ${client_id}}}) {
+                client_id
+                company_description
+                competitive_advantage
+                id
+                pain
+                proposition_1
+                proposition_2
+                proposition_3
+            }
+        }
+    `;
+}
+
+export const clientProspectQuestionnaire = (client_id) => {
+    return gql`
+        query clientProspectQuestionnaireQuery {
+            prospect_questionnaire(where: {client_id: {_eq: ${client_id}}}) {
+                client_id
+                decision_maker_keywords
+                id
+                industries
+                org_chart_connection
+                prospect_meeting
+                target_geography_description
             }
         }
     `;

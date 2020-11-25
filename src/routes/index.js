@@ -41,6 +41,7 @@ import Accounts from './Accounts'
 import ScheduleAccounts from './ScheduleAccounts'
 import Contacts from './Contacts'
 import Events from './Events'
+// import Questionnaire from './Questionnaire'
 import CampaignContactEvents from './CampaignContactEvents'
 import SailebotEvents from './SailebotEvents'
 import Clarifications from './Clarifications';
@@ -57,6 +58,7 @@ import Confirmation from './Unsubscribe/confirmation';
 import Companies from './Companies';
 import Deployments from './Deployments';
 import ManageEvent from './ManageEvent'
+import Questionnaires from './Questionnaires';
 // import { Link } from 'react-router-dom';
 
 
@@ -268,6 +270,11 @@ function Routes() {
                             exact
                             path='/app/contacts' 
                             component={Contacts}
+                        />
+                        <Route
+                            exact
+                            path='/app/questionnaires-by-client' 
+                            component={Questionnaires}
                         />
                         <Route
                             exact
