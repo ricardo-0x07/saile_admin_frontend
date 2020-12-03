@@ -258,7 +258,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
     console.log('item: ', item)
     updateReload()
   }
-  const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data) => {
+  const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data, is_delisted) => {
     console.log('contact_data: ', contact_data)
     const {
       cc,
@@ -284,7 +284,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
     await updateCampaignAccountMutation({
       variables: {
           objects: {
-            is_delisted: true,
+            is_delisted: !is_delisted,
             last_delisted_date: new Date().toJSON().slice(0, 10) 
           },
           account_id: contact_data.account_id,
@@ -292,15 +292,15 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
       }
     });
 
-    await updateEventMutation({
-      variables: {
-          objects: {
-            to_clarify: toClarify,
-            to,
-          },
-          id
-      }
-    });
+    // await updateEventMutation({
+    //   variables: {
+    //       objects: {
+    //         to_clarify: toClarify,
+    //         to,
+    //       },
+    //       id
+    //   }
+    // });
     updateReload()
   }
   const _reListCampaignContact_ = async (updateCampaignContactMutation, deleteEventMutation) => {
@@ -531,6 +531,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                               </Query>
                              
                             }
+                            {/* Delist or Relist Account */}
                             {
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
                               <Query query={getContactById(contact_id)} >
@@ -545,19 +546,45 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                                     return null;
                                   }
                                   const contact = data.contact[0]
-
+                                  const { account_id } = data.contact[0]
+                                  if (account_id === undefined) {
+                                    return null;
+                                  }
+              
                                   return (
-                                    <div style={{ flexDirection: 'row' }}>
-                                      <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact)}>Remove Account</Button>
-                                    </div>
-                                  );
+                                    <Query query={getCampaignAccount(campaign_id, account_id)} >
+                                    { (campaignAccountQuery) => {
+                                      console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
+                                      if (
+                                      campaignAccountQuery.loading ||
+                                        !campaignAccountQuery.data ||
+                                        !campaignAccountQuery.data.campaign_account ||
+                                        !campaignAccountQuery.data.campaign_account.length > 0 ||
+                                        !campaignAccountQuery.data.campaign_account
+                                      ) {
+                                        return null;
+                                      }
+                                      console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
+                                      const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+                  
+                                      return (
+                                        <div style={{ flexDirection: 'row' }}>
+                                          {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}
+                                          <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                                        </div>
+                                      );  
+                                    }} 
+                                    </Query>
+                                  );           
                                 }}
                               </Query>
                             }
+                            {/* Edit Event */}
                             {
                               window.location.hostname === "localhost" &&
                               <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
                             }
+                            {/* Follow up period */}
                             {
                               // !isIn &&
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
@@ -683,6 +710,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
 
 
 
+              {/* Add Campaign contact */}
               {
                 state.showBody &&
                 <React.Fragment>

@@ -339,6 +339,7 @@ export const listCampaignTemplates = (campaign_id) => {
                 id
                 name
                 subject
+                updated_at
             }
         }
     `;
@@ -354,6 +355,7 @@ export const listTemplates = (limit) => {
                 id
                 name
                 subject
+                updated_at
             }
         }
     `;

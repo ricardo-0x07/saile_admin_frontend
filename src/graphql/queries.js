@@ -1394,6 +1394,17 @@ export const clientEventByLabel = (client_id, label_query, limit=10, offset=0, i
     `;
 }
 
+export const getDelivered = (event_id) => {
+    return gql`
+        query GetDelivered {
+            delivered(where: {event_id: {_eq: ${event_id}}}) {
+                digital_labor
+                label
+            }
+        }
+    `;
+}
+
 export const clientEventByCampaignContact = (client_id, contact_id, campaign_id) => {
     return gql`
         query ClientEventByCampaignContact {

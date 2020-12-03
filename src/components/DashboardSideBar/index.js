@@ -27,7 +27,7 @@ export default function DashboardSideBar (props) {
             </ListItem>
             <ListItem button  component={RouterLink} to="/app/clients">
               <ListItemIcon>
-                <BusinessIcon style={{ color: '#43485a' }}/>
+                <PeopleIcon style={{ color: '#43485a' }}/>
               </ListItemIcon>
               <ListItemText primary="New Clients" />
             </ListItem>

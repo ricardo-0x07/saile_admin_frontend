@@ -11,7 +11,7 @@ import { updateSingleCampaignAccount } from "../../graphql/mutations";
 
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
-import { getContactById, getCampaignContact, getCampaignAccount/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
+import { getContactById, getCampaignContact, getCampaignAccount, getDelivered/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
 import CampaignContactEvents from '../CampaignContactEvents';
 import * as moment from 'moment';
 const useStyles = makeStyles(theme => ({
@@ -33,6 +33,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     subject,
     label,
     to,
+    id,
     body,
     date,
     cc,
@@ -240,6 +241,34 @@ export const EventCard = ({ event, updateReload, client, history }) => {
         return (
           <Card>
             <CardContent>
+            {
+                  event && event.id && event.label && event.label === "actionable_opportunity" &&
+                  <Typography>
+                    <Query query={getDelivered(event.id)} >
+                      { ({data, loading}) => {
+                        if (
+                          loading ||
+                          !data ||
+                          !data.delivered ||
+                          !data.delivered.length > 0 ||
+                          !data.delivered
+                        ) {
+                          return null;
+                        }
+                        console.log('getDelivered data: ',  data)
+                        console.log('label: ', label)
+                        const { digital_labor } = data.delivered[0]
+                        if (digital_labor === undefined) {
+                          return null;
+                        }
+
+                        return (
+                          <span><strong>Digital Labour: </strong> {digital_labor} </span>
+                        );
+                      }}
+                    </Query>  
+                  </Typography>
+              }
               <Typography><strong>CampaignId: </strong>{event.campaign_id || ''}<strong> EventId: </strong>{event.id} <strong>Label: </strong>{label} <strong>From:</strong> {sender} <strong>To:</strong> {to}</Typography>
               <Typography><strong>Subject:</strong> {subject} <strong>Cc:</strong> {cc} <strong>Date:</strong> <Moment format="YYYY-MMM-DD" date={date !== null && date }></Moment></Typography>
               {

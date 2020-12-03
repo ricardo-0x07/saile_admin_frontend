@@ -22,7 +22,7 @@ export default class FileUpload extends Component {
         const results = await Object.values(this.state.filesToUpload).map( fileToUpload =>{
             return axios(
                 " https://ks11x9jc67.execute-api.us-west-2.amazonaws.com/Stage?fileName=" +
-                    `${this.props.campaign_name.replaceAll(" ", "_")}${fileToUpload.name.replaceAll(" ", "").replaceAll("-", "").replaceAll(",", "")}&bucketName=${this.state.bucket}`//fileToUpload.name
+                    `${this.props.campaign_name.replaceAll(" ", "_").replaceAll("-", "")}${fileToUpload.name.replaceAll(" ", "").replaceAll("-", "").replaceAll(",", "")}&bucketName=${this.state.bucket}`//fileToUpload.name
             ).then(async response => {
                 // Getting the url from response
                 const url = response.data.fileUploadURL;
