@@ -33,7 +33,6 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     subject,
     label,
     to,
-    id,
     body,
     date,
     cc,
