@@ -5,7 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Moment from 'react-moment';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 
 
 export const TemplateCard = ({ template, campaign,  history }) => {

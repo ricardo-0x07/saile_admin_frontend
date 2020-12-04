@@ -4,6 +4,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   FormControlLabel,
   Switch
@@ -13,15 +14,16 @@ import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 // import Switch from '@material-ui/core/Switch';
 import { updateCampaign } from "../../graphql/mutations";
-import { countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs } from "../../graphql/queries"
+import { listAccountsByList, countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs } from "../../graphql/queries"
 import CampaignChart from './CampaignChart';
 import { describeService, updateService, deployCampaign } from '../../utils/rest_api'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import WindResponseFileUpload from './WindResponseFileUpload'
 import ProcessApolloAccountsFileUpload from './ProcessApolloAccountsFileUpload'
+import { CSVLink } from "react-csv";
 
-// import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 // import { blue } from '@material-ui/core/colors';
 
 
@@ -31,6 +33,14 @@ import ProcessApolloAccountsFileUpload from './ProcessApolloAccountsFileUpload'
 //     color: blue[600],
 //   },
 // });
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
+  },
+}));
 
 function SimpleDialog(props) {
   // const classes = useStyles();
@@ -60,6 +70,8 @@ function SimpleDialog(props) {
 }
 
 export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
+  const classes = useStyles();
+
   const [state, setState] = React.useState({
     toStatus: campaign.to_run,
     service: {},
@@ -172,14 +184,18 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
     <Composed>
       {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery, outboundEventLogsQuery, inboundEventLogsQuery, listCompanyDomainByIdQuery }) => {
         let countCampaignAccounts = null
+        let accounts = [];
         if (countCampaignAccountsQuery.data && countCampaignAccountsQuery.data.campaign_account_aggregate && !countCampaignAccountsQuery.loading) {
+          
+          accounts = countCampaignAccountsQuery.data.campaign_account_aggregate.nodes.map(({account_id}) => account_id);
+          console.log('accounts: ', accounts);
           countCampaignAccounts = countCampaignAccountsQuery.data.campaign_account_aggregate.aggregate.count          
         }
         let countCampaignScheduleAccounts = null
         if (countCampaignScheduleAccountsQuery.data && countCampaignScheduleAccountsQuery.data.schedule_account_aggregate && !countCampaignScheduleAccountsQuery.loading) {
           countCampaignScheduleAccounts = countCampaignScheduleAccountsQuery.data.schedule_account_aggregate.aggregate.count          
         }
-        console.log('outboundEventLogsQuery: ', outboundEventLogsQuery)
+        
         console.log('countCampaignAccountsQuery: ', countCampaignAccountsQuery)
         console.log('listCompanyDomainByIdQuery: ', listCompanyDomainByIdQuery)
         
@@ -317,6 +333,45 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                       :
                       null
                   }
+                  {
+                    accounts && accounts.length > 0 &&
+                    <Query query={listAccountsByList} variables={{list: accounts}}>
+                      { ({data, loading, error}) => {
+                      if (
+                          loading ||
+                          !data ||
+                          !data.account ||
+                          !data.account.length > 0 ||
+                          !data.account
+                        ) {
+                          return null;
+                        }
+                        console.log("data.account: ", data.account)
+
+                        return (
+                          <div className={classes.root}>
+                            {
+                              !loading && data && data.account && data.account.length > 0 
+                              ?
+                              <React.Fragment>
+                                <CSVLink
+                                  data={data.account}
+                                  filename={`${campaign.name ? campaign.name : 'campaign'}_${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_campaign_accounts.csv`}
+                                  className="btn btn-primary"
+                                  target="_blank"
+                                >
+                                  Download Data CSV
+                                </CSVLink>
+                              </React.Fragment>
+                              :
+                              <CircularProgress color="secondary" />
+
+                            }
+                          </div>
+                        );
+                      }}
+                    </Query>
+                  }                
 
 
                 </CardActions>
