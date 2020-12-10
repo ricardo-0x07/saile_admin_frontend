@@ -13,8 +13,8 @@ import moment from 'moment';
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
 // import Switch from '@material-ui/core/Switch';
-import { updateCampaign } from "../../graphql/mutations";
-import { listAccountsByList, countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs } from "../../graphql/queries"
+import { updateCampaign, createCampaignContact, createContact, createCampaignAccount, createScheduleAccount, createSchedule } from "../../graphql/mutations";
+import { getScheduledAccountByAccountId, listAccountsByList, countCampaignScheduleAccounts, countCampaignAccounts, listCompanyDomainById, inbox_event_logs, getContactsByAccountId } from "../../graphql/queries"
 import CampaignChart from './CampaignChart';
 import { describeService, updateService, deployCampaign } from '../../utils/rest_api'
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     '& > * + *': {
       marginLeft: theme.spacing(2),
+      marginBottom: theme.spacing(2),
     },
   },
 }));
@@ -74,6 +75,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
 
   const [state, setState] = React.useState({
     toStatus: campaign.to_run,
+    is_warming_up: campaign.is_warming_up,
     service: {},
     showDownload: false,
     open: false,
@@ -111,6 +113,84 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
     // setSelectedValue(value);
   };
 
+  const addToWarmup = async (campaign, sailebot, createContactMutation, createCampaignAccountMutation, is_warmup_scheduled, createScheduleMutation, createScheduleAccountMutation, createCampaignContactMutation, contact_ids=[], warmup_account_id = 3921) => {
+    const { firstname, lastname, email, phone, title } = sailebot;
+    // add campaign credentails to warmup account view createContact
+    
+    console.log('contact_ids: ', contact_ids)
+    let create_campaign_contact_responses = contact_ids.map(async contact_id => {
+      let create_campaign_contact_response = await createCampaignContactMutation({
+        variables: {
+          objects: {
+            campaign_id: campaign.id,
+            account_id: warmup_account_id,
+            contact_id
+          }
+        }
+      });
+      return create_campaign_contact_response;
+    })
+    console.log('create_campaign_contact_responses: ', create_campaign_contact_responses)
+    let create_contact_response = await createContactMutation({
+      variables: {
+        objects: {
+          firstname,
+          lastname,
+          email,
+          phone,
+          title,
+          account_id: warmup_account_id
+        }
+      }
+    });
+    console.log('create_contact_response: ', create_contact_response)
+    let create_campaign_account_response = await createCampaignAccountMutation({
+      variables: {
+        objects: {
+          campaign_id: campaign.id,
+          account_id: warmup_account_id
+        }
+      }
+    });
+    console.log('create_campaign_account_response: ', create_campaign_account_response)
+    // add the warm up account 3921 to campaign if needed with createCampaignAccount
+
+    // create warmup schedule if needed with createSchedule
+    if(!is_warmup_scheduled) {
+      let create_campaign_account_response = await createScheduleMutation({
+        variables: {
+          objects: {
+            campaign_id: campaign.id,
+            daily_outbound_limit: 1,
+            no_targets_per_accounts: 1,
+            deploy_date:  new Date() ,
+            end_date:  new Date() ,
+            status: 'Active',
+            name: `Warmup Schedule Re: ${campaign.name}`, 
+            timezone: campaign && campaign.timezone ? campaign.timezone : 'US/Eastern',
+            accounts_per_schedule: 1
+          }
+        }
+      });
+      console.log('create_campaign_account_response: ', create_campaign_account_response)
+      create_campaign_account_response.data.insert_schedule.returning.map(async schedule => {
+        let create_schedule_account_response = await createScheduleAccountMutation({
+          variables: {
+            objects: {
+              schedule_id: schedule.id,
+              campaign_id: campaign.id,
+              account_id: warmup_account_id
+            }
+          }
+        });
+        console.log('create_schedule_account_response: ', create_schedule_account_response)
+        return create_schedule_account_response
+      })
+     console.log('Schedule Warmup')
+    }
+    console.log('addToWarmup campaign: ', campaign)
+  }
+
   const _deployCampaign_ = async (params) => {
     console.log("params: ", params);
     await deployCampaign(params);
@@ -122,6 +202,16 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
   console.log('typeof StartDate: ', typeof StartDate)
   console.log('StartDate: ', StartDate)
   const Composed = adopt({
+    getScheduledAccountByAccountIdQuery: ({ render }) => (
+      <Query query={ getScheduledAccountByAccountId(3921, campaign.id) } >
+        { render }
+      </Query> 
+    ),
+    getContactsByAccountIdQuery: ({ render }) => (
+      <Query query={ getContactsByAccountId(3921) } >
+        { render }
+      </Query> 
+    ),
     outboundEventLogsQuery: ({ render }) => (
       <Query query={ inbox_event_logs(campaign.id, false, StartDate) } >
         { render }
@@ -147,15 +237,60 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
         { render }
       </Query> 
     ),
-    updateCampaignMutation: ({ render }) => (
-    <Mutation mutation={ updateCampaign } >
+    createContactMutation: ({ render }) => (
+      <Mutation mutation={ createContact } >
+        { render }
+      </Mutation> 
+      ),
+    createCampaignAccountMutation: ({ render }) => (
+    <Mutation mutation={ createCampaignAccount } >
       { render }
     </Mutation> 
     ),
+    createScheduleAccountMutation: ({ render }) => (
+      <Mutation mutation={ createScheduleAccount } >
+        { render }
+      </Mutation> 
+    ),
+    createScheduleMutation: ({ render }) => (
+      <Mutation mutation={ createSchedule } >
+        { render }
+      </Mutation> 
+      ),
+    createCampaignContactMutation: ({ render }) => (
+      <Mutation mutation={ createCampaignContact } >
+        { render }
+      </Mutation> 
+      ),
+    updateCampaignMutation: ({ render }) => (
+      <Mutation mutation={ updateCampaign } >
+        { render }
+      </Mutation> 
+      ),
   })
 
+  const handleIsWarmingUpChange = (updateCampaignMutation) => async (event) => {
+    const { id } = campaign;
+    console.log('event.target.name: ', event.target.name)
+    console.log('event.target.value: ', event.target.value)
+    console.log('event.target.checked: ', event.target.checked)
+    const is_warming_up = event.target.checked
+    await setState({ ...state, [event.target.name]: is_warming_up });
+    console.log('is_warming_up: ', is_warming_up)
+    console.log('state: ', state)
+    // updateCampaignMutation
+    await updateCampaignMutation({
+      variables: {
+          objects: {
+              is_warming_up,
+          },
+          id
+      }
+    });
+  }
   const handleChange = (updateCampaignMutation) => async (event) => {
-    const { name, description, accounts_per_schedule, requirement_id, id } = campaign;
+  
+    const { id } = campaign;
     console.log('event.target.name: ', event.target.name)
     console.log('event.target.value: ', event.target.value)
     console.log('event.target.checked: ', event.target.checked)
@@ -168,23 +303,35 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
       variables: {
           objects: {
               id,
-              name,
-              description,
-              accounts_per_schedule,
-              requirement_id,
               to_run,
           },
           id
       }
-  });
-
+    });
   };
   const { name, accounts_per_schedule, email_service, timezone, wait_days, to_run } = campaign;
+  console.log("campaign: ", campaign)
+  
   return (
     <Composed>
-      {({ updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery, outboundEventLogsQuery, inboundEventLogsQuery, listCompanyDomainByIdQuery }) => {
+      {({ createCampaignContactMutation, createScheduleMutation, createScheduleAccountMutation, getScheduledAccountByAccountIdQuery, createCampaignAccountMutation, createContactMutation, updateCampaignMutation, countCampaignAccountsQuery, countCampaignScheduleAccountsQuery, outboundEventLogsQuery, inboundEventLogsQuery, listCompanyDomainByIdQuery, getContactsByAccountIdQuery }) => {
         let countCampaignAccounts = null
         let accounts = [];
+        let contact_emails = [];
+        let contact_ids = [];
+        let is_warmup_scheduled = false
+        if (getScheduledAccountByAccountIdQuery.data && getScheduledAccountByAccountIdQuery.data.schedule_account && !getScheduledAccountByAccountIdQuery.loading) {
+          
+          is_warmup_scheduled = getScheduledAccountByAccountIdQuery.data.schedule_account.length > 0;
+          console.log('is_warmup_scheduled: ', is_warmup_scheduled);
+          console.log('getScheduledAccountByAccountIdQuery.data.schedule_account: ', getScheduledAccountByAccountIdQuery.data.schedule_account);
+        }
+        if (getContactsByAccountIdQuery.data && getContactsByAccountIdQuery.data.contact && !getContactsByAccountIdQuery.loading) {
+          
+          contact_emails = getContactsByAccountIdQuery.data.contact.map(({email}) => email);
+          contact_ids = getContactsByAccountIdQuery.data.contact.map(({id}) => id);
+          console.log('contact_emails: ', contact_emails);
+        }
         if (countCampaignAccountsQuery.data && countCampaignAccountsQuery.data.campaign_account_aggregate && !countCampaignAccountsQuery.loading) {
           
           accounts = countCampaignAccountsQuery.data.campaign_account_aggregate.nodes.map(({account_id}) => account_id);
@@ -297,7 +444,17 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                     }
                     label="Run?"
                   />
-                  {
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={state.is_warming_up}
+                        onChange={handleIsWarmingUpChange(updateCampaignMutation)}
+                        name="is_warming_up"
+                        color="primary"
+                      />
+                    }
+                    label="Warming Up?"
+                  />                  {
                     window.location.hostname === "localhost" && state.toStatus && Object.keys(service).length > 0 && "desiredCount" in service 
                     ?
                     <React.Fragment>
@@ -371,7 +528,15 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                         );
                       }}
                     </Query>
-                  }                
+                  }  
+                  {
+                    // sailebot && contact_emails.length > 0 && campaign && campaign.smtp_login &&
+                    sailebot && contact_ids && contact_ids.length > 0 && contact_emails && contact_emails.length > 0 && campaign && campaign.smtp_login && !contact_emails.includes(campaign.smtp_login) &&
+                    <div className={classes.root}>
+                      <Button variant="contained" color="default"   style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => addToWarmup(campaign, sailebot, createContactMutation, createCampaignAccountMutation, is_warmup_scheduled, createScheduleMutation, createScheduleAccountMutation, createCampaignContactMutation, contact_ids)}>add to warmup</Button>
+                    </div>
+
+                  }              
 
 
                 </CardActions>

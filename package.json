@@ -59,6 +59,7 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-router-redux": "^4.0.8",
+    "react-s3-uploader": "^5.0.0",
     "react-scripts": "3.4.0",
     "react-select": "^3.1.0",
     "react-select-popover": "^0.1.1",

@@ -123,7 +123,7 @@ export const createUpdateAccount = gql`
 
 export const createContactAccount = gql`
   mutation InsertAccount($objects: [account_insert_input!]!) {
-    insert_account(objects: $objects, on_conflict: {constraint: account_name_email_domain_key, update_columns: [name, email_domain]}) {
+    insert_account(objects: $objects, on_conflict: {constraint: account_name_email_domain_key, update_columns: [name, email_domain, account_id]}) {
       returning {
         id
       }

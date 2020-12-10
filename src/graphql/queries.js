@@ -152,6 +152,7 @@ export const listCompanies = (limit) => {
                 created_at
                 updated_at
                 to_suppress
+                logo
             }
         }
     `;
@@ -266,6 +267,10 @@ export const GET_ALL_CAMPAIGNS = gql`
             name
             requirement_id
             timezone
+            is_warming_up
+            max_heat
+            warmup_start
+            warmup_end
             schedules {
                 campaign_id
                 daily_outbound_limit
@@ -822,11 +827,25 @@ export const listScheduleAccounts = (schedule_id, limit=10, offset=0) => {
                 }
                 account_id
                 campaign_id
+                schedule_id
                 id
             }
         }
     `;
 }
+
+export const getScheduledAccountByAccountId = (campaign_id, account_id, limit=10, offset=0) => {
+    return gql`
+        query GetScheduledAccountByAccountId {
+            schedule_account(where: {account_id: {_eq: ${account_id}} campaign_id: {_eq: ${campaign_id}}}, limit: ${limit}, offset: ${offset}) {
+                account_id
+                campaign_id
+                id
+            }
+        }
+    `;
+}
+
 
 export const listAllCampaignAccounts = (campaign_id) => {
     return gql`
@@ -998,6 +1017,35 @@ export const getContactById = (id) => {
     return gql`
         query GetContactById {
             contact(where: {id: {_eq: ${id}}}) {
+                account_id
+                bounce_type
+                email
+                first_outbound_done
+                firstname
+                gender
+                id
+                is_ema_eligible
+                is_eva_eligible
+                is_referral
+                lastname
+                member_status
+                phone
+                position
+                role
+                sam_status
+                second_outbound_done
+                source
+                title
+                to_followup
+            }
+        }
+    `;
+}
+
+export const getContactsByAccountId = (account_id) => {
+    return gql`
+        query GetContactById {
+            contact(where: {account_id: {_eq: ${account_id}}}) {
                 account_id
                 bounce_type
                 email
@@ -1282,6 +1330,10 @@ export const listRequirementCampaigns = (requirement_id) => {
             email_service
             wait_days
             company_domain_id
+            is_warming_up
+            max_heat
+            warmup_start
+            warmup_end
         }
     }
 `;
@@ -1427,6 +1479,40 @@ export const clientEventByCampaignContact = (client_id, contact_id, campaign_id)
                 sender
                 to
                 campaign_id
+            }
+        }
+    `;
+}
+
+export const listRecentCampaignEventsContactEmail = (search_term, campaign_id) => {
+    return gql`
+        query ListRecentCampaignEventsContactEmail {
+            event(
+                where: {
+                        campaign_id: {_eq: ${campaign_id}},
+                        to: {_ilike: "%${search_term}%"},
+                        is_inbound: {_eq: false} 
+                    },
+                    order_by: {id: desc},
+                    limit: 20
+                ) {
+                body
+                cc
+                contact_id
+                date
+                id
+                label
+                nlu_input_text
+                selected_intent
+                subject
+                sender
+                to
+                campaign_id
+                contact {
+                    id
+                    account_id
+                    email
+                }
             }
         }
     `;

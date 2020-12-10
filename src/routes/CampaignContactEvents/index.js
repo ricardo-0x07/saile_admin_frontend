@@ -3,7 +3,7 @@ import { Query } from "react-apollo";
 
 import { EventCard } from "./EventCard";
 // import { listEvents, clientEventByCampaignContact } from "../../graphql/subscription";
-import { listEvents, clientEventByCampaignContact } from "../../graphql/queries";
+import { listEvents, clientEventByCampaignContact, listRecentCampaignEventsContactEmail } from "../../graphql/queries";
 import Title from '../../components/Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
@@ -18,12 +18,12 @@ const useStyles = makeStyles(theme => ({
 
 
 const Events = (props) => {
-  console.log('campaignContactevents props: ', props);
+  const { search_term, campaign_id } = props
   const classes = useStyles();
   const Composed = adopt({
-    eventsSubscription: (props.location && props.locationprops.location.state && props.location.state.client && props.location.state.contact_id && props.location.state.client.id  && props.location.state.campaign_id) 
-    || (props.client && props.contact_id && props.client.id  && props.campaign_id)?
-    ({ render }) => (
+    eventsSubscription: (!search_term &&  (props.location && props.locationprops.location.state && props.location.state.client && props.location.state.contact_id && props.location.state.client.id  && props.location.state.campaign_id)) 
+    || (props.client && props.contact_id && props.client.id  && props.campaign_id)
+    ?({ render }) => (
       <Query query={
         clientEventByCampaignContact(
           (props.location && props.location.state && props.location.state.client) 
@@ -38,12 +38,24 @@ const Events = (props) => {
         { render }
       </Query>
     )
-    :
-    ({ render }) => (
-      <Query query={listEvents(10) } >
-        { render }
-      </Query>
-    ),
+    : search_term && search_term !== '' && campaign_id 
+      ?
+      ({ render }) => (
+        <Query query={
+            listRecentCampaignEventsContactEmail(
+              search_term,
+              campaign_id
+            )
+        } >
+          { render }
+        </Query>
+      )
+      :
+      ({ render }) => (
+        <Query query={listEvents(10) } >
+          { render }
+        </Query>
+      ),
   })
   return (
     <Composed>

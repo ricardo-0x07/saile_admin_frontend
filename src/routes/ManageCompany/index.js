@@ -46,6 +46,7 @@ const ManageCompanyForm = (props) => {
         city: '',
         country: '',
         phone: '',
+        logo: 'https://d13rds6btkjz86.cloudfront.net/logos/Saile.Logo.png',
     };
     if ( props.location.state && props.location.state.company) {
         initialValues = props.location.state.company
@@ -76,6 +77,7 @@ const ManageCompanyForm = (props) => {
                                 state,
                                 country,
                                 phone,
+                                logo
                             }) => {
                                 if (id) {
                                     await mutation({
@@ -92,6 +94,7 @@ const ManageCompanyForm = (props) => {
                                                 state,
                                                 country,
                                                 phone,
+                                                logo
                                             },
                                             id
                                         }
@@ -111,6 +114,7 @@ const ManageCompanyForm = (props) => {
                                                 state,
                                                 country,
                                                 phone,
+                                                logo
                                             }
                                         }
                                     });
@@ -189,6 +193,14 @@ const ManageCompanyForm = (props) => {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.phone || ''}
+                                        />
+                                        <TextField
+                                            name="logo"
+                                            label="Logo" 
+                                            variant="filled" 
+                                            margin="normal" 
+                                            onChange={handleChange}
+                                            value={values.logo || ''}
                                         />
                                     </FormGroup>
                                 </FormControl>

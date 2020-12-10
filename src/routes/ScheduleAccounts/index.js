@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 const Accounts = (props) => {
   const classes = useStyles();
   const limit = 10
-  let total = 10
+  let total = 1
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     // value = value * total;

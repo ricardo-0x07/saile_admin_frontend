@@ -23,6 +23,7 @@ import { adopt } from 'react-adopt';
 import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
 import ContactSelect from "./ContactSelect";
 import AddCampaignContact from './AddCampaignContact';
+import CampaignContactEvents from '../CampaignContactEvents';
 
 
 // const actionable_opportunity_clarification_lambda_api_endpoint = "https://8xbo18ydk7.execute-api.us-west-2.amazonaws.com/Prod/"
@@ -47,10 +48,14 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
   const [state, setState] = React.useState({
     showBody: false,
     delay: 7,
-    showcontactForm: false
+    showcontactForm: false,
+    showCampaignContactEvents: false,
   });
   const classes = useStyles();
 
+  const handleShowCampaignContactEvents = async () => {
+    await setState({ ...state, showCampaignContactEvents: !state.showCampaignContactEvents });
+  }
   const {
     cc,
     date,
@@ -280,7 +285,6 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
     } = event;
     const toClarify=false
     console.log('contact_data.account_id: ', contact_data.account_id)
-    console.log('campaign_id: ', campaign_id)
     await updateCampaignAccountMutation({
       variables: {
           objects: {
@@ -387,6 +391,9 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
       </React.Fragment>
     );
   }
+  console.log("sender.split('@'): ", sender.split('@'))
+  console.log("sender.split('@'): ", sender.split('@')[sender.split('@').length-1])
+
   
   return (
     <Composed>
@@ -495,6 +502,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                           }
                           <CardActions className={classes.root}>
                             <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
+                            <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>
                             <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Dismiss</Button>
                             <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
                             {
@@ -754,6 +762,10 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                 <AddCampaignContact closeForm={toggleContactForm} account_id={ undefined} campaign_id={campaign_id} apolloClient={apolloClient}/>
                 : null
 
+              }
+              {
+                campaign_id && state.showCampaignContactEvents &&
+                <CampaignContactEvents search_term={sender ?  sender.split('@')[sender.split('@').length-1] : ''} campaign_id={campaign_id}/>
               }
 
             </CardContent>

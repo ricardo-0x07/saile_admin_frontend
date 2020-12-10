@@ -51,12 +51,8 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data) => {
     console.log('contact_data: ', contact_data)
     const {
-
-      id,
       campaign_id,
-      to,
     } = event;
-    const toClarify=false
     console.log('contact_data.account_id: ', contact_data.account_id)
     console.log('campaign_id: ', campaign_id)
     await updateCampaignAccountMutation({
@@ -70,16 +66,22 @@ export const EventCard = ({ event, updateReload, client, history }) => {
       }
     });
 
-    await updateEventMutation({
-      variables: {
-          objects: {
-            to_clarify: toClarify,
-            label: 'no_response',
-            to,
-          },
-          id
-      }
-    });
+    // const {
+
+    //   id,
+    //   to,
+    // } = event;
+    // const toClarify=false
+    // await updateEventMutation({
+    //   variables: {
+    //       objects: {
+    //         to_clarify: toClarify,
+    //         label: 'no_response',
+    //         to,
+    //       },
+    //       id
+    //   }
+    // });
     updateReload()
   }
 

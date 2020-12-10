@@ -10,6 +10,10 @@ import {
 } from '@material-ui/core';
 import { adopt } from 'react-adopt';
 import { Mutation } from "react-apollo";
+import CardMedia from '@material-ui/core/CardMedia';
+import LogoFileUpload from './LogoFileUpload'
+
+
 
 // import { companyEventCountByLabel, companyEventCount } from "../../graphql/queries";
 
@@ -23,14 +27,27 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
     },
   },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
 }));
+// const styles = 
+// {
+
+// media: {
+//   height: 0,
+//   paddingTop: '56.25%', // 16:9,
+//   marginTop:'30'
+// }
+//   };
 
 export const CompanyCard = ({ company,  history }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     to_suppress: company.to_suppress,
   });
-  const {name, id } = company;
+  const {name, id, logo } = company;
   // const { to_suppress } = state;
 
   const Composed = adopt({
@@ -66,16 +83,28 @@ export const CompanyCard = ({ company,  history }) => {
       {({ updateCompanyMutation }) => {
         return (
           <Card>
-            <CardContent>
-              <Typography>Company ID: {id}</Typography>
-              <Typography>Company: {name}</Typography>
+            {/* <CardMedia
+              className={classes.media}
+              image={logo}
+              title="Company Logo"
+              style={{height: 0, width: 'auto', paddingTop: '66.25%'}}
+            /> */}
+            <CardMedia style={{height: '10%', width: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>
+             <img src={logo} alt="Company Logo" width='10%' style={{ alignSelf: 'center', margin: 'auto' }}/>
+            </CardMedia>
+
+            <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Typography>{name} </Typography>
+              <Typography>ID: {id}</Typography>
             </CardContent>
-            <div style={{ display: 'flex', flexDirection: 'row' }} className={classes.root}>
-              <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }} className={classes.root}>
+              <CardActions style={{ display: 'flex', flexDirection: 'column'}} className={classes.root}>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-company', {company})}>Edit</Button>
-                <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-client', {company})}>Add Client</Button>
-                <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/clients-by-company', {company})}>View Clients</Button>
-                <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/domains-by-company', {company})}>View Domains</Button>
+                {/* <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-client', {company})}>Add Client</Button> */}
+                <div style={{display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                  <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/clients-by-company', {company})}>Clients</Button>
+                  <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/domains-by-company', {company})}>Domains</Button>
+                </div>
                 <FormControlLabel
                     control={
                       <Switch
@@ -87,6 +116,17 @@ export const CompanyCard = ({ company,  history }) => {
                     }
                     label="Suppression?"
                   />
+                {
+                  window.location.hostname === "localhost" && name &&
+                  <div style={{ display: 'flex', flexDirection: 'column'}}>
+                    <LogoFileUpload 
+                      id={id}
+                      name={ 
+                        `Logo Upload`
+                      }
+                    />                  
+                  </div>
+                }
               </CardActions>
               {/* <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {
