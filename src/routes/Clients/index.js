@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
 const Clients = (props) => {
   console.log('props: ', props)
   const classes = useStyles();
-  const limit = 2;
-  let total = 2;
+  const limit = 1;
+  let total = 1;
   
   const [state, setState] = React.useState({
     reload: false,
@@ -83,7 +83,7 @@ const Clients = (props) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateColumns: "repeat(1, 1fr)",
                 gridGap: 10
               }}
             >
