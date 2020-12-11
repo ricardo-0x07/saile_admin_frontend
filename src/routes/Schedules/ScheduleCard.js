@@ -43,45 +43,61 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
   }
   const { name, no_targets_per_accounts, deploy_date, end_date, id, campaign_id } = schedule;
   const { elasticity } = requirement;
-  console.log('elasticity: ', elasticity);
+  // console.log('elasticity: ', elasticity);
 
   const getScheduledContactsCount = () => {
     const schedule_accounts_ids = [...new Set(schedule.schedule_accounts.map(item => item.account_id))]
     return schedule_accounts_ids.reduce(  async (dataP, account_id) => {
+      // contact_id: {_nin: [41046, 41049]}
       const data = await dataP;
-      const response = await apolloClient.query({
-        query: gql`
-          query MyQuery($account_id:Int!, $campaign_id:Int!, $schedule_id:Int!, $client_id:Int!, $elasticity:Int!) {
-            campaign_contacts_view(where: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}, schedule_id: {_eq: $schedule_id}, client_id: {_eq: $client_id}, unsubscribed: {_eq: false}, campaign_contact_is_delisted: {_eq: false}, campaign_account_is_delisted: {_eq: false}}, limit: $elasticity, order_by: {contact_id: asc}) {
-              account_id
-              campaign_account_is_delisted
-              campaign_account_last_delisted_date
-              campaign_contact_delisted_date
-              campaign_contact_is_delisted
-              campaign_id
-              client_id
-              contact_id
-              deploy_date
-              id
-              next_date
-              schedule_id
-              status
-              to_followup
-              unsubscribed
+      const results = await Array(elasticity).fill(1).reduce(async (accP, limit) => {
+        // console.log("limit: ", limit)
+        const acc = await accP;
+        const contact_ids = [...new Set(acc.map(item => item.contact_id))]
+        // console.log("contact_ids: ", contact_ids)
+        const response = await apolloClient.query({
+          query: gql`
+            query MyQuery($account_id:Int!, $contact_ids:[Int!], $campaign_id:Int!, $schedule_id:Int!, $client_id:Int!, $elasticity:Int!) {
+              campaign_contacts_view(where: {account_id: {_eq: $account_id}, contact_id: {_nin: $contact_ids}, campaign_id: {_eq: $campaign_id}, schedule_id: {_eq: $schedule_id}, client_id: {_eq: $client_id}, unsubscribed: {_eq: false}, campaign_contact_is_delisted: {_eq: false}, campaign_account_is_delisted: {_eq: false}}, limit: $elasticity, order_by: {contact_id: asc}) {
+                account_id
+                campaign_account_is_delisted
+                campaign_account_last_delisted_date
+                campaign_contact_delisted_date
+                campaign_contact_is_delisted
+                campaign_id
+                client_id
+                contact_id
+                deploy_date
+                id
+                next_date
+                schedule_id
+                status
+                to_followup
+                unsubscribed
+              }
             }
+          `,
+          variables: {
+            account_id: account_id,
+            campaign_id: campaign_id,
+            elasticity: limit,
+            schedule_id: schedule.id,
+            client_id: sailebot.client_id,
+            contact_ids
           }
-        `,
-        variables: {
-          account_id: account_id,
-          campaign_id: campaign_id,
-          elasticity: elasticity,
-          schedule_id: schedule.id,
-          client_id: sailebot.client_id
+        })
+        // console.log('response.acc: ', response.data);
+        if(response.data && response.data.campaign_contacts_view && response.data.campaign_contacts_view.length) {
+          return acc.concat(response.data.campaign_contacts_view);
+        } else {
+          return acc;
         }
-      })
-      // console.log('response.data: ', response.data);
-      if(response.data && response.data.campaign_contacts_view && response.data.campaign_contacts_view.length) {
-        return data.concat(response.data.campaign_contacts_view);
+        // console.log("response.data.campaign_contacts_view: ", response.data.campaign_contacts_view)
+        // return response.data.campaign_contacts_view
+      }, []);
+      // console.log("results: ", results)
+      if(results && results.length > 0) {
+        return data.concat(results);
       } else {
         return data;
       }

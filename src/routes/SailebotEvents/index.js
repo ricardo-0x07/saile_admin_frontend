@@ -83,7 +83,7 @@ const Events = (props) => {
 
         return (
           <div className={classes.root}>
-            <Title>{props.location.state.label ? props.location.state.label.replace('_', ' ').toUpperCase() : ""} EVENTS</Title>
+            <Title>{totalCampaignEventsQuery && totalCampaignEventsQuery.data && totalCampaignEventsQuery.data.event_aggregate && totalCampaignEventsQuery.data.event_aggregate.aggregate.count ? totalCampaignEventsQuery.data.event_aggregate.aggregate.count : 0} {props.location.state.label ? props.location.state.label.replace('_', ' ').toUpperCase() : ""} EVENTS</Title>
             <div
               style={{
                 display: "grid",
@@ -104,9 +104,9 @@ const Events = (props) => {
                 ))
               }
             </div>
-              <div className={classes.root}>
-                <Pagination count={total} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
-              </div>
+            <div className={classes.root}>
+              <Pagination count={total} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
+            </div>
             </div>  
         );
       }}

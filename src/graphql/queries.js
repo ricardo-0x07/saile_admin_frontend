@@ -23,7 +23,7 @@ export const GET_ALL_CLIENTS =gql`
     }
 }
 `;
-export const listNullCompanyIdClients = (limit) => {
+export const listNullCompanyIdClients = (limit, offset) => {
     return gql`
         query ListClients {
             client(where: {company_id: {_is_null: true}}, limit: ${limit}, offset: 0) {
@@ -81,10 +81,10 @@ export const listClients = (limit) => {
     `;
 }
 
-export const listCompanyUserClients = (company_id) => {
+export const listCompanyUserClients = (company_id, limit=10, offset=0) => {
     return gql`
         query ListCompanyUserClients {
-            client(where: {company_id: {_eq: ${company_id}}}) {
+            client(where: {company_id: {_eq: ${company_id}}}, limit: ${limit}, offset: ${offset}, order_by: {id: desc}) {
                 NAICS
                 address
                 city
@@ -1532,6 +1532,42 @@ export const totalCampaignEventsByLabel = (client_id, label_query, is_inbound=fa
         }
     `;
 }
+
+export const totalCompanyClients = (company_id) => {
+    return gql`
+        query TotalClients {
+            client_aggregate(where: {company_id: {_eq: ${company_id}}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+
+export const totalNullCompanyClients = () => {
+    return gql`
+        query TotalCompanyClients {
+            client_aggregate({company_id: {_is_null: true}}) {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+export const totalClients = () => {
+    return gql`
+        query TotalCompanyClients {
+            client_aggregate() {
+                aggregate {
+                count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+
 export const totalCampaignEvents = (client_id) => {
     return gql`
         query TotalCampaignClarificationEvents {

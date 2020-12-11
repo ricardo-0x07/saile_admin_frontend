@@ -2,11 +2,12 @@ import * as React from "react";
 import { Query } from "react-apollo";
 import { connect } from 'react-redux';
 import { ClientCard } from "./ClientCard";
-import { /*listClients,*/ listCompanyUserClients, listNullCompanyIdClients } from "../../graphql/queries";
+import { /*listClients,*/ listCompanyUserClients, listNullCompanyIdClients, totalCompanyClients, totalNullCompanyClients } from "../../graphql/queries";
 import Title from '../../components/Title';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { adopt } from 'react-adopt';
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,16 +22,38 @@ const useStyles = makeStyles(theme => ({
 const Clients = (props) => {
   console.log('props: ', props)
   const classes = useStyles();
+  const limit = 2;
+  let total = 2;
+  
+  const [state, setState] = React.useState({
+    reload: false,
+    page: 1
+  });
+  const { page } = state;
+  const handleChange = (event, value) => {
+    setState({ page: value})
+  };
   const Composed = adopt({
+    totalClientsQuery: props.location.state && props.location.state.company && props.location.state.company.id ?
+    ({ render }) => (
+      <Query query={totalCompanyClients(props.location.state.company.id)} >
+        { render }
+      </Query>
+    )
+    : ({ render }) => (
+      <Query query={totalNullCompanyClients()} >
+        { render }
+      </Query>
+    ), 
     clientsQuery: props.location.state && props.location.state.company && props.location.state.company.id ?
     ({ render }) => (
-      <Query query={listCompanyUserClients(props.location.state.company.id)} >
+      <Query query={listCompanyUserClients(props.location.state.company.id, limit, (page-1) * limit)} >
         { render }
       </Query>
     )
     :
     ({ render }) => (
-      <Query query={listNullCompanyIdClients(10) } >
+      <Query query={listNullCompanyIdClients(limit, (page-1) * limit) } >
         { render }
       </Query>
     ),
@@ -38,7 +61,7 @@ const Clients = (props) => {
 
   return (
     <Composed>
-      {({ clientsQuery: {data, loading} }) => {
+      {({ clientsQuery: {data, loading}, totalClientsQuery }) => {
         if (
           loading ||
           !data ||
@@ -48,6 +71,10 @@ const Clients = (props) => {
           return null;
         }
 
+        if (!totalClientsQuery.loading) {
+          console.log('totalClientsQuery: ', totalClientsQuery)
+          total =  Math.ceil(totalClientsQuery.data.client_aggregate.aggregate.count/limit)
+        }
 
         return (
           <div className={classes.root}>
@@ -65,6 +92,9 @@ const Clients = (props) => {
                   <ClientCard client={x} name={x.name} key={x.id}  history={props.history}/>
                 ))
               }
+            </div>
+            <div className={classes.root}>
+              <Pagination count={total} page={page} onChange={handleChange} variant="outlined" shape="rounded" />
             </div>
           </div>
         );
