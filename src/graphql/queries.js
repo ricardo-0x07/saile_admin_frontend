@@ -1548,7 +1548,7 @@ export const totalCompanyClients = (company_id) => {
 export const totalNullCompanyClients = () => {
     return gql`
         query TotalCompanyClients {
-            client_aggregate({company_id: {_is_null: true}}) {
+            client_aggregate(where: {company_id: {_is_null: true}}) {
                 aggregate {
                 count(columns: id, distinct: true)
                 }
