@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, useField } from 'formik';
+import { Formik, useField, Field } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     TextField,
@@ -9,6 +9,11 @@ import {
     FormGroup,
     FormControlLabel,
 } from '@material-ui/core';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+  } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 import { Mutation, Query } from "react-apollo";
 import { createCampaign, updateCampaign } from "../../graphql/mutations";
 import CompanyDomainSimpleSelect from './CompanyDomainSimpleSelect';
@@ -17,6 +22,33 @@ import TimezoneSimpleSelect from './TimezoneSimpleSelect';
 import Switch from '@material-ui/core/Switch';
 import { getCompanyByRequirementId } from "../../graphql/queries";
 
+const DatePickerField = ({ field, form, ...other }) => {
+    const currentError = form.errors[field.name];
+  
+    return (
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+            <KeyboardDatePicker
+                clearable
+                // disablePast
+                name={field.name}
+                value={field.value}
+                format="YYYY-MM-DD"
+                helperText={currentError}
+                label={field.label}
+                error={Boolean(currentError)}
+                onError={error => {
+                // handle as a side effect
+                if (error !== currentError) {
+                    form.setFieldError(field.name, error);
+                }
+                }}
+                // if you are using custom validation schema you probably want to pass `true` as third argument
+                onChange={date => form.setFieldValue(field.name, date, false)}
+                {...other}
+            />
+        </MuiPickersUtilsProvider>
+    );
+};
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -54,7 +86,11 @@ const ManageCampaignForm = (props) => {
         smtp_password: '',
         email_service: '',
         timezone: '',
-        wait_days: 0
+        wait_days: 0,
+        is_warming_up: false,
+        warmup_start:  new Date() ,
+        warmup_end:  new Date() ,
+        max_heat: 10,
 };
     if ( props.location.state && props.location.state.campaign) {
         initialValues = props.location.state.campaign
@@ -115,7 +151,11 @@ const ManageCampaignForm = (props) => {
                                             timezone,
                                             email_service,
                                             wait_days,
-                                            company_domain_id
+                                            company_domain_id,
+                                            is_warming_up,
+                                            warmup_start,
+                                            warmup_end,
+                                            max_heat
                                         }) => {
                                             if (id) {
                                                 await mutation({
@@ -135,7 +175,11 @@ const ManageCampaignForm = (props) => {
                                                             email_service,
                                                             timezone,
                                                             wait_days: Number(wait_days),
-                                                            company_domain_id
+                                                            company_domain_id,
+                                                            is_warming_up,
+                                                            warmup_start,
+                                                            warmup_end,
+                                                            max_heat
                                                         },
                                                         id
                                                     }
@@ -157,7 +201,11 @@ const ManageCampaignForm = (props) => {
                                                             email_service,
                                                             timezone,
                                                             wait_days: Number(wait_days),
-                                                            company_domain_id
+                                                            company_domain_id,
+                                                            is_warming_up,
+                                                            warmup_start,
+                                                            warmup_end,
+                                                            max_heat
                                                         }
                                                     }
                                                 });
@@ -205,6 +253,16 @@ const ManageCampaignForm = (props) => {
                                                         onChange={handleChange}
                                                         value={values.wait_days  || ''}
                                                     />
+                                                    <TextField
+                                                        name="max_heat"
+                                                        label="Max Warm" 
+                                                        variant="filled" 
+                                                        margin="normal" 
+                                                        onChange={handleChange}
+                                                        value={values.max_heat  || ''}
+                                                    />
+                                                    <Field label="Start Warmpup" name="warmup_start" component={DatePickerField} />
+                                                    <Field label="Complete Warmup" name="warmup_end" component={DatePickerField} />
                                                     <EmailServiceSimpleSelect label="Email Service" name="email_service" onChange={handleChange} value={values.email_service || 'mailgun'}/>
                                                     <TimezoneSimpleSelect label="Timezone" name="timezone" onChange={handleChange} value={values.timezone || ''}/>
                                                     <TextField

@@ -263,7 +263,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
     console.log('item: ', item)
     updateReload()
   }
-  const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data, is_delisted) => {
+  const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data, is_delisted, refetchAccount) => {
     console.log('contact_data: ', contact_data)
     const {
       cc,
@@ -295,17 +295,8 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
           campaign_id,
       }
     });
+    refetchAccount()
 
-    // await updateEventMutation({
-    //   variables: {
-    //       objects: {
-    //         to_clarify: toClarify,
-    //         to,
-    //       },
-    //       id
-    //   }
-    // });
-    updateReload()
   }
   const _reListCampaignContact_ = async (updateCampaignContactMutation, deleteEventMutation) => {
     const {
@@ -578,7 +569,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                                       return (
                                         <div style={{ flexDirection: 'row' }}>
                                           {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}
-                                          <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                                          <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
                                         </div>
                                       );  
                                     }} 

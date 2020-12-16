@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
 const Clients = (props) => {
   console.log('props: ', props)
   const classes = useStyles();
-  const limit = 1;
   let total = 1;
+  let limit = props.location.state && props.location.state.company && props.location.state.company.id ? 1 : 10;
   
   const [state, setState] = React.useState({
     reload: false,
@@ -70,6 +70,7 @@ const Clients = (props) => {
         ) {
           return null;
         }
+        console.log('clientsQuery data: ', data)
 
         if (!totalClientsQuery.loading) {
           console.log('totalClientsQuery: ', totalClientsQuery)
