@@ -236,7 +236,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   // console.log(body.split("\n").slice(0,4))
   console.log("contact_id: ", contact_id);
   console.log("campaign_id: ", campaign_id);
-  let refetchContact = null;
+  // let refetchContact = null;
   return (
     <Composed>
       {({ updateEventMutation, updateCampaignContactMutation, updateCampaignAccountMutation  }) => {
@@ -310,7 +310,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                             }
                             console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
                             const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
-                            refetchContact = campaignAccountQuery.refetch;
+                            // refetchContact = campaignAccountQuery.refetch;
         
                             return (
                               <span><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'} </span>
