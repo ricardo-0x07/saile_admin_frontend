@@ -48,7 +48,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   const handleShowCampaignContactEvents = async () => {
     await setState({ ...state, showCampaignContactEvents: !state.showCampaignContactEvents });
   }
-  const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data) => {
+  const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data, is_delisted, refetchAccount) => {
     console.log('contact_data: ', contact_data)
     const {
       campaign_id,
@@ -58,7 +58,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     await updateCampaignAccountMutation({
       variables: {
           objects: {
-            is_delisted: true,
+            is_delisted: !is_delisted,
             last_delisted_date: new Date().toJSON().slice(0, 10) 
           },
           account_id: contact_data.account_id,
@@ -82,7 +82,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     //       id
     //   }
     // });
-    updateReload()
+    refetchAccount()
   }
 
   const _delistCampaignContact_ = async (updateCampaignContactMutation, updateEventMutation) => {
@@ -236,6 +236,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   // console.log(body.split("\n").slice(0,4))
   console.log("contact_id: ", contact_id);
   console.log("campaign_id: ", campaign_id);
+  let refetchContact = null;
   return (
     <Composed>
       {({ updateEventMutation, updateCampaignContactMutation, updateCampaignAccountMutation  }) => {
@@ -309,6 +310,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                             }
                             console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
                             const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+                            refetchContact = campaignAccountQuery.refetch;
         
                             return (
                               <span><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'} </span>
@@ -437,7 +439,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                       }
 
                       return (
-                        <Button variant="contained" size="small" onClick={() => _delistCampaignContact_(updateCampaignContactMutation, updateEventMutation)}>Remove Contact</Button>
+                        <Button variant="contained" size="small" onClick={() => _delistCampaignContact_(updateCampaignContactMutation, updateEventMutation )}>Remove Contact</Button>
                       );
                     }}
                   </Query>
@@ -458,11 +460,45 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                       }
                       const contact = data.contact[0]
 
+                      // return (
+                      //   <div style={{ flexDirection: 'row' }}>
+                      //     <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact)}>Remove Account</Button>
+                      //   </div>
+                      // );
+                      const { account_id } = data.contact[0]
+                      if (account_id === undefined) {
+                        return null;
+                      }
+  
                       return (
-                        <div style={{ flexDirection: 'row' }}>
-                          <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact)}>Remove Account</Button>
-                        </div>
-                      );
+                        <Query query={getCampaignAccount(campaign_id, account_id)} >
+                        { (campaignAccountQuery) => {
+                          console.log('getCampaignAccount campaignAccountQuery.data: ', campaignAccountQuery.data)
+                          if (
+                          campaignAccountQuery.loading ||
+                            !campaignAccountQuery.data ||
+                            !campaignAccountQuery.data.campaign_account ||
+                            !campaignAccountQuery.data.campaign_account.length > 0 ||
+                            !campaignAccountQuery.data.campaign_account
+                          ) {
+                            return null;
+                          }
+                          console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
+                          const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+      
+                          return (
+                            // <div style={{ flexDirection: 'row' }}>
+                            //   {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}
+                            //   <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                            // </div>
+                            <div style={{ flexDirection: 'row' }}>
+                              <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                            </div>
+                          );  
+                        }} 
+                        </Query>
+                      );           
+
                     }}
                   </Query>
                 }
