@@ -66,23 +66,21 @@ export const EventCard = ({ event, updateReload, client, history }) => {
       }
     });
 
-    // const {
-
-    //   id,
-    //   to,
-    // } = event;
+    const {
+      id,
+    } = event;
     // const toClarify=false
-    // await updateEventMutation({
-    //   variables: {
-    //       objects: {
-    //         to_clarify: toClarify,
-    //         label: 'no_response',
-    //         to,
-    //       },
-    //       id
-    //   }
-    // });
-    refetchAccount()
+    await updateEventMutation({
+      variables: {
+          objects: {
+            to_clarify: is_delisted ? false : true,
+            label: is_delisted ? label : 'no_response',
+          },
+          id
+      }
+    });
+    // refetchAccount()
+    updateReload()
   }
 
   const _delistCampaignContact_ = async (updateCampaignContactMutation, updateEventMutation) => {

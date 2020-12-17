@@ -411,7 +411,8 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                   <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-schedule', {campaign, requirement, sailebot})}>Add Schedule</Button>
                   <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/manage-account', {campaign, requirement, sailebot})}>Add Account</Button>
                   {
-                    window.location.hostname === "localhost" && name &&
+                    // window.location.hostname === "localhost" && name &&
+                    name &&
                     <div style={{ display: 'flex', flexDirection: 'column'}}>
                       <WindResponseFileUpload 
                         campaign_name={name}
@@ -454,7 +455,8 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                       />
                     }
                     label="Warming Up?"
-                  />                  {
+                  />                  
+                  {
                     window.location.hostname === "localhost" && state.toStatus && Object.keys(service).length > 0 && "desiredCount" in service 
                     ?
                     <React.Fragment>
