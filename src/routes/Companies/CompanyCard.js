@@ -42,13 +42,14 @@ const useStyles = makeStyles(theme => ({
 // }
 //   };
 
-export const CompanyCard = ({ company,  history }) => {
+export const CompanyCard = ({ company,  history, refetch }) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     to_suppress: company.to_suppress,
   });
   const {name, id, logo } = company;
   // const { to_suppress } = state;
+  console.log("logo.split('/'): ", logo.split('/', 4).join('/'))
 
   const Composed = adopt({
     updateCompanyMutation: ({ render }) => (
@@ -57,6 +58,21 @@ export const CompanyCard = ({ company,  history }) => {
       </Mutation> 
       ),  
   })
+  const updateLogo = (updateCompanyMutation) => async (filename) => {
+    const { id, logo } = company;
+    const logo_base = logo.split('/', 4).join('/')
+    const updated_logo = `${logo_base}/${filename}`
+    // updateCompanyMutation
+    await updateCompanyMutation({
+      variables: {
+          objects: {
+              logo: updated_logo,
+          },
+          id
+      }
+    });
+    refetch()
+  }
   const handleChange = (updateCompanyMutation) => async (event) => {
     const { id } = company;
     console.log('event.target.name: ', event.target.name)
@@ -75,8 +91,8 @@ export const CompanyCard = ({ company,  history }) => {
           },
           id
       }
-  });
-
+    });
+    refetch()
   };
   return (
     <Composed>
@@ -124,6 +140,7 @@ export const CompanyCard = ({ company,  history }) => {
                       name={ 
                         `Logo Upload`
                       }
+                      updateLogo={updateLogo(updateCompanyMutation)}
                     />                  
                   </div>
                 }

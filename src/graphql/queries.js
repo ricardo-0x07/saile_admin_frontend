@@ -137,7 +137,7 @@ export const listCompanyUserClients = (company_id, limit=10, offset=0) => {
 export const listCompanies = (limit) => {
     return gql`
         query ListCompanies {
-            company(limit: ${limit}, offset: 0) {
+            company(limit: ${limit}, offset: 0, order_by: {id: asc}) {
                 id
                 name
                 address

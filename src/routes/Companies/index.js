@@ -25,7 +25,7 @@ const Companies = (props) => {
     <Query
     query={listCompanies(100)}
     >
-      {({ data, loading }) => {
+      {({ data, loading, refetch }) => {
         console.log('props: ', props)
         console.log('data: ', data)
         console.log('loading: ', loading)
@@ -52,7 +52,7 @@ const Companies = (props) => {
             >
               {
                 data.company.filter(item => item ).map(x => (
-                  <CompanyCard company={x} name={x.name} key={x.id}  history={props.history}/>
+                  <CompanyCard refetch={refetch} company={x} name={x.name} key={x.id}  history={props.history}/>
                 ))
               }
             </div>

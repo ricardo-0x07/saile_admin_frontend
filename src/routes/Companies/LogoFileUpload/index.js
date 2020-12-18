@@ -38,10 +38,12 @@ export default class FileUpload extends Component {
                 })
                     .then(async res => {
                         console.log("res: ", res)
+                        this.props.updateLogo(fileToUpload.name);
                         this.setState({
                             uploadSuccess: "File upload successfull",
                             error: undefined
                         });
+                        
                         return res
                     })
                     .catch(err => {
