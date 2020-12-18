@@ -417,13 +417,13 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                       <WindResponseFileUpload 
                         campaign_name={name}
                         name={ 
-                          `Process Apollo Contacts`
+                          `Process Wind: Contacts`
                         }
                       />                  
                       <ProcessApolloAccountsFileUpload 
                         campaign_name={name}
                         name={ 
-                          `Process Apollo Accounts`
+                          `Process Wind: Accounts`
                         }
                       />
                     </div>
