@@ -133,7 +133,7 @@ export const CompanyCard = ({ company,  history, refetch }) => {
                     label="Suppression?"
                   />
                 {
-                  window.location.hostname === "localhost" && name &&
+                  name &&
                   <div style={{ display: 'flex', flexDirection: 'column'}}>
                     <LogoFileUpload 
                       id={id}
