@@ -35,13 +35,17 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
   const [state, setState] = React.useState({
     data: [],
     showDownload: false,
+    addingToSchedule: false
   });
   // const contact_ids = [...new Set(state.data.map(item => item.contact_id))]
   // const {data, showDownload} = state;
-  const { showDownload } = state;
+  const { showDownload, addingToSchedule } = state;
   const handleShowDownload = async () => {
     await setState({ ...state, showDownload: !showDownload });
   }
+  // const _addingToSchedule_ = async () => {
+  //   await setState({ ...state, addingToSchedule: true });
+  // }
   const { name, no_targets_per_accounts, deploy_date, end_date, id } = schedule;
   // const { elasticity } = requirement;
   // console.log('elasticity: ', elasticity);
@@ -145,6 +149,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
 
   const addScheduleAccounts = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
+    await setState({ ...state, addingToSchedule: true });
     const campaign_accounts = listCampaignAccountsSubscription.data && listCampaignAccountsSubscription.data.campaign_account ? listCampaignAccountsSubscription.data.campaign_account : []
     const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
     const schedule_id = schedule.id
@@ -172,6 +177,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
         id_list: schedule_account_ids
       }
     });
+    await setState({ ...state, addingToSchedule: false });
 
   }
   // const addScheduleAccountsTactical = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
@@ -358,15 +364,21 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                 <ComposedAddAccount >
                   {({ listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription }) => 
                     (
-                      !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
-                      <React.Fragment>
-                        <Button size="small" onClick={() => {
-                          if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
-                            addScheduleAccounts(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
-                          }
-                        }}>Assign Accounts</Button>
-                      </React.Fragment>
-                      : null
+                      !(schedule.schedule_accounts.length >= accounts_per_schedule) 
+                      ?
+                        addingToSchedule 
+                        ?
+                        <CircularProgress color="secondary" />
+                        :
+                        <React.Fragment>
+                          <Button size="small" onClick={() => {
+                            if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
+                              addScheduleAccounts(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
+                            }
+                          }}>Assign Accounts</Button>
+                        </React.Fragment>
+                      : 
+                      null
                     )
                   }
                 </ComposedAddAccount>                
