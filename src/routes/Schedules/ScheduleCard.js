@@ -13,7 +13,7 @@ import { adopt } from 'react-adopt';
 import { listAvailableCampaignAccounts, listShallowScheduleAccounts } from "../../graphql/subscription";
 import { createScheduleAccount, updateCampaignAccount, deleteScheduleAccount } from "../../graphql/mutations";
 import { getScheduleById, listAccountsByList } from "../../graphql/queries";
-import gql from 'graphql-tag';
+// import gql from 'graphql-tag';
 import { CSVLink } from "react-csv";
 import FileUpload from '../../components/FileUpload'
 // import { jsonToCSV } from 'react-papaparse'
@@ -36,109 +36,110 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
     data: [],
     showDownload: false,
   });
-  const contact_ids = [...new Set(state.data.map(item => item.contact_id))]
-  const {data, showDownload} = state;
+  // const contact_ids = [...new Set(state.data.map(item => item.contact_id))]
+  // const {data, showDownload} = state;
+  const { showDownload } = state;
   const handleShowDownload = async () => {
     await setState({ ...state, showDownload: !showDownload });
   }
-  const { name, no_targets_per_accounts, deploy_date, end_date, id, campaign_id } = schedule;
-  const { elasticity } = requirement;
+  const { name, no_targets_per_accounts, deploy_date, end_date, id } = schedule;
+  // const { elasticity } = requirement;
   // console.log('elasticity: ', elasticity);
 
-  const getScheduledContactsCount = () => {
-    const schedule_accounts_ids = [...new Set(schedule.schedule_accounts.map(item => item.account_id))]
-    return schedule_accounts_ids.reduce(  async (dataP, account_id) => {
-      // contact_id: {_nin: [41046, 41049]}
-      const data = await dataP;
-      const results = await Array(elasticity).fill(1).reduce(async (accP, limit) => {
-        // console.log("limit: ", limit)
-        const acc = await accP;
-        const contact_ids = [...new Set(acc.map(item => item.contact_id))]
-        // console.log("contact_ids: ", contact_ids)
-        const response = await apolloClient.query({
-          query: gql`
-            query MyQuery($account_id:Int!, $contact_ids:[Int!], $campaign_id:Int!, $schedule_id:Int!, $client_id:Int!, $elasticity:Int!) {
-              campaign_contacts_view(where: {account_id: {_eq: $account_id}, contact_id: {_nin: $contact_ids}, campaign_id: {_eq: $campaign_id}, schedule_id: {_eq: $schedule_id}, client_id: {_eq: $client_id}, unsubscribed: {_eq: false}, campaign_contact_is_delisted: {_eq: false}, campaign_account_is_delisted: {_eq: false}}, limit: $elasticity, order_by: {contact_id: asc}) {
-                account_id
-                campaign_account_is_delisted
-                campaign_account_last_delisted_date
-                campaign_contact_delisted_date
-                campaign_contact_is_delisted
-                campaign_id
-                client_id
-                contact_id
-                deploy_date
-                id
-                next_date
-                schedule_id
-                status
-                to_followup
-                unsubscribed
-              }
-            }
-          `,
-          variables: {
-            account_id: account_id,
-            campaign_id: campaign_id,
-            elasticity: limit,
-            schedule_id: schedule.id,
-            client_id: sailebot.client_id,
-            contact_ids
-          }
-        })
-        // console.log('response.acc: ', response.data);
-        if(response.data && response.data.campaign_contacts_view && response.data.campaign_contacts_view.length) {
-          return acc.concat(response.data.campaign_contacts_view);
-        } else {
-          return acc;
-        }
-        // console.log("response.data.campaign_contacts_view: ", response.data.campaign_contacts_view)
-        // return response.data.campaign_contacts_view
-      }, []);
-      // console.log("results: ", results)
-      if(results && results.length > 0) {
-        return data.concat(results);
-      } else {
-        return data;
-      }
-    }, [])
-  }
+  // const getScheduledContactsCount = () => {
+  //   const schedule_accounts_ids = [...new Set(schedule.schedule_accounts.map(item => item.account_id))]
+  //   return schedule_accounts_ids.reduce(  async (dataP, account_id) => {
+  //     // contact_id: {_nin: [41046, 41049]}
+  //     const data = await dataP;
+  //     const results = await Array(elasticity).fill(1).reduce(async (accP, limit) => {
+  //       // console.log("limit: ", limit)
+  //       const acc = await accP;
+  //       const contact_ids = [...new Set(acc.map(item => item.contact_id))]
+  //       // console.log("contact_ids: ", contact_ids)
+  //       const response = await apolloClient.query({
+  //         query: gql`
+  //           query MyQuery($account_id:Int!, $contact_ids:[Int!], $campaign_id:Int!, $schedule_id:Int!, $client_id:Int!, $elasticity:Int!) {
+  //             campaign_contacts_view(where: {account_id: {_eq: $account_id}, contact_id: {_nin: $contact_ids}, campaign_id: {_eq: $campaign_id}, schedule_id: {_eq: $schedule_id}, client_id: {_eq: $client_id}, unsubscribed: {_eq: false}, campaign_contact_is_delisted: {_eq: false}, campaign_account_is_delisted: {_eq: false}}, limit: $elasticity, order_by: {contact_id: asc}) {
+  //               account_id
+  //               campaign_account_is_delisted
+  //               campaign_account_last_delisted_date
+  //               campaign_contact_delisted_date
+  //               campaign_contact_is_delisted
+  //               campaign_id
+  //               client_id
+  //               contact_id
+  //               deploy_date
+  //               id
+  //               next_date
+  //               schedule_id
+  //               status
+  //               to_followup
+  //               unsubscribed
+  //             }
+  //           }
+  //         `,
+  //         variables: {
+  //           account_id: account_id,
+  //           campaign_id: campaign_id,
+  //           elasticity: limit,
+  //           schedule_id: schedule.id,
+  //           client_id: sailebot.client_id,
+  //           contact_ids
+  //         }
+  //       })
+  //       // console.log('response.acc: ', response.data);
+  //       if(response.data && response.data.campaign_contacts_view && response.data.campaign_contacts_view.length) {
+  //         return acc.concat(response.data.campaign_contacts_view);
+  //       } else {
+  //         return acc;
+  //       }
+  //       // console.log("response.data.campaign_contacts_view: ", response.data.campaign_contacts_view)
+  //       // return response.data.campaign_contacts_view
+  //     }, []);
+  //     // console.log("results: ", results)
+  //     if(results && results.length > 0) {
+  //       return data.concat(results);
+  //     } else {
+  //       return data;
+  //     }
+  //   }, [])
+  // }
 
-  const getCampaignContactsCount = (campaign_accounts) => {
-    const campaign_accounts_ids = [...new Set(campaign_accounts.map(item => item.account_id))]
-    return campaign_accounts_ids.reduce(  async (dataP, account_id) => {
-      const data = await dataP;
-      const response = await apolloClient.query({
-        query: gql`
-          query MyQuery($account_id:Int!, $campaign_id:Int!) {
-            campaign_contact_aggregate(where: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}, is_delisted: {_eq: false} }) {
-              aggregate {
-                count(columns: id, distinct: true)
-              }
-            }
-          }
-        `,
-        variables: {
-          account_id: account_id,
-          campaign_id: campaign_id
-        }
-      })
-      if(response.data && response.data.campaign_contact_aggregate.aggregate && response.data.campaign_contact_aggregate.aggregate.count && response.data.campaign_contact_aggregate.aggregate.count > 0) {
-        return data.concat([account_id]);
-      } else {
-        return data;
-      }
-    }, [])
-  }
+  // const getCampaignContactsCount = (campaign_accounts) => {
+  //   const campaign_accounts_ids = [...new Set(campaign_accounts.map(item => item.account_id))]
+  //   return campaign_accounts_ids.reduce(  async (dataP, account_id) => {
+  //     const data = await dataP;
+  //     const response = await apolloClient.query({
+  //       query: gql`
+  //         query MyQuery($account_id:Int!, $campaign_id:Int!) {
+  //           campaign_contact_aggregate(where: {account_id: {_eq: $account_id}, campaign_id: {_eq: $campaign_id}, is_delisted: {_eq: false} }) {
+  //             aggregate {
+  //               count(columns: id, distinct: true)
+  //             }
+  //           }
+  //         }
+  //       `,
+  //       variables: {
+  //         account_id: account_id,
+  //         campaign_id: campaign_id
+  //       }
+  //     })
+  //     if(response.data && response.data.campaign_contact_aggregate.aggregate && response.data.campaign_contact_aggregate.aggregate.count && response.data.campaign_contact_aggregate.aggregate.count > 0) {
+  //       return data.concat([account_id]);
+  //     } else {
+  //       return data;
+  //     }
+  //   }, [])
+  // }
 
-  React.useEffect(() => {
-    const getData = async () => {
-      const resp = await getScheduledContactsCount();
-      // const json = await resp.json()
-      setState({ ...state, data: resp });
-    }
-    getData();
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+  // React.useEffect(() => {
+  //   const getData = async () => {
+  //     const resp = await getScheduledContactsCount();
+  //     // const json = await resp.json()
+  //     setState({ ...state, data: resp });
+  //   }
+  //   getData();
+  // }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   
   const accounts_per_schedule = schedule && schedule.accounts_per_schedule && schedule.accounts_per_schedule > 0 ? schedule.accounts_per_schedule : campaign && campaign.accounts_per_schedule ? campaign.accounts_per_schedule : 100;
@@ -173,50 +174,50 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
     });
 
   }
-  const addScheduleAccountsTactical = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
-    const campaign_accounts = listCampaignAccountsSubscription.data && listCampaignAccountsSubscription.data.campaign_account ? listCampaignAccountsSubscription.data.campaign_account : []
-    const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
-    const schedule_id = schedule.id
-    const campaign_id = schedule.campaign_id
-    const campaign_accounts_some = await getCampaignContactsCount(campaign_accounts)
-    console.log('campaign_accounts_some: ', campaign_accounts_some);
-    let pre_process = campaign_accounts.filter(acc => campaign_accounts_some.includes(acc.account_id))
-    console.log('pre_process.length: ', pre_process.length);
-    let pre_process_2 = pre_process.filter(acc => !schedule_accounts.includes(acc.account_id) )
-    console.log('pre_process_2: ', pre_process_2);
-    console.log('schedule_accounts.includes(241945): ', schedule_accounts.includes(241945));
-    console.log('campaign_accounts_some.includes(241945): ', campaign_accounts_some.includes(241945));
-    console.log('campaign_accounts.map(acc =>acc.account_id).includes(241945): ', campaign_accounts.map(acc =>acc.account_id).includes(241945));
+  // const addScheduleAccountsTactical = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
+  //   const campaign_accounts = listCampaignAccountsSubscription.data && listCampaignAccountsSubscription.data.campaign_account ? listCampaignAccountsSubscription.data.campaign_account : []
+  //   const schedule_accounts = listShallowScheduleAccountsSubscription.data && listShallowScheduleAccountsSubscription.data.schedule_account ? listShallowScheduleAccountsSubscription.data.schedule_account.map(acc => acc.account_id) : []
+  //   const schedule_id = schedule.id
+  //   const campaign_id = schedule.campaign_id
+  //   const campaign_accounts_some = await getCampaignContactsCount(campaign_accounts)
+  //   console.log('campaign_accounts_some: ', campaign_accounts_some);
+  //   let pre_process = campaign_accounts.filter(acc => campaign_accounts_some.includes(acc.account_id))
+  //   console.log('pre_process.length: ', pre_process.length);
+  //   let pre_process_2 = pre_process.filter(acc => !schedule_accounts.includes(acc.account_id) )
+  //   console.log('pre_process_2: ', pre_process_2);
+  //   console.log('schedule_accounts.includes(241945): ', schedule_accounts.includes(241945));
+  //   console.log('campaign_accounts_some.includes(241945): ', campaign_accounts_some.includes(241945));
+  //   console.log('campaign_accounts.map(acc =>acc.account_id).includes(241945): ', campaign_accounts.map(acc =>acc.account_id).includes(241945));
     
-    const processed = pre_process_2.splice(0,accounts_to_add).map( ( account ) => {
-      return {
-        account_id: account.account_id,
-        schedule_id,
-        campaign_id
-      };
-    })
-    console.log('processed: ', processed);
+  //   const processed = pre_process_2.splice(0,accounts_to_add).map( ( account ) => {
+  //     return {
+  //       account_id: account.account_id,
+  //       schedule_id,
+  //       campaign_id
+  //     };
+  //   })
+  //   console.log('processed: ', processed);
 
 
-    if (processed.length > 0) {
-      await createScheduleAccountMutation({
-        variables: {
-          objects: processed
-        }
-      });
+  //   if (processed.length > 0) {
+  //     await createScheduleAccountMutation({
+  //       variables: {
+  //         objects: processed
+  //       }
+  //     });
   
-      const schedule_account_ids = campaign_accounts.map( acc => acc.id);
-      await updateCampaignAccountMutation({
-        variables: {
-          objects: {is_scheduled: true},
-          id_list: schedule_account_ids
-        }
-      });
-      console.log('schedule_account_ids: ', schedule_account_ids);
+  //     const schedule_account_ids = campaign_accounts.map( acc => acc.id);
+  //     await updateCampaignAccountMutation({
+  //       variables: {
+  //         objects: {is_scheduled: true},
+  //         id_list: schedule_account_ids
+  //       }
+  //     });
+  //     console.log('schedule_account_ids: ', schedule_account_ids);
   
-    }
+  //   }
 
-  }
+  // }
   const no_schedule_accounts = schedule.schedule_accounts ? schedule.schedule_accounts.length : 0
   const accounts_to_add = accounts_per_schedule - no_schedule_accounts;
   const clear_delisted = async (deleteScheduleAccountMutation, getScheduleByIdQuery) => {
@@ -335,13 +336,13 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
               }
               <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
               {
-                data && data.length >0 && contact_ids && contact_ids.length > 0?
-                <div>
-                  <Typography>Number of Contacts: {data && data.length ? contact_ids.length : 0 }</Typography>
-                  <Typography>Average Elasticity: {data && schedule.schedule_accounts && schedule.schedule_accounts.length > 0 && data.length > 0 ? (contact_ids.length/schedule.schedule_accounts.length).toFixed(2) : 0 }</Typography>
-                </div>
-                :
-                <CircularProgress color="secondary" />
+                // data && data.length >0 && contact_ids && contact_ids.length > 0?
+                // <div>
+                //   <Typography>Number of Contacts: {data && data.length ? contact_ids.length : 0 }</Typography>
+                //   <Typography>Average Elasticity: {data && schedule.schedule_accounts && schedule.schedule_accounts.length > 0 && data.length > 0 ? (contact_ids.length/schedule.schedule_accounts.length).toFixed(2) : 0 }</Typography>
+                // </div>
+                // :
+                // <CircularProgress color="secondary" />
               }
 
             </CardContent>
@@ -364,16 +365,33 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                             addScheduleAccounts(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
                           }
                         }}>Assign Accounts</Button>
-                        <Button size="small" onClick={() => {
-                          if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
-                            addScheduleAccountsTactical(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
-                          }
-                        }}>Assign Accounts, Tactical</Button>
                       </React.Fragment>
                       : null
                     )
                   }
                 </ComposedAddAccount>                
+
+                // campaign && 
+                // <ComposedAddAccount >
+                //   {({ listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription }) => 
+                //     (
+                //       !(schedule.schedule_accounts.length >= accounts_per_schedule) ?
+                //       <React.Fragment>
+                //         <Button size="small" onClick={() => {
+                //           if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
+                //             addScheduleAccounts(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
+                //           }
+                //         }}>Assign Accounts</Button>
+                //         <Button size="small" onClick={() => {
+                //           if (!listShallowScheduleAccountsSubscription.loading && !listCampaignAccountsSubscription.loading) {
+                //             addScheduleAccountsTactical(schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add)
+                //           }
+                //         }}>Assign Accounts, Tactical</Button>
+                //       </React.Fragment>
+                //       : null
+                //     )
+                //   }
+                // </ComposedAddAccount>                
               }
               {
                 !showDownload &&
