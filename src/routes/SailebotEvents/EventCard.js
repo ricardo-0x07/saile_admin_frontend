@@ -14,6 +14,9 @@ import { Mutation, Query } from "react-apollo";
 import { getContactById, getCampaignContact, getCampaignAccount, getDelivered/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
 import CampaignContactEvents from '../CampaignContactEvents';
 import * as moment from 'moment';
+// import { createActionableOpportunity } from '../../utils/rest_api'
+
+
 const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
@@ -48,6 +51,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   const handleShowCampaignContactEvents = async () => {
     await setState({ ...state, showCampaignContactEvents: !state.showCampaignContactEvents });
   }
+
   const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data, is_delisted, refetchAccount) => {
     console.log('contact_data: ', contact_data)
     const {
@@ -115,6 +119,16 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     });
     updateReload()
   }
+  // const _createActionableOpportunity_ = async (opportunity) => {
+  //   try {
+  //     console.log('opportunity: ', opportunity)
+  //     await createActionableOpportunity(opportunity)
+  //     console.log('opportunity: ', opportunity)
+  //     updateReload()
+  //   } catch (error) {
+  //     console.log('createActionableOpportunity error: ', error)
+  //   }
+  // }
   // const insertBody = (body) => {
   //   return (
   //     <React.Fragment>
@@ -417,6 +431,11 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                   </Query>
                   
                 }
+                {
+                  // label === "refferal" && id && sailebot && sailebot.id && contact_id &&
+                  // <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create AO</Button>
+                }
+
                 {
                   campaign_id && contact_id &&
                   <Query query={getCampaignContact(campaign_id, contact_id)} >

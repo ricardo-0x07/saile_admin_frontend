@@ -493,7 +493,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                             </Query>
                             
                           }
-                          <CardActions className={classes.root}>
+                          <CardActions className={classes.root} style={{ flexFlow: 'wrap'}}>
                             <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                             <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>
                             <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Dismiss</Button>
@@ -580,9 +580,9 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                                 }}
                               </Query>
                             }
-                          </CardActions>
+                          {/* </CardActions>
 
-                          <CardActions className={classes.root}>
+                          <CardActions className={classes.root}> */}
                             {/* Edit Event */}
                             {
                               window.location.hostname === "localhost" &&
@@ -703,6 +703,11 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                               // contact_id &&
                               // <Button variant="contained" size="small" onClick={unsubscribeContact(updateContactMutation)}>Globally Unsubscribe Contact</Button>
                             }
+                            {
+                              window.location.hostname === "localhost" && id && sailebot && sailebot.id && contact_id &&
+                              <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {is_ao: false, event_id: id, sailebot_id: sailebot.id}})}>Create NO</Button>
+                            }
+
                           </CardActions>
 
                         </React.Fragment>

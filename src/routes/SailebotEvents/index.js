@@ -19,9 +19,11 @@ const useStyles = makeStyles(theme => ({
 
 
 const Events = (props) => {
+  console.log("sailebot events props: ", props)
   const classes = useStyles();
   const limit = 5;
   let total = 5;
+  // const is_ao = false;
   
   const [state, setState] = React.useState({
     reload: false,
@@ -34,6 +36,8 @@ const Events = (props) => {
   if(props.location.state.client === undefined) {
     return null;
   }
+
+
   const Composed = adopt({
     totalCampaignEventsQuery: props.location.state && props.location.state.client && props.location.state.client.id && props.location.state.label ?
     ({ render }) => (
