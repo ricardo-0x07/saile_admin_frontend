@@ -3,6 +3,8 @@
 import * as React from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+// import CardActions from "@material-ui/core/CardActions";
+
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
@@ -131,7 +133,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
       }
     });
     const toClarify=false
-    var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Respuesta automática", "Automatisch antwoord", "Risposta Non al computer", "Risposta automatica", "Automatische Antwort", "Automatische_Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+    var AUTO_REPLY_SUBJECT_KEYWORDS = ["utf-8", "Autosvar", "Respuesta automática", "Automatisch antwoord", "Risposta Non al computer", "Risposta automatica", "Automatische Antwort", "Automatische_Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
     var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
     console.log("subject: ", subject)
     console.log("isIn: ", isIn)
@@ -198,39 +200,39 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
   }
 
 
-  const noResponseClarification = (updateEventMutation) => async () => {
-    const {
-      cc,
-      date,
-      id,
-      label,
-      sender,
-      subject,
-      contact_id,
-      nlu_input_text,
-      nlu_json_response,
-      selected_intent,
-      validated_json_response,
-      validated_intent,
-      campaign_id,
-      is_inbound,
-      to_clarify,
-      to,
-    } = event;
+  // const noResponseClarification = (updateEventMutation) => async () => {
+  //   const {
+  //     cc,
+  //     date,
+  //     id,
+  //     label,
+  //     sender,
+  //     subject,
+  //     contact_id,
+  //     nlu_input_text,
+  //     nlu_json_response,
+  //     selected_intent,
+  //     validated_json_response,
+  //     validated_intent,
+  //     campaign_id,
+  //     is_inbound,
+  //     to_clarify,
+  //     to,
+  //   } = event;
     
-    const toClarify=false
-    await updateEventMutation({
-      variables: {
-          objects: {
-            label: 'no_response',
-            to_clarify: toClarify,
-            to,
-          },
-          id
-      }
-    });
-    updateReload()
-  }
+  //   const toClarify=false
+  //   await updateEventMutation({
+  //     variables: {
+  //         objects: {
+  //           label: 'no_response',
+  //           to_clarify: toClarify,
+  //           to,
+  //         },
+  //         id
+  //     }
+  //   });
+  //   updateReload()
+  // }
   const dismissClarification = (updateEventMutation) => async () => {
     const {
       id,
@@ -495,7 +497,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                             <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                             <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>
                             <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Dismiss</Button>
-                            <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
+                            {/* <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button> */}
                             {
                               id && sailebot && sailebot.id && contact_id &&
                               <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
@@ -578,6 +580,9 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                                 }}
                               </Query>
                             }
+                          </CardActions>
+
+                          <CardActions className={classes.root}>
                             {/* Edit Event */}
                             {
                               window.location.hostname === "localhost" &&

@@ -6,6 +6,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import { adopt } from 'react-adopt';
 import { Query } from "react-apollo";
 import { clientEventByLabel, totalCampaignEventsByLabel, totalCampaignEvents, clientEvent } from "../../graphql/queries";
+import { CSVLink } from "react-csv";
 
 
 const useStyles = makeStyles(theme => ({
@@ -84,6 +85,17 @@ const Events = (props) => {
         return (
           <div className={classes.root}>
             <Title>{totalCampaignEventsQuery && totalCampaignEventsQuery.data && totalCampaignEventsQuery.data.event_aggregate && totalCampaignEventsQuery.data.event_aggregate.aggregate.count ? totalCampaignEventsQuery.data.event_aggregate.aggregate.count : 0} {props.location.state.label ? props.location.state.label.replace('_', ' ').toUpperCase() : ""} EVENTS</Title>
+            {
+              props.location.state.label === 'refferal' &&
+              <CSVLink
+                data={eventsQuery.data.event}
+                filename={`${props.location.state.label ? props.location.state.label : ""}_events.csv`}
+                className="btn btn-primary"
+                target="_blank"
+              >
+                Download Nuture Data CSV
+              </CSVLink>
+            }
             <div
               style={{
                 display: "grid",
