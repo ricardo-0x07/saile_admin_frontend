@@ -38,7 +38,9 @@ export const EventCard = ({ event }) => {
         <Typography>Body: </Typography>
         {
           // body.split("\n").map((el, key) => el ? <div key={key} dangerouslySetInnerHTML={createMarkup(el)} /> : <br key={key}/>)//.slice(0,19)
-          <div dangerouslySetInnerHTML={createMarkup(body)} />
+          // <div dangerouslySetInnerHTML={createMarkup(body)} />
+          body.split("\n").map((el, key) => el ? <div key={key} dangerouslySetInnerHTML={createMarkup(el)} /> : <br key={key}/>)//.slice(0,19)
+
           
         }
       </React.Fragment>

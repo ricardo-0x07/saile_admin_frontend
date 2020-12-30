@@ -3,8 +3,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import { Query, Mutation } from "react-apollo";
 import { AccountCard } from "./AccountCard";
 import Title from '../../components/Title';
-import AccountsCSVReader from '../../components/AccountsCSVReader';
-import ContactsCSVReader from '../../components/ContactsCSVReader';
+// import AccountsCSVReader from '../../components/AccountsCSVReader';
+// import ContactsCSVReader from '../../components/ContactsCSVReader';
 import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,7 +30,7 @@ const Accounts = (props) => {
   //   console.log('item: ', item)
   // }
   let total = 10;
-  const limit = 10;
+  const limit = 5;
   let _page = 1
   // let search_term = `%${''}%`
   
@@ -45,49 +45,49 @@ const Accounts = (props) => {
   });
   const { page, search_term, email_domain_search_term } = state;
   _page = page
-  const accounts_csv_key_map = {
-    name: 'Account: Account Name',
-    address: 'Account: Billing Street',
-    street: 'Account: Billing Street',
-    employees: 'Account: Employees',
-    phone: 'Account: Main Phone',
-    revenue: 'Account: Revenue ($mil)',
-    state  : 'Account: Billing State/Province',
-    website  : 'Account: Website',
-    email_domain: 'Account: Email Domain',
-    NAICS: 'Account: Primary US NAICS Code',
-    city: 'Account: Billing City',
-    country: 'Account: Billing Country',
-    ex_id: 'Account: Account ID',
-    d_u_n_s_number: 'Account: D-U-N-S® Number',
-    postal_code: 'Account: Postal Code',
-    industry: 'Account: Vertical',
-  };
+  // const accounts_csv_key_map = {
+  //   name: 'Account: Account Name',
+  //   address: 'Account: Billing Street',
+  //   street: 'Account: Billing Street',
+  //   employees: 'Account: Employees',
+  //   phone: 'Account: Main Phone',
+  //   revenue: 'Account: Revenue ($mil)',
+  //   state  : 'Account: Billing State/Province',
+  //   website  : 'Account: Website',
+  //   email_domain: 'Account: Email Domain',
+  //   NAICS: 'Account: Primary US NAICS Code',
+  //   city: 'Account: Billing City',
+  //   country: 'Account: Billing Country',
+  //   ex_id: 'Account: Account ID',
+  //   d_u_n_s_number: 'Account: D-U-N-S® Number',
+  //   postal_code: 'Account: Postal Code',
+  //   industry: 'Account: Vertical',
+  // };
 
-  const contacts_csv_key_map = {
-    bounce_type: '',
-    email: 'Email',
-    firstname: 'First Name',
-    gender: 'Gender',
-    is_ema_eligible: 'EMA Eligible?',
-    is_eva_eligible: 'EVA Eligible?',
-    lastname: 'Last Name',
-    member_status: 'Member Status',
-    phone: '',
-    position: '',
-    role: 'Role',
-    sam_status: '',
-    source: '',
-    title: 'Title',
-    ex_id: 'Contact ID',
-    ex_account_id: 'Account ID',
-    ex_member_id: 'Member ID',
-    linkedin: 'LinkedIn URL',
-    city: 'Billing City',
-    state: 'Billing State/Province',
-    country: 'Billing Country',
+  // const contacts_csv_key_map = {
+  //   bounce_type: '',
+  //   email: 'Email',
+  //   firstname: 'First Name',
+  //   gender: 'Gender',
+  //   is_ema_eligible: 'EMA Eligible?',
+  //   is_eva_eligible: 'EVA Eligible?',
+  //   lastname: 'Last Name',
+  //   member_status: 'Member Status',
+  //   phone: '',
+  //   position: '',
+  //   role: 'Role',
+  //   sam_status: '',
+  //   source: '',
+  //   title: 'Title',
+  //   ex_id: 'Contact ID',
+  //   ex_account_id: 'Account ID',
+  //   ex_member_id: 'Member ID',
+  //   linkedin: 'LinkedIn URL',
+  //   city: 'Billing City',
+  //   state: 'Billing State/Province',
+  //   country: 'Billing Country',
     
-  };
+  // };
 
   const handleChange = (event, value) => {
     setState({ page: value, email_domain_search_term: `%${''}%`, search_term: `%${''}%`, searchQuery: ''})
@@ -287,11 +287,11 @@ const Accounts = (props) => {
               // />  
             }            
             {
-              props.location.state && props.location.state.campaign && props.location.state.campaign.id && 
-              <>
-                <ContactsCSVReader history={props.history} location={props.location} contacts_csv_key_map={contacts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Contacts'} sailebot={props.location.state.sailebot} requirement={props.location.state.requirement}/>
-                <AccountsCSVReader history={props.history} location={props.location} accounts_csv_key_map={accounts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Accounts'} sailebot={props.location.state.sailebot} requirement={props.location.state.requirement}/>
-              </>
+              // props.location.state && props.location.state.campaign && props.location.state.campaign.id && 
+              // <>
+              //   <ContactsCSVReader history={props.history} location={props.location} contacts_csv_key_map={contacts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Contacts'} sailebot={props.location.state.sailebot} requirement={props.location.state.requirement}/>
+              //   <AccountsCSVReader history={props.history} location={props.location} accounts_csv_key_map={accounts_csv_key_map} campaign_id={props.location.state.campaign.id} label={'Accounts'} sailebot={props.location.state.sailebot} requirement={props.location.state.requirement}/>
+              // </>
             }
             <form onSubmit={handleSearchChange(fetchMore, data)}>
             {/* <form> */}
@@ -306,7 +306,7 @@ const Accounts = (props) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateColumns: "repeat(1, 1fr)",
                 gridGap: 10
               }}
             >

@@ -585,7 +585,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                           <CardActions className={classes.root}> */}
                             {/* Edit Event */}
                             {
-                              window.location.hostname === "localhost" &&
+                              // window.location.hostname === "localhost" &&
                               <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
                             }
                             {/* Follow up period */}

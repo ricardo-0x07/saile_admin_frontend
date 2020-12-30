@@ -173,17 +173,13 @@ export const createUpdateCampaignAccountChangeStatus = gql`
 
 export const createUpdateCampaignAccount = gql`
   mutation InsertCampaignAccount($objects: [campaign_account_insert_input!]!) {
-    insert_campaign_account(objects: $objects, on_conflict: {constraint: campaign_account_campaign_id_account_id_key, update_columns: [campaign_id, account_id, is_delisted]}) {
+    insert_campaign_account(objects: $objects, on_conflict: {constraint: campaign_account_campaign_id_account_id_key, update_columns: [campaign_id, account_id, is_delisted, status]}) {
       returning {
         id
         status
         is_delisted
         account_id
         campaign_id
-        account { 
-          name
-          email_domain
-        }
       }
     }
   }

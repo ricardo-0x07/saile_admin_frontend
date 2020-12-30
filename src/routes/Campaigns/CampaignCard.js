@@ -5,7 +5,10 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from '@material-ui/core/CircularProgress';
+// import { Divider } from '@material-ui/core';
+
 import {
+  Divider,
   FormControlLabel,
   Switch
 } from '@material-ui/core';
@@ -320,6 +323,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
         let contact_emails = [];
         let contact_ids = [];
         let is_warmup_scheduled = false
+        let scheduled_accounts = [];
         if (getScheduledAccountByAccountIdQuery.data && getScheduledAccountByAccountIdQuery.data.schedule_account && !getScheduledAccountByAccountIdQuery.loading) {
           
           is_warmup_scheduled = getScheduledAccountByAccountIdQuery.data.schedule_account.length > 0;
@@ -340,7 +344,9 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
         }
         let countCampaignScheduleAccounts = null
         if (countCampaignScheduleAccountsQuery.data && countCampaignScheduleAccountsQuery.data.schedule_account_aggregate && !countCampaignScheduleAccountsQuery.loading) {
-          countCampaignScheduleAccounts = countCampaignScheduleAccountsQuery.data.schedule_account_aggregate.aggregate.count          
+          countCampaignScheduleAccounts = countCampaignScheduleAccountsQuery.data.schedule_account_aggregate.aggregate.count     
+          scheduled_accounts = countCampaignScheduleAccountsQuery.data.schedule_account_aggregate.nodes.map(({account}) => account).filter(account => account.id !== 3921);  
+          console.log('scheduled_accounts: ', scheduled_accounts)   
         }
         
         console.log('countCampaignAccountsQuery: ', countCampaignAccountsQuery)
@@ -514,12 +520,12 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                               ?
                               <React.Fragment>
                                 <CSVLink
-                                  data={data.account}
+                                  data={data.account.filter(account => account.id !== 3921)}
                                   filename={`${campaign.name ? campaign.name : 'campaign'}_${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_campaign_accounts.csv`}
                                   className="btn btn-primary"
                                   target="_blank"
                                 >
-                                  Download Data CSV
+                                  Download Campaign CSV
                                 </CSVLink>
                               </React.Fragment>
                               :
@@ -531,6 +537,19 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                       }}
                     </Query>
                   }  
+                  <Divider/>
+                  {
+                    scheduled_accounts.length > 0  &&
+                    <CSVLink
+                      data={scheduled_accounts}
+                      filename={`${campaign.name ? campaign.name : 'campaign'}_${campaign.smtp_login ? campaign.smtp_login : 'campaign'}_scheduled_accounts.csv`}
+                      className="btn btn-primary"
+                      target="_blank"
+                    >
+                      Download Scheduled CSV
+                    </CSVLink>
+
+                  }
                   {
                     // sailebot && contact_emails.length > 0 && campaign && campaign.smtp_login &&
                     sailebot && contact_ids && contact_ids.length > 0 && contact_emails && contact_emails.length > 0 && campaign && campaign.smtp_login && !contact_emails.includes(campaign.smtp_login) &&

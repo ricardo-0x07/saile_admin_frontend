@@ -413,7 +413,7 @@ export const inbox_event_logs = (campaign_id=94192, is_inbound=false, after_date
 export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_term='', is_scheduled=false) => {
     return gql`
     query ListCampaignAccounts {
-        campaign_account(limit:${limit}, offset:${offset}, where: {account: {name: {_ilike: "%${search_term}%"}}, campaign_id: {_eq: ${campaign_id}}}, order_by: {account_id: desc}) {
+        campaign_account(limit:${limit}, offset:${offset}, where: {account: {_or: {email_domain: {_ilike: "%${search_term}%"}}, name: {_ilike: "%${search_term}%"}}}, campaign_id: {_eq: ${campaign_id}}}, order_by: {account_id: desc}) {
             account {
                     NAICS
                     city
@@ -442,7 +442,7 @@ export const listCampaignAccounts = (campaign_id, limit=10, offset=0, search_ter
 
 export const ListCampaignAccounts =  gql`
 query ListCampaignAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!) {   
-    campaign_account(limit:$limit, offset:$offset, where: {is_delisted: {_eq: false}, account: {name: {_ilike: $search_term}}, campaign_id: {_eq: $campaign_id}}, order_by: {account: {name: asc}}) {
+    campaign_account(limit:$limit, offset:$offset, where: {is_delisted: {_eq: false}, account: {_or: {email_domain: {_ilike: $search_term}, name: {_ilike: $search_term}}}, campaign_id: {_eq: $campaign_id}}, order_by: {account: {name: asc}}) {
         account {
                 NAICS
                 city
@@ -472,7 +472,7 @@ query ListCampaignAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search
 
 export const ListAccounts  = gql`
     query ListAccounts($campaign_id:Int!, $limit:Int!, $offset:Int!, $search_term:String!) {
-        account(limit:$limit, offset:$offset, order_by: {name: asc}, where: {name: {_ilike: $search_term}, campaign_accounts: {is_delisted: {_eq: false}}}) {
+        account(limit:$limit, offset:$offset, order_by: {name: asc}, where: {_or: {email_domain: {_ilike: $search_term}, name: {_ilike: $search_term}}, campaign_accounts: {is_delisted: {_eq: false}}}) {
             NAICS
             address
             city
@@ -1761,7 +1761,28 @@ export const countCampaignScheduleAccounts = (campaign_id) => {
         query CountCampaignScheduleAccounts  {
             schedule_account_aggregate(where: {campaign_id: {_eq: ${campaign_id}}}) {
                 aggregate {
-                count(columns: account_id, distinct: true)
+                    count(columns: account_id, distinct: true)
+                }
+                nodes {
+                    account {
+                        id
+                        name
+                        email_domain
+                        email
+                        domain
+                        website
+                        revenue
+                        employees
+                        street
+                        city
+                        state
+                        country
+                        industry
+                        fax
+                        address
+                        NAICS
+                        d_u_n_s_number
+                    }
                 }
             }
         }

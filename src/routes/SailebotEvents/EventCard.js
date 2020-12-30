@@ -213,6 +213,19 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     console.log("results: ", results);
     updateReload()
   }
+  // const insertBody = (body) => {
+  //   return (
+  //     <React.Fragment>
+  //       <Typography>Body: </Typography>
+  //       {
+  //         body.split("\n").map((el, key) => el ? <div key={key} dangerouslySetInnerHTML={createMarkup(el)} /> : <br key={key}/>)//.slice(0,19)
+  //       }
+  //     </React.Fragment>
+  //   );
+  // }
+  // function createMarkup(body) {
+  //   return {__html: body};
+  // }
   const insertBody = (body) => {
     return (
       <React.Fragment>
@@ -368,7 +381,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                 <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>
                 <Button variant="contained" size="small"  onClick={dismissClarification(updateEventMutation)}>To clarify</Button>
                 {
-                  window.location.hostname === "localhost" &&
+                  // window.location.hostname === "localhost" &&
                   <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
                 }
                 {/* <Button  variant="contained" size="small" onClick={() => history.push('/app/events-by-campaign-contact', {client, campaign_id: event.campaign_id, contact_id: event.contact_id })}>Contact Events</Button> */}

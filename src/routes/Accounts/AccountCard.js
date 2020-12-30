@@ -1,7 +1,7 @@
 import * as React from "react";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
+// import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Mutation } from "react-apollo";
@@ -80,18 +80,18 @@ export const AccountCard = ({ id, account,  campaign,  history, updateReload }) 
         // () => {
           return (
             <Card>
-              <CardContent>
+              <CardActions style={{flexFlow: 'wrap'}}>
                 {id && <Typography variant="caption"  display="block"><Typography variant="button" >AcoountId: </Typography>{id}</Typography>}
                 {name && <Typography variant="caption"  display="block"><Typography variant="button" >Name: </Typography>{name}</Typography>}
                 {email_domain && <Typography variant="caption"  display="block"><Typography variant="button" >Email Domain: : </Typography>{email_domain}</Typography>}
                 {website && <Typography variant="caption"  display="block"><Typography variant="button" >Website: </Typography>{website}</Typography>}
                 {address && <Typography variant="caption"  display="block"><Typography variant="button" >Address: </Typography>{address}</Typography>}
-              </CardContent>
+              </CardActions>
               <CardActions>
                 <Button size="small" onClick={() => history.push('/app/manage-account', {account, campaign})}>Edit</Button>
-                <Button variant="contained" color="secondary" size="small" onClick={() => removeCampaignAccount(createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation, deleteScheduleAccountMutation, campaign.id, account.id)}>Remove Account</Button>
                 <Button size="small" onClick={() => history.push('/app/manage-contact', {account})}>Add Contact</Button>
                 <Button size="small" onClick={() => history.push('/app/contacts-by-account', {account})}>View Contacts</Button>
+                <Button variant="contained" color="secondary" size="small" onClick={() => removeCampaignAccount(createUpdateCampaignAccountMutation, createUpdateCampaignContactMutation, deleteScheduleAccountMutation, campaign.id, account.id)}>Remove Account</Button>
               </CardActions>
             </Card>
           );
