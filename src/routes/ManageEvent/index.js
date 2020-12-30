@@ -86,7 +86,8 @@ const ManageEventForm = (props) => {
                                         }
                                     });
                                 }
-                                props.history.push('/app')
+                                // props.history.push('/app')
+                                props.history.goBack()
                             }
                         }
                     >

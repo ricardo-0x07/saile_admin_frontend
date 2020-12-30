@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 
 const Events = (props) => {
   console.log("sailebot events props: ", props)
+  console.log("sailebot events props.history: ", props.history)
   const classes = useStyles();
   const limit = 5;
   let total = 5;
