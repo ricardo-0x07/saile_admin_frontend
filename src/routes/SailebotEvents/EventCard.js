@@ -51,7 +51,51 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   const handleShowCampaignContactEvents = async () => {
     await setState({ ...state, showCampaignContactEvents: !state.showCampaignContactEvents });
   }
+  const reEngage = (updateCampaignAccountMutation, updateEventMutation, contact_data, refetchAccount, updateCampaignContactMutation) => async () => {
+    const {
+      id,
+      contact_id,
+      campaign_id,
+      to,
+    } = event;
+    await updateCampaignContactMutation({
+      variables: {
+          objects: {
+            is_delisted: false,
+            status: 'Active',
+          },
+          contact_id,
+          campaign_id,
+      }
+    });
+    
+    const toClarify=false
+    await updateEventMutation({
+      variables: {
+          objects: {
+            label: 're_engage',
+            to_clarify: toClarify,
+            to,
+          },
+          id
+      }
+    });
+    console.log('contact_data.account_id: ', contact_data.account_id)
+    await updateCampaignAccountMutation({
+      variables: {
+          objects: {
+            to_followup: true,
+            is_delisted: false,
+            last_delisted_date: new Date().toJSON().slice(0, 10) 
+          },
+          account_id: contact_data.account_id,
+          campaign_id,
+      }
+    });
+    refetchAccount()
 
+    updateReload()
+  }
   const _delistCampaignAccount_ = async (updateCampaignAccountMutation, updateEventMutation, contact_data, is_delisted, refetchAccount) => {
     console.log('contact_data: ', contact_data)
     const {
@@ -521,8 +565,12 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                             //   {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}
                             //   <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
                             // </div>
-                            <div style={{ flexDirection: 'row' }}>
-                              <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                            <div style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                              <Button variant="contained" size="small" style={{marginRight: '1rem'}} onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                              {
+                                label === 'actionable_opportunity' && window.location.hostname === "localhost" &&
+                                <Button variant="contained" size="small" color="secondary" onClick={() => reEngage(updateCampaignAccountMutation, updateEventMutation, contact, campaignAccountQuery.refetch, updateCampaignContactMutation)}>Re Engage</Button>
+                              }
                             </div>
                           );  
                         }} 

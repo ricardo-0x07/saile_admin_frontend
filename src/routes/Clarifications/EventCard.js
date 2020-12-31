@@ -200,39 +200,81 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
   }
 
 
-  // const noResponseClarification = (updateEventMutation) => async () => {
-  //   const {
-  //     cc,
-  //     date,
-  //     id,
-  //     label,
-  //     sender,
-  //     subject,
-  //     contact_id,
-  //     nlu_input_text,
-  //     nlu_json_response,
-  //     selected_intent,
-  //     validated_json_response,
-  //     validated_intent,
-  //     campaign_id,
-  //     is_inbound,
-  //     to_clarify,
-  //     to,
-  //   } = event;
+  const noResponseClarification = (updateEventMutation) => async () => {
+    const {
+      id,
+    } = event;
     
-  //   const toClarify=false
-  //   await updateEventMutation({
-  //     variables: {
-  //         objects: {
-  //           label: 'no_response',
-  //           to_clarify: toClarify,
-  //           to,
-  //         },
-  //         id
-  //     }
-  //   });
-  //   updateReload()
-  // }
+    const toClarify=false
+    await updateEventMutation({
+      variables: {
+          objects: {
+            label: 'no_response',
+            to_clarify: toClarify,
+          },
+          id
+      }
+    });
+    updateReload()
+  }
+
+  const reEngage = (updateCampaignAccountMutation, updateEventMutation, contact_data, refetchAccount, updateCampaignContactMutation) => async () => {
+    const {
+      cc,
+      date,
+      id,
+      label,
+      sender,
+      subject,
+      contact_id,
+      nlu_input_text,
+      nlu_json_response,
+      selected_intent,
+      validated_json_response,
+      validated_intent,
+      campaign_id,
+      is_inbound,
+      to_clarify,
+      to,
+    } = event;
+    await updateCampaignContactMutation({
+      variables: {
+          objects: {
+            is_delisted: false,
+            status: 'Active',
+          },
+          contact_id,
+          campaign_id,
+      }
+    });
+    
+    const toClarify=false
+    await updateEventMutation({
+      variables: {
+          objects: {
+            label: 're_engage',
+            to_clarify: toClarify,
+            to,
+          },
+          id
+      }
+    });
+    console.log('contact_data.account_id: ', contact_data.account_id)
+    await updateCampaignAccountMutation({
+      variables: {
+          objects: {
+            is_delisted: false,
+            last_delisted_date: new Date().toJSON().slice(0, 10) 
+          },
+          account_id: contact_data.account_id,
+          campaign_id,
+      }
+    });
+    refetchAccount()
+
+    updateReload()
+  }
+
   const dismissClarification = (updateEventMutation) => async () => {
     const {
       id,
@@ -352,6 +394,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
     await updateCampaignContactMutation({
       variables: {
           objects: {
+            to_followup: true,
             is_delisted: true,
             status: 'Remove',
             delisted_date: new Date().toJSON().slice(0, 10) 
@@ -453,7 +496,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                    { (getCampaignSaileBotQuery) => {
                     console.log('getCampaignSaileBotQuery.data: ', getCampaignSaileBotQuery.data)
 
-                    var AUTO_REPLY_SUBJECT_KEYWORDS = ["Autosvar", "Respuesta automática", "Automatisch antwoord", "Risposta Non al computer", "Risposta automatica", "Automatische Antwort", "Automatische_Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office' ]
+                    var AUTO_REPLY_SUBJECT_KEYWORDS = ["Automatyczna odpowiedź", "Automatyczna", "Autosvar", "Respuesta automática", "Automatisch antwoord", "Risposta Non al computer", "Risposta automatica", "Automatische Antwort", "Automatische_Antwort", "ponse_automatique", "OUT OF OFFICE NOTIFICATION", "Răspuns automat:", "Resposta automática", "自動回覆", 'Automatic reply:', 'Automatic_reply', 'Auto-Reply', 'Out of Office', 'Out of the Office', 'Out of the office' ]
                     var isIn = new RegExp(AUTO_REPLY_SUBJECT_KEYWORDS.join("|")).test(subject)
                     console.log("subject: ", subject)
                     console.log("isIn: ", isIn)
@@ -497,7 +540,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                             <Button variant="contained" size="small" onClick={handleChange}>{!state.showBody ? "View Body" : "Hide Body"}</Button>
                             <Button variant="contained" size="small" color={state.showCampaignContactEvents ? "secondary" :  "default"}onClick={handleShowCampaignContactEvents}>{!state.showCampaignContactEvents ? "View Events" : "Hide Events"}</Button>
                             <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Dismiss</Button>
-                            {/* <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button> */}
+                            <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
                             {
                               id && sailebot && sailebot.id && contact_id &&
                               <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
@@ -569,9 +612,13 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                                       const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
                   
                                       return (
-                                        <div style={{ flexDirection: 'row' }}>
+                                        <div style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                           {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}
-                                          <Button variant="contained" size="small" onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                                          <Button variant="contained" size="small" style={{marginRight: '1rem'}} onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                                          {
+                                            label === 'actionable_opportunity' && window.location.hostname === "localhost" &&
+                                            <Button variant="contained" size="small" color="secondary" onClick={() => reEngage(updateCampaignAccountMutation, updateEventMutation, contact, campaignAccountQuery.refetch, updateCampaignContactMutation)}>Re Engage</Button>
+                                          }
                                         </div>
                                       );  
                                     }} 
