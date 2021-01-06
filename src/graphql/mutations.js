@@ -454,5 +454,13 @@ export const deleteEvent = gql`
   }
 `;
 
+export const deleteOutboundEventByContactIdLabel = gql`
+  mutation DeleteOutboundEventByContactIdLabel( $contact_id: Int, $label: String ) {
+    delete_event(where: {contact_id: {_eq: $contact_id}, label: {_eq: $label}, is_inbound: {_eq: false}}) {
+      affected_rows
+    }
+  }
+`;
+
 
 

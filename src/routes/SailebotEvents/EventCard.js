@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Moment from 'react-moment';
-import { updateEvent, updateCampaignContact } from "../../graphql/mutations";
+import { updateEvent, updateCampaignContact, deleteOutboundEventByContactIdLabel } from "../../graphql/mutations";
 import { updateSingleCampaignAccount } from "../../graphql/mutations";
 
 import { adopt } from 'react-adopt';
@@ -51,7 +51,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   const handleShowCampaignContactEvents = async () => {
     await setState({ ...state, showCampaignContactEvents: !state.showCampaignContactEvents });
   }
-  const reEngage = (updateCampaignAccountMutation, updateEventMutation, contact_data, refetchAccount, updateCampaignContactMutation) => async () => {
+  const reEngage = (updateCampaignAccountMutation, updateEventMutation, contact_data, refetchAccount, updateCampaignContactMutation, deleteOutboundEventByContactIdLabelMutation) => async () => {
     const {
       id,
       contact_id,
@@ -61,6 +61,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     await updateCampaignContactMutation({
       variables: {
           objects: {
+            to_followup: true,
             is_delisted: false,
             status: 'Active',
           },
@@ -69,6 +70,13 @@ export const EventCard = ({ event, updateReload, client, history }) => {
       }
     });
     
+    await deleteOutboundEventByContactIdLabelMutation({
+      variables: {
+        contact_id, 
+        is_inbound: false,
+        label: "actionable_opportunity"
+      }
+    });        
     const toClarify=false
     await updateEventMutation({
       variables: {
@@ -84,7 +92,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     await updateCampaignAccountMutation({
       variables: {
           objects: {
-            to_followup: true,
+            status: 'Active',
             is_delisted: false,
             last_delisted_date: new Date().toJSON().slice(0, 10) 
           },
@@ -92,7 +100,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
           campaign_id,
       }
     });
-    refetchAccount()
+    // refetchAccount()
 
     updateReload()
   }
@@ -281,7 +289,12 @@ export const EventCard = ({ event, updateReload, client, history }) => {
     );
   }
   const Composed = adopt({
-    updateEventMutation: ({ render }) => (
+      deleteOutboundEventByContactIdLabelMutation: ({ render }) => (
+        <Mutation mutation={ deleteOutboundEventByContactIdLabel } >
+          { render }
+        </Mutation> 
+      ),
+      updateEventMutation: ({ render }) => (
         <Mutation mutation={ updateEvent } >
           { render }
         </Mutation> 
@@ -308,7 +321,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
   // let refetchContact = null;
   return (
     <Composed>
-      {({ updateEventMutation, updateCampaignContactMutation, updateCampaignAccountMutation  }) => {
+      {({ updateEventMutation, updateCampaignContactMutation, updateCampaignAccountMutation, deleteOutboundEventByContactIdLabelMutation  }) => {
         return (
           <Card>
             <CardContent>
@@ -569,7 +582,7 @@ export const EventCard = ({ event, updateReload, client, history }) => {
                               <Button variant="contained" size="small" style={{marginRight: '1rem'}} onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
                               {
                                 label === 'actionable_opportunity' && window.location.hostname === "localhost" &&
-                                <Button variant="contained" size="small" color="secondary" onClick={() => reEngage(updateCampaignAccountMutation, updateEventMutation, contact, campaignAccountQuery.refetch, updateCampaignContactMutation)}>Re Engage</Button>
+                                <Button variant="contained" size="small" color="secondary" onClick={() => reEngage(updateCampaignAccountMutation, updateEventMutation, contact, campaignAccountQuery.refetch, updateCampaignContactMutation, deleteOutboundEventByContactIdLabelMutation)}>Re Engage</Button>
                               }
                             </div>
                           );  
