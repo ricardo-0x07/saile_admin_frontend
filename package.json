@@ -29,7 +29,7 @@
     "aws-appsync": "^3.0.2",
     "aws-appsync-react": "^3.0.2",
     "aws-sdk": "^2.770.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "clsx": "^1.1.0",
     "date-fns": "^2.10.0",
