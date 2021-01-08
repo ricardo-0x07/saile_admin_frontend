@@ -15,6 +15,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
@@ -52,6 +53,8 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
     delay: 7,
     showcontactForm: false,
     showCampaignContactEvents: false,
+    createAOLoading: false,
+    createReferralLoading: false,
   });
   const classes = useStyles();
 
@@ -81,11 +84,13 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
   const _createreferral_ = async (referral) => {
     try {
       console.log('referral: ', referral)
+      await setState({ ...state, createReferralLoading: true });
       await createreferral(referral)
       console.log('referral: ', referral)
       updateReload()
     } catch (error) {
       console.log('createreferral error: ', error)
+      await setState({ ...state, createReferralLoading: false });
       updateReload()
     }
   }
@@ -93,11 +98,13 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
   const _createActionableOpportunity_ = async (opportunity) => {
     try {
       console.log('opportunity: ', opportunity)
+      await setState({ ...state, createAOLoading: true });
       await createActionableOpportunity(opportunity)
       console.log('opportunity: ', opportunity)
       updateReload()
     } catch (error) {
       console.log('createActionableOpportunity error: ', error)
+      await setState({ ...state, createAOLoading: false });
       updateReload()
     }
   }
@@ -556,12 +563,28 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                             <Button variant="contained" size="small" onClick={dismissClarification(updateEventMutation)}>Dismiss</Button>
                             <Button variant="contained" size="small" onClick={noResponseClarification(updateEventMutation)}>None Response</Button>
                             {
-                              id && sailebot && sailebot.id && contact_id &&
-                              <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
+                              id && sailebot && sailebot.id && contact_id && 
+                              <React.Fragment>
+                                {
+                                  !state.createReferralLoading 
+                                  ?
+                                  <Button variant="contained" size="small" onClick={() => _createreferral_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create Referral</Button>
+                                  :
+                                  <CircularProgress color="secondary" />
+                                }
+                              </React.Fragment>
                             }
                             {
                               id && sailebot && sailebot.id && contact_id &&
-                              <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create AO</Button>
+                              <React.Fragment>
+                                {
+                                  !state.createAOLoading 
+                                  ?
+                                  <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {event_id: id, sailebot_id: sailebot.id}})}>Create AO</Button>
+                                  :
+                                  <CircularProgress color="secondary" />
+                                }
+                              </React.Fragment>
                             }
                             {
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
@@ -765,7 +788,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                               // <Button variant="contained" size="small" onClick={unsubscribeContact(updateContactMutation)}>Globally Unsubscribe Contact</Button>
                             }
                             {
-                              window.location.hostname === "localhost" && id && sailebot && sailebot.id && contact_id &&
+                              id && sailebot && sailebot.id && contact_id &&
                               <Button variant="contained" size="small" onClick={() => _createActionableOpportunity_({entity: {is_ao: false, event_id: id, sailebot_id: sailebot.id}})}>Create NO</Button>
                             }
 
