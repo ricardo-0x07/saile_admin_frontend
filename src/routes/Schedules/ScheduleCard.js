@@ -46,7 +46,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
   // const _addingToSchedule_ = async () => {
   //   await setState({ ...state, addingToSchedule: true });
   // }
-  const { name, no_targets_per_accounts, deploy_date, end_date, id } = schedule;
+  const { name, no_targets_per_accounts, deploy_date, end_date, id, computed_elasticity } = schedule;
   // const { elasticity } = requirement;
   // console.log('elasticity: ', elasticity);
 
@@ -327,6 +327,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
               <Typography>Name: {name}</Typography>
               <Typography>Id: {id}</Typography>
               <Typography>Schedule Elasticity: {no_targets_per_accounts}</Typography>
+              <Typography>Computed Elasticity: {computed_elasticity}</Typography>
               {
                 requirement && 
                 <Typography>Campaign Elasticity: {requirement.elasticity}</Typography>

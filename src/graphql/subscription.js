@@ -420,6 +420,7 @@ export const listCampaignSchedules = (campaign_id, is_delisted=false) => {
             timezone
             updated_at
             accounts_per_schedule
+            computed_elasticty
             schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}, campaign_id: {_eq: ${campaign_id}}}}}) {
                 id
                 account_id

@@ -93,6 +93,9 @@ export const DeploymentCard = ({ service,  history }) => {
           console.log("tzTime > start: ", tzTime > start);
           console.log('AEST time: '+ (new Date(tzTime)).toISOString())
         }
+        if (getCampaignQuery && getCampaignQuery.data &&  getCampaignQuery.data.campaign && getCampaignQuery.data.campaign[0]["to_run"] !== true && Object.keys(service_data).length > 0 && "desiredCount" in service_data && service_data["desiredCount"] === 0) {
+          return null;
+        }
         return (
           <Card>
             <CardContent>

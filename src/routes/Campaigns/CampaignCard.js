@@ -312,7 +312,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
       }
     });
   };
-  const { name, accounts_per_schedule, email_service, timezone, wait_days, to_run } = campaign;
+  const { name, accounts_per_schedule, email_service, timezone, wait_days, to_run, computed_elasticity } = campaign;
   console.log("campaign: ", campaign)
   
   return (
@@ -392,6 +392,7 @@ export const CampaignCard = ({ campaign, sailebot, requirement,  history }) => {
                   }                  <Typography>Accounts per schedule: {accounts_per_schedule}</Typography>
                   <Typography>Outbound delay: {wait_days}</Typography>
                   <Typography>Elasticity: {requirement.elasticity}</Typography>
+                  <Typography>Computed Elasticity: {computed_elasticity}</Typography>
                   <Typography>Campaign Accounts: {countCampaignAccounts}</Typography>
                   <Typography>Campaign Scheduled Accounts: {countCampaignScheduleAccounts}</Typography>
                   {

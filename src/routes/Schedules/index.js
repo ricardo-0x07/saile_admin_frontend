@@ -1,12 +1,11 @@
 import * as React from "react";
-import { Query, Subscription } from "react-apollo";
+import { Query } from "react-apollo";
 import { adopt } from 'react-adopt';
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 
 import { ScheduleCard } from "./ScheduleCard";
-import { listCampaignSchedules } from "../../graphql/subscription";
-import { listSchedules } from "../../graphql/queries";
+import { listSchedules, listCampaignSchedules } from "../../graphql/queries";
 import Title from '../../components/Title';
 
 
@@ -28,9 +27,9 @@ const Schedules = (props) => {
   const Composed = adopt({
     listSchedulesQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
-      <Subscription subscription={listCampaignSchedules(props.location.state.campaign.id)} >
+      <Query query={listCampaignSchedules(props.location.state.campaign.id)} >
         { render }
-      </Subscription>
+      </Query>
     )
     :
     ({ render }) => (
@@ -40,9 +39,9 @@ const Schedules = (props) => {
     ),
     listDelistedSchedulesCampaignAccountsQuery: props.location.state && props.location.state.campaign && props.location.state.campaign.id ?
     ({ render }) => (
-      <Subscription subscription={listCampaignSchedules(props.location.state.campaign.id,true)} >
+      <Query query={listCampaignSchedules(props.location.state.campaign.id,true)} >
         { render }
-      </Subscription>
+      </Query>
     )
     :
     ({ render }) => (
@@ -56,6 +55,9 @@ const Schedules = (props) => {
   return (
     <Composed>
       {({ listSchedulesQuery: { data, loading }, listDelistedSchedulesCampaignAccountsQuery }) => {
+        console.log('data: ', data);
+        console.log('loading: ', loading);
+
         if (
           loading ||
           !data ||

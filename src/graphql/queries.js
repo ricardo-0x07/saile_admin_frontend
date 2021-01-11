@@ -271,6 +271,7 @@ export const GET_ALL_CAMPAIGNS = gql`
             max_heat
             warmup_start
             warmup_end
+            computed_elasticity
             schedules {
                 campaign_id
                 daily_outbound_limit
@@ -281,6 +282,7 @@ export const GET_ALL_CAMPAIGNS = gql`
                 no_targets_per_accounts
                 status
                 timezone
+                computed_elasticity
             }
             templates {
                 body_html_text
@@ -643,6 +645,7 @@ export const listCampaigns = (limit=10, offset=0) => {
             timezone
             wait_days
             company_domain_id
+            computed_elasticity
         }
     }
 `;
@@ -691,6 +694,7 @@ export const listSchedules = (limit=10, is_delisted=false, offset=0, account_lim
                 no_targets_per_accounts
                 status
                 timezone
+                computed_elasticity
                 schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}}}}) {
                     id
                     account_id
@@ -738,6 +742,7 @@ export const listSchedules = (limit=10, is_delisted=false, offset=0, account_lim
             status
             timezone
             updated_at
+            computed_elasticity
             accounts_per_schedule
             schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}, campaign_id: {_eq: ${campaign_id}}}}}) {
                 id
@@ -1334,6 +1339,7 @@ export const listRequirementCampaigns = (requirement_id) => {
             max_heat
             warmup_start
             warmup_end
+            computed_elasticity
         }
     }
 `;
