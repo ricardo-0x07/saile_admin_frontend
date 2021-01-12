@@ -180,7 +180,7 @@ const ManageContactForm = (props) => {
                                 const { apolloClient, campaign_id } = props;
                                 let referrer_response = null;
                                 let account_id_ = null
-                                let campaign_account_response = null;
+                                // let campaign_account_response = null;
                                 if((account_id === undefined || account_id === null) && referrer_email !== undefined && referrer_email !== null && referrer_email !== '') {
                                     referrer_response = await apolloClient.query({
                                         query: gql`
