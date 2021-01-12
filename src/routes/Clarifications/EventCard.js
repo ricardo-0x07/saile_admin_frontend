@@ -678,7 +678,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
                               <React.Fragment>
                                 <FormControl className={classes.formControl}>
-                                  <InputLabel id="demo-simple-select-label">Folloup period</InputLabel>
+                                  <InputLabel id="demo-simple-select-label">Followup Period</InputLabel>
                                   <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"

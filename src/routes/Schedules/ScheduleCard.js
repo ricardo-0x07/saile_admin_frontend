@@ -178,6 +178,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
       }
     });
     await setState({ ...state, addingToSchedule: false });
+    // refetch_schedule_accounts()
 
   }
   // const addScheduleAccountsTactical = async (schedule, listShallowScheduleAccountsSubscription, listCampaignAccountsSubscription, createScheduleAccountMutation, updateCampaignAccountMutation, accounts_to_add) => {
@@ -297,6 +298,11 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
         {render}
       </Query> 
     ),
+    getListedScheduleByIdQuery: ({ render }) => (
+      <Subscription subscription={getScheduleById(schedule.id, campaign.id, false)} >
+        {render}
+      </Subscription> 
+    ),
     // total_campaign_contacts: GetScheduledContactsCount()
   })
   // const total_campaign_contacts = 0
@@ -317,9 +323,13 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
 
   return (
     <Composed>
-      {({ createScheduleAccountMutation, updateCampaignAccountMutation, getScheduleByIdQuery, deleteScheduleAccountMutation }) => {
+      {({ createScheduleAccountMutation, updateCampaignAccountMutation, getScheduleByIdQuery, getListedScheduleByIdQuery, deleteScheduleAccountMutation }) => {
         const accounts = schedule.schedule_accounts.map(({account_id}) => account_id);
         console.log('showDownload: ', showDownload);
+        console.log('getListedScheduleByIdQuery: ', getListedScheduleByIdQuery);
+        // let refetch_scheduled_accounts = getListedScheduleByIdQuery.refetch;
+        // console.log('refetch_scheduled_accounts: ', refetch_scheduled_accounts);
+
 
         return (
           <Card>
@@ -341,7 +351,7 @@ export const ScheduleCard = ({ schedule, requirement, sailebot,  campaign,  hist
                   End Date: <Moment format="YYYY-MMM-DD" date={end_date !== null && end_date }></Moment>
                 </Typography>
               }
-              <Typography>Number of Accounts: {schedule.schedule_accounts ? schedule.schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
+              <Typography>Number of Accounts: {getListedScheduleByIdQuery.data !== undefined && getListedScheduleByIdQuery.data.schedule.length > 0 && getListedScheduleByIdQuery.data.schedule[0] !== undefined && getListedScheduleByIdQuery.data.schedule[0].schedule_accounts ? getListedScheduleByIdQuery.data.schedule[0].schedule_accounts.length : 0}/{accounts_per_schedule}</Typography>
               {
                 // data && data.length >0 && contact_ids && contact_ids.length > 0?
                 // <div>

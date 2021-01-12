@@ -402,6 +402,33 @@ export const getCampaignContact = (campaign_id, contact_id) => {
     `;
 }
 
+export const getScheduleById = (id, campaign_id, is_delisted=true) => {
+    return gql`
+    subscription GetScheduleById {
+        schedule(where: {id: {_eq: ${id}}}) {
+            campaign_id
+            date
+            daily_outbound_limit
+            created_at
+            deploy_date
+            end_date
+            id
+            name
+            no_targets_per_accounts
+            status
+            timezone
+            updated_at
+            accounts_per_schedule
+            schedule_accounts(where: {account: {campaign_accounts: {is_delisted: {_eq: ${is_delisted}}, campaign_id: {_eq: ${campaign_id}}}}}) {
+                id
+                account_id
+                schedule_id
+            }
+      }
+    }
+  `;
+  }
+
 
 export const listCampaignSchedules = (campaign_id, is_delisted=false) => {
     return gql`
