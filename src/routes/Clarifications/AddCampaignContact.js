@@ -199,23 +199,24 @@ const ManageContactForm = (props) => {
                                     console.log("referrer_response: ", referrer_response)
                                     account_id_ = referrer_response.data && referrer_response.data.contact && referrer_response.data.contact.length > 0 && referrer_response.data.contact[0].account_id !== undefined ? referrer_response.data.contact[0].account_id : null; 
                                     console.log("referrer_response: ", referrer_response)
-                                    campaign_account_response = await apolloClient.query({
-                                      query: gql`
-                                        query MyQuery($email:String!) {
-                                          campaign_account(where: {campaign_id: {_eq: $campaign_id}, account_id: {_eq: $account_id}}) {
-                                            account_id
-                                            campaign_id
-                                            id
-                                          }
-                                        }
-                                      `,
-                                      variables: {
-                                        campaign_id,
-                                        account_id
-                                      }
-                                  })
-                                  account_id_ = campaign_account_response.data && campaign_account_response.data.campaign_account && campaign_account_response.data.campaign_account.length > 0 && campaign_account_response.data.campaign_account[0].account_id !== undefined ? referrer_response.data.campaign_account[0].account_id : null; 
-
+                                    // if(campaign_id !== null || campaign_id !== undefined) {
+                                    //   campaign_account_response = await apolloClient.query({
+                                    //     query: gql`
+                                    //       query MyQuery($email:String!) {
+                                    //         campaign_account(where: {campaign_id: {_eq: $campaign_id}, account_id: {_eq: $account_id}}) {
+                                    //           account_id
+                                    //           campaign_id
+                                    //           id
+                                    //         }
+                                    //       }
+                                    //     `,
+                                    //     variables: {
+                                    //       campaign_id,
+                                    //       account_id
+                                    //     }
+                                    //   })
+                                    //   account_id_ = campaign_account_response.data && campaign_account_response.data.campaign_account && campaign_account_response.data.campaign_account.length > 0 && campaign_account_response.data.campaign_account[0].account_id !== undefined ? referrer_response.data.campaign_account[0].account_id : null;   
+                                    // }
                               }
                                 console.log("account_id_: ", account_id_)
 
