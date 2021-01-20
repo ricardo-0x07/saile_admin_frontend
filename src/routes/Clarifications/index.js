@@ -108,14 +108,14 @@ const Events = (props) => {
                   <EventCard updateReload={() => {
                     refetch();
                     totalCampaignClarificationEventsSubscription.refetch()
-                  }} event={x} name={x.name} key={x.id} history={props.history}  apolloClient={props.client}/>
+                  }} event={x} name={x.name} key={x.id} history={props.history}  apolloClient={props.client} company={props.location.state.client.company}/>
                 ))
                 :
                 data.event.filter(item => item ).map(x => (
                   <EventCard updateReload={() => {
                     refetch();
                     totalCampaignClarificationEventsSubscription.refetch()
-                  }} event={x} name={x.name} key={x.id}  history={props.history} apolloClient={props.client}/>
+                  }} event={x} name={x.name} key={x.id}  history={props.history} apolloClient={props.client} />
                 ))
               }
             </div>

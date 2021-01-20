@@ -90,7 +90,7 @@ const Clients = (props) => {
             >
               {
                 data.client.filter(item => item ).map(x => (
-                  <ClientCard client={x} name={x.name} key={x.id}  history={props.history}/>
+                  <ClientCard client={x} name={x.name} key={x.id}  history={props.history} company={props.location.state.company}/>
                 ))
               }
             </div>

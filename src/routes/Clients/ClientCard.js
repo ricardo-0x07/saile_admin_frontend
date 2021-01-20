@@ -60,13 +60,13 @@ export const ClientCard = ({ client,  history }) => {
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-client', {client})}>Edit</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-sailebot', {client})}>Add SaileBot</Button>
-                <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/sailebots-by-client', {client})}>View SaileBots</Button>
+                <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/sailebots-by-client', {client, company})}>View SaileBots</Button>
                 <Button variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/questionnaires-by-client', {client})}>View Questionnaires</Button>
               </CardActions>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {
                   client &&
-                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/clarifications-by-campaign', {client, name: 'Client'})}>Clarifications</Button>
+                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/clarifications-by-campaign', {client, company, name: 'Client'})}>Clarifications</Button>
                 }
                 {
                   clientEventCountQuery.data && 

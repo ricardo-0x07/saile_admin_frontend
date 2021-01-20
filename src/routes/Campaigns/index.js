@@ -134,7 +134,7 @@ const Campaigns = (props) => {
               {
                 props.location.state && props.location.state.requirement ?
                 data.campaign.filter(item => item.requirement_id === props.location.state.requirement.id ).map(x => (
-                  <CampaignCard campaign={x} name={x.name} key={x.id} history={props.history} requirement={props.location.state.requirement} sailebot={props.location.state.sailebot}/>
+                  <CampaignCard campaign={x} name={x.name} key={x.id} history={props.history} requirement={props.location.state.requirement} sailebot={props.location.state.sailebot} client={props.location.state.client} comapny={props.location.state.comapny}/>
                 ))
                 :
                 data.campaign.filter(item => item ).map(x => (

@@ -21,7 +21,8 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import { Mutation, Query } from "react-apollo";
 import { updateEvent, updateContact, updateSingleCampaignAccount, updateCampaignContact, deleteEvent, deleteOutboundEventByContactIdLabel } from "../../graphql/mutations";
-import { getContactById, getCampaignContact, getCampaignAccount, getCampaignSaileBot } from "../../graphql/queries";
+import { getContactById, getCampaignContact, getCampaignAccount, getCampaignSaileBot, getCampaignAOTemplates, getCampaignReferrer } from "../../graphql/queries";
+// import { getCampaignAOTemplates } from "../../graphql/queries";
 import { adopt } from 'react-adopt';
 import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
 import ContactSelect from "./ContactSelect";
@@ -29,6 +30,9 @@ import AddCampaignContact from './AddCampaignContact';
 import CampaignContactEvents from '../CampaignContactEvents';
 import EventEditDialog from './EventEditDialog';
 import EditAccountDialog from './EditAccountDialog';
+import EditContactDialog from './EditContactDialog';
+import PreviewAODialog from './PreviewAODialog';
+
 
 
 // const actionable_opportunity_clarification_lambda_api_endpoint = "https://8xbo18ydk7.execute-api.us-west-2.amazonaws.com/Prod/"
@@ -49,7 +53,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const EventCard = ({ event, updateReload, history, apolloClient }) => {
+export const EventCard = ({ event, updateReload, history, apolloClient, company }) => {
   const [state, setState] = React.useState({
     showBody: false,
     delay: 7,
@@ -470,7 +474,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
               {
                 campaign_id && contact_id &&
                 <Query query={getContactById(contact_id)} >
-                  { ({data, loading}) => {
+                  { ({data, loading, refetch}) => {
                   if (
                       loading ||
                       !data ||
@@ -482,6 +486,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                     }
                     console.log('getContactById data: ',  data)
                     console.log("state.delay: ", state.delay)
+                    const contact = data.contact[0]
                     const { account_id } = data.contact[0]
                     if (account_id === undefined) {
                       return null;
@@ -504,7 +509,11 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                         const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
     
                         return (
-                          <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
+                          <React.Fragment>
+                            {/* EditContactDialog */}
+                            {/* <EditContactDialog contact={contact} updateReload={refetch} history={history} apolloClient={apolloClient} name={`Edit contact`}/> */}
+                            <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography>
+                          </React.Fragment>
                         );
                       }}
                     </Query>                    
@@ -618,7 +627,7 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                             {
                               id && sailebot && sailebot.id && campaign_id && contact_id &&
                               <Query query={getContactById(contact_id)} >
-                                { ({data, loading}) => {
+                                { ({data, loading, refetch}) => {
                                   if (
                                     loading ||
                                     !data ||
@@ -653,8 +662,58 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                                       return (
                                         <React.Fragment>
                                           {
+                                            contact &&
+                                            <EditContactDialog contact={contact} updateReload={refetch} history={history} apolloClient={apolloClient} name={`Edit contact`}/>
+                                          }
+                                          {
                                             account && account.id &&
+                                            <React.Fragment>
                                             <EditAccountDialog account={account} updateReload={campaignAccountQuery.refetch} history={history} apolloClient={apolloClient} name={`Edit Account`}/>
+                                              {
+                                                // getCampaignAOTemplates
+                                                campaign_id &&
+                                                <Query query={getCampaignAOTemplates(campaign_id, 'actionable_opportunity')} >
+                                                  { (getCampaignAOTemplatesQuery) => {
+                                                    if (
+                                                    getCampaignAOTemplatesQuery.loading ||
+                                                      !getCampaignAOTemplatesQuery.data ||
+                                                      !getCampaignAOTemplatesQuery.data.template ||
+                                                      !getCampaignAOTemplatesQuery.data.template.length > 0 ||
+                                                      !getCampaignAOTemplatesQuery.data.template
+                                                    ) {
+                                                      return null;
+                                                    }
+                                                    console.log('getCampaignAOTemplatesQuery.data: ', getCampaignAOTemplatesQuery.data)
+                                                    const template = getCampaignAOTemplatesQuery.data.template[0]
+                                                    let referrer = null;
+                                                    // PreviewAODialog getCampaignReferrer
+                                                    return (
+                                                      <Query query={getCampaignReferrer(campaign_id, contact_id)} >
+                                                        { (getCampaignReferrerQuery) => {
+                                                          if (
+                                                          !getCampaignReferrerQuery.loading &&
+                                                            getCampaignReferrerQuery.data &&
+                                                            getCampaignReferrerQuery.data.campaign_referral &&
+                                                            getCampaignReferrerQuery.data.campaign_referral.length > 0 &&
+                                                            getCampaignReferrerQuery.data.campaign_referral[0].contact
+                                                          ) {
+                                                            referrer = getCampaignReferrerQuery.data.campaign_referral[0].contact
+                                                            console.log('referrer: ', referrer)
+                                                          }
+                                                          if (getCampaignReferrerQuery.loading) {
+                                                            return null
+                                                          }
+                                                          console.log('getCampaignReferrerQuery.data: ', getCampaignReferrerQuery.data)
+                                                          
+                                                          // PreviewAODialog getCampaignReferrer
+                                                          return <PreviewAODialog template={template} referrer={referrer} event={event} account={account} contact={contact} updateReload={getCampaignAOTemplatesQuery.refetch} history={history} apolloClient={apolloClient} name={`Preview AO`} company={company}/>;
+                                                        }}
+                                                      </Query>
+                                                    );
+                                                  }}
+                                                </Query>
+                                              }
+                                            </React.Fragment>
                                           }
                                           <div style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                             {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}

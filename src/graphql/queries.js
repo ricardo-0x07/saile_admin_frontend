@@ -780,6 +780,21 @@ export const listSchedules = (limit=10, is_delisted=false, offset=0, account_lim
     }
   `;
   }
+
+  export const getCampaignAOTemplates = (campaign_id, name) => {
+    return gql`
+        query GetCampaignAOTemplates {
+            template(where: {campaign_id: {_eq: ${campaign_id}}, name: {_ilike: "%${name}%"}}) {
+                body_html_text
+                body_text
+                campaign_id
+                id
+                name
+                subject
+            }
+        }
+    `;
+}
 export const listAccounts = (limit=10, offset=0, search_term='') => {
     return gql`
         query ListAccounts {
@@ -1138,6 +1153,26 @@ export const getCampaignContact = (campaign_id, contact_id) => {
                 status
                 contact {
                     is_undeliverable
+                }
+            }
+        }
+    `;
+}
+
+export const getCampaignReferrer = (campaign_id, referree_id) => {
+    return gql`
+        query GetCampaignContact {
+            campaign_referral(where: {campaign_id: {_eq: ${campaign_id}}, referree_id: {_eq: ${referree_id}}}) {
+                id
+                campaign_id
+                referree_id
+                contact {
+                    id
+                    firstname
+                    lastname
+                    email
+                    phone
+                    title
                 }
             }
         }

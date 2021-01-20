@@ -12,7 +12,7 @@ import { Formik, useField } from 'formik';
 import { adopt } from 'react-adopt';
 import {
     TextField,
-    FormControlLabel,
+    // FormControlLabel,
     FormLabel,
     FormControl,
     FormGroup,
@@ -286,14 +286,14 @@ export default function EventEditDialog(props) {
                                         onChange={handleChange}
                                         value={values.phone || ''}
                                     />
-                                    <TextField
+                                    {/* <TextField
                                         name="fax"
                                         label="Fax" 
                                         variant="filled" 
                                         margin="normal" 
                                         onChange={handleChange}
                                         value={values.fax || ''}
-                                    />
+                                    /> */}
                                     <TextField
                                         name="revenue"
                                         label="Revenue" 
@@ -326,14 +326,14 @@ export default function EventEditDialog(props) {
                                         onChange={handleChange}
                                         value={values.country || ''}
                                     />
-                                    <TextField
+                                    {/* <TextField
                                         name="NAICS"
                                         label="NAICS" 
                                         variant="filled" 
                                         margin="normal" 
                                         onChange={handleChange}
                                         value={values.NAICS || ''}
-                                    />
+                                    /> */}
                                     <TextField
                                         name="website"
                                         label="Website" 
@@ -342,7 +342,7 @@ export default function EventEditDialog(props) {
                                         onChange={handleChange}
                                         value={values.website || ''}
                                     />
-                                    <TextField
+                                    {/* <TextField
                                         name="domain"
                                         label="Domain" 
                                         variant="filled" 
@@ -354,8 +354,8 @@ export default function EventEditDialog(props) {
                                         label="Is Scheduled?"
                                         control={
                                             <Checkbox name="is_scheduled" onChange={handleChange} value={values.is_scheduled} />
-                                        }
-                                    />
+                                        } 
+                                    />*/}
                                 </FormGroup>
                             </FormControl>
                             <Button variant="contained" type='submit'>Submit</Button>
