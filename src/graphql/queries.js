@@ -1482,6 +1482,10 @@ export const clientNutureEventByLabel = (client_id, label_query, is_inbound=true
                     account {
                         name
                         address
+                        street
+                        city
+                        state
+                        country
                     }
                 }
                 id
@@ -1702,6 +1706,10 @@ export const clientEvent = (client_id, limit=10, offset=0) => {
                     account {
                         name
                         address
+                        street
+                        city
+                        state
+                        country
                     }
                 }
             }

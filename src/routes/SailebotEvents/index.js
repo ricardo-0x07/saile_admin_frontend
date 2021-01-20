@@ -89,10 +89,10 @@ const Events = (props) => {
 
           nurtureData = nurtureEventsQuery.data.event.map(nut => {
             const { body, cc, id, date, label, contact } = nut;
-            const { account: { name, address }, email, firstname, lastname, title } = contact;
+            const { account: { name, address, street, city, state, country }, email, firstname, lastname, title } = contact;
             return {
               body, cc, id, date, label,
-              name, address,
+              name, address, street, city, state, country,
               email, firstname, lastname, title
             }
           })
