@@ -1,11 +1,11 @@
-import { LOGIN_ACTION, LOGOUT_ACTION, Endpoints, globalCookiePolicy, ADMIN_SECRET_HEADER_KEY } from './types'
+import { LOGIN_ACTION, LOGOUT_ACTION, SET_USER, Endpoints, globalCookiePolicy, ADMIN_SECRET_HEADER_KEY } from './types'
 
 // import requestAction from './requestAction';
 import { push } from 'react-router-redux';
 //Sample Login Function
-export function login(admin_secret) {
+export function login(payload) {
     return dispatch => {
-        dispatch({ type: LOGIN_ACTION, payload: { admin_secret } });
+        dispatch({ type: LOGIN_ACTION, payload: payload });
     }
 }
 
@@ -13,6 +13,8 @@ export function login(admin_secret) {
 export function logout() {
  return dispatch => dispatch({type: LOGOUT_ACTION});
 }
+
+export const setUser = payload => ({ type: SET_USER, payload });
 
 export const verifyLogin = ({
     adminSecret,
@@ -65,6 +67,7 @@ export const verifyLogin = ({
         //     },
         //   });
             sessionStorage.setItem(ADMIN_SECRET_HEADER_KEY, adminSecret);
+            sessionStorage.setItem('token', adminSecret);
         }
         if (successCallback) {
           successCallback();

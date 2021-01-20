@@ -1,5 +1,7 @@
 export const LOGIN_ACTION = "LOGIN_ACTION"
 export const LOGOUT_ACTION = "LOGOUT_ACTION"
+export const SET_USER = 'SET_USER';
+
 const baseUrl = 'https://saile-graph-api.net'
 
 export const Endpoints = {

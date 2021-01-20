@@ -1452,6 +1452,30 @@ export const clientEventByLabel = (client_id, label_query, limit=10, offset=0, i
     `;
 }
 
+export const clientNutureEventByLabel = (client_id, label_query, is_inbound=true) => {
+    return gql`
+        query ClientNutureEventByLabel {
+            event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: ${is_inbound}}, to_clarify: {_eq: false}}) {
+                contact {
+                email
+                firstname
+                lastname
+                title
+                account {
+                    name
+                    address
+                }
+                }
+                id
+                label
+                date
+                cc
+                body
+            }
+        }
+    `;
+}
+
 export const getDelivered = (event_id) => {
     return gql`
         query GetDelivered {

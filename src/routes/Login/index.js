@@ -4,6 +4,8 @@ import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux';
 import { verifyLogin } from '../../actions';
 import * as actions from '../../actions';
+import { getJWTAuth } from '../../utils/rest_api'
+
 
 import background from './SS.png';
 const styles = require('./Login.scss');
@@ -19,6 +21,11 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
 
   // input handler
   const [adminSecretInput, setAdminSecretInput] = useState('');
+  // const authenticate = async (credentials) => {
+  //   const credentials_results = await getJWTAuth({entity: credentials})
+  //   console.log("credentials_results: ", credentials_results)
+  // }
+
 
   const getLoginForm = () => {
     const getLoginButtonText = () => {
@@ -49,7 +56,7 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
         const successCallback = () => {
             setLoading(false);
             setError(null);
-            login(adminSecretInput)
+            login({token: adminSecretInput, user: {}})
             props.history.push('/app');
         };
 
