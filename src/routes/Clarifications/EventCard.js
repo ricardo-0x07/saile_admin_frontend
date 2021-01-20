@@ -27,6 +27,8 @@ import { createreferral, createActionableOpportunity } from '../../utils/rest_ap
 import ContactSelect from "./ContactSelect";
 import AddCampaignContact from './AddCampaignContact';
 import CampaignContactEvents from '../CampaignContactEvents';
+import EventEditDialog from './EventEditDialog';
+import EditAccountDialog from './EditAccountDialog';
 
 
 // const actionable_opportunity_clarification_lambda_api_endpoint = "https://8xbo18ydk7.execute-api.us-west-2.amazonaws.com/Prod/"
@@ -646,17 +648,24 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                                         return null;
                                       }
                                       console.log('campaignAccountQuery.data: ', campaignAccountQuery.data)
-                                      const { is_delisted } = campaignAccountQuery.data.campaign_account[0]
+                                      const { is_delisted, account } = campaignAccountQuery.data.campaign_account[0]
                   
                                       return (
-                                        <div style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                          {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}
-                                          <Button variant="contained" size="small" style={{marginRight: '1rem'}} onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                                        <React.Fragment>
                                           {
-                                            label === 'actionable_opportunity' && window.location.hostname === "localhost" &&
-                                            <Button variant="contained" size="small" color="secondary" onClick={() => reEngage(updateCampaignAccountMutation, updateEventMutation, contact, campaignAccountQuery.refetch, updateCampaignContactMutation, deleteOutboundEventByContactIdLabelMutation)}>Re Engage</Button>
+                                            account && account.id &&
+                                            <EditAccountDialog account={account} updateReload={campaignAccountQuery.refetch} history={history} apolloClient={apolloClient} name={`Edit Account`}/>
                                           }
-                                        </div>
+                                          <div style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            {/* <Typography><strong>AccountID: {account_id} Status:</strong> {is_delisted ? 'De-listed' : 'Listed'}</Typography> */}
+                                            <Button variant="contained" size="small" style={{marginRight: '1rem'}} onClick={() => _delistCampaignAccount_(updateCampaignAccountMutation, updateEventMutation, contact, is_delisted, campaignAccountQuery.refetch)}>{is_delisted? "Relist" : "Delist"} Account</Button>
+                                            {
+                                              label === 'actionable_opportunity' && window.location.hostname === "localhost" &&
+                                              
+                                                <Button variant="contained" size="small" color="secondary" onClick={() => reEngage(updateCampaignAccountMutation, updateEventMutation, contact, campaignAccountQuery.refetch, updateCampaignContactMutation, deleteOutboundEventByContactIdLabelMutation)}>Re Engage</Button>
+                                            }
+                                          </div>
+                                        </React.Fragment>
                                       );  
                                     }} 
                                     </Query>
@@ -670,8 +679,9 @@ export const EventCard = ({ event, updateReload, history, apolloClient }) => {
                             {/* Edit Event */}
                             {
                               // window.location.hostname === "localhost" &&
-                              <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
+                              // <Button  variant="contained" size="small" onClick={() => history.push('/app/manage-event', { event })}>Edit Event</Button>
                             }
+                            <EventEditDialog event={event} updateReload={updateReload} history={history} apolloClient={apolloClient} name={`Edit Event`}/>
                             {/* Follow up period */}
                             {
                               // !isIn &&

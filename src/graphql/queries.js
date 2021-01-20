@@ -973,6 +973,24 @@ export const getCampaignAccount = (campaign_id, account_id) => {
                 campaign_id
                 account_id
                 is_delisted
+                account {
+                    id
+                    name
+                    email_domain
+                    revenue
+                    street
+                    website
+                    state
+                    phone
+                    domain
+                    email
+                    employees
+                    fax
+                    NAICS
+                    address
+                    country
+                    city
+                }
             }
         }
     `;
@@ -1457,14 +1475,14 @@ export const clientNutureEventByLabel = (client_id, label_query, is_inbound=true
         query ClientNutureEventByLabel {
             event(where: {campaign: {requirement: {sailebot: {client_id: {_eq: ${client_id}}}}}, label: {_eq: "${label_query}"}, is_inbound: {_eq: ${is_inbound}}, to_clarify: {_eq: false}}) {
                 contact {
-                email
-                firstname
-                lastname
-                title
-                account {
-                    name
-                    address
-                }
+                    email
+                    firstname
+                    lastname
+                    title
+                    account {
+                        name
+                        address
+                    }
                 }
                 id
                 label
@@ -1676,6 +1694,16 @@ export const clientEvent = (client_id, limit=10, offset=0) => {
                 sender
                 to
                 validated_intent
+                contact {
+                    email
+                    firstname
+                    lastname
+                    title
+                    account {
+                        name
+                        address
+                    }
+                }
             }
         }
     `;
