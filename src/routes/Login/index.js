@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux';
 import { verifyLogin } from '../../actions';
 import * as actions from '../../actions';
-import { getJWTAuth } from '../../utils/rest_api'
+// import { getJWTAuth } from '../../utils/rest_api'
 
 
 import background from './SS.png';
