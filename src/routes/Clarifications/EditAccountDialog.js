@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     flex: 1,
   },
+  margin: {
+    margin: theme.spacing(1),
+  },
   root: {
     '& > *': {
       margin: theme.spacing(1),
@@ -236,7 +239,7 @@ export default function EventEditDialog(props) {
                         {({ values, handleChange, handleSubmit }) => (
                         <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
                             <FormControl component="fieldset">
-                                <FormLabel component="legend">Account Creation/Update</FormLabel>
+                                <FormLabel component="legend">Account Edit</FormLabel>
                                 <FormGroup aria-label="position" >
                                     <TextField
                                         name="name"
@@ -303,12 +306,12 @@ export default function EventEditDialog(props) {
                                         value={values.revenue || ''}
                                     />
                                     <TextField
-                                        name="state"
-                                        label="State" 
+                                        name="street"
+                                        label="Street" 
                                         variant="filled" 
                                         margin="normal" 
                                         onChange={handleChange}
-                                        value={values.state || ''}
+                                        value={values.street || ''}
                                     />
                                     <TextField
                                         name="city"
@@ -317,6 +320,14 @@ export default function EventEditDialog(props) {
                                         margin="normal" 
                                         onChange={handleChange}
                                         value={values.city || ''}
+                                    />
+                                    <TextField
+                                        name="state"
+                                        label="State" 
+                                        variant="filled" 
+                                        margin="normal" 
+                                        onChange={handleChange}
+                                        value={values.state || ''}
                                     />
                                     <TextField
                                         name="country"
@@ -358,7 +369,7 @@ export default function EventEditDialog(props) {
                                     />*/}
                                 </FormGroup>
                             </FormControl>
-                            <Button variant="contained" type='submit'>Submit</Button>
+                            <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
                         </form>
                         )}
                     </Formik>

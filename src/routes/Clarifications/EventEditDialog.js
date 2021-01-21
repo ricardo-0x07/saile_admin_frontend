@@ -154,7 +154,7 @@ export default function EventEditDialog(props) {
                         {({ values, handleChange, handleSubmit }) => (
                             <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
                                 <FormControl component="fieldset">
-                                    <FormLabel component="legend">Event Creation/Update</FormLabel>
+                                    <FormLabel component="legend">Event Edit</FormLabel>
                                     { 
                                         isPreview 
                                         ? 
@@ -163,7 +163,7 @@ export default function EventEditDialog(props) {
                                             {insertBody('Body', values.body  || '')}
                                         </div>
                                         : <FormGroup aria-label="position" >
-                                            <TextField
+                                            {/* <TextField
                                                 name="label"
                                                 label="Label" 
                                                 variant="filled" 
@@ -178,7 +178,7 @@ export default function EventEditDialog(props) {
                                                 margin="normal" 
                                                 onChange={handleChange}
                                                 value={values.cc  || ''}
-                                            />
+                                            /> */}
                                             <TextField
                                                 name="subject"
                                                 label="Subject" 
@@ -193,7 +193,7 @@ export default function EventEditDialog(props) {
                                                 margin="normal" 
                                                 onChange={handleChange}
                                                 value={values.body  || ''}
-                                                rowsMax={10}
+                                                rowsMax={30}
                                                 aria-label="body"
                                                 placeholder="Text"
                                             />
@@ -202,9 +202,9 @@ export default function EventEditDialog(props) {
                                 </FormControl>
                                 {
                                     !isPreview 
-                                    && <Button variant="contained" type='submit'>Submit</Button>
+                                    && <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
                                 }
-                                <Button variant="contained" type='button' onClick={togglePreview}>{!isPreview ? 'Preview' : 'Edit' }</Button>
+                                <Button variant="contained" type='button' onClick={togglePreview} style={{textAlign: 'inherit'}}>{!isPreview ? 'Preview' : 'Edit' }</Button>
                             </form>
                         )}
                     </Formik>

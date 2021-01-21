@@ -117,6 +117,7 @@ export const listCompanyUserClients = (company_id, limit=10, offset=0) => {
                     country
                     industry
                     phone
+                    logo
                 }
                 sailebots {
                     client_id
@@ -943,6 +944,7 @@ export const getCompanyByCampaignId = (campaign_id) => {
                 street
                 updated_at
                 website
+                logo
             }
         }
     `;
@@ -963,6 +965,7 @@ export const getCompanyByRequirementId = (requirement_id) => {
                 street
                 updated_at
                 website
+                logo
             }
         }
     `;

@@ -296,7 +296,7 @@ export default function EventEditDialog(props) {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.position === null ? '' : values.position }
-                                        /> */}
+                                        /> 
                                         <TextField
                                             name="source"
                                             label="Source" 
@@ -304,10 +304,10 @@ export default function EventEditDialog(props) {
                                             margin="normal" 
                                             onChange={handleChange}
                                             value={values.source === null ? '' : values.source }
-                                        />
+                                        /> */}
                                     </FormGroup>
                                 </FormControl>
-                                <Button variant="contained" type='submit'>Submit</Button>
+                                <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
                             </form>
                         )}}
                     </Formik>

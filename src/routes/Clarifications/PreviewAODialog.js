@@ -51,8 +51,8 @@ export default function PreviewAODialog(props) {
     const location = useLocation();
     const history = useHistory();
     const [open, setOpen] = React.useState(false);
-    let isPreview = true
-    // const [isPreview, setIsPreview] = React.useState(true)
+    // let isPreview = true
+    const [isPreview, setIsPreview] = React.useState(true)
     console.log("props: ", props)
     const { company, contact, account, event, referrer } = props;
     let client_company = company && company.name? company.name : 'client company'
@@ -203,8 +203,15 @@ export default function PreviewAODialog(props) {
         setOpen(true);
     };
 
+    // console.log('isPreview: ', isPreview);
+    console.log('props.template: ', props.template);
+    const togglePreview = () => {
+        setIsPreview(!isPreview)
+    }
+
     const handleClose = () => {
         setOpen(false);
+        togglePreview()
     };
     let initialValues = {
         name: '',
@@ -226,11 +233,6 @@ export default function PreviewAODialog(props) {
             };
         }
     }
-    // console.log('isPreview: ', isPreview);
-    console.log('props.template: ', props.template);
-    // const togglePreview = () => {
-    //     setIsPreview(!isPreview)
-    // }
     function createMarkup(body) {
         return {__html: body};
     }
@@ -372,10 +374,10 @@ export default function PreviewAODialog(props) {
                                     }
                                 </FormControl>
                                 {
-                                    // !isPreview 
-                                    // && <Button variant="contained" type='submit'>Submit</Button>
+                                    !isPreview 
+                                    && <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
                                 }
-                                <Button variant="contained" type='button' onClick={handleClose}>Close</Button>
+                                <Button variant="contained" type='button' onClick={togglePreview} style={{textAlign: 'inherit'}}>{!isPreview ? 'Preview' : 'Edit' }</Button>
                             </form>
                         )}
                     </Formik>
