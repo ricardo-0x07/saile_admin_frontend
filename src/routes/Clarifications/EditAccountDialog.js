@@ -10,6 +10,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Formik, useField } from 'formik';
 import { adopt } from 'react-adopt';
+import DialogContent from '@material-ui/core/DialogContent';
+
 import {
     TextField,
     // FormControlLabel,
@@ -130,7 +132,7 @@ export default function EventEditDialog(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         {props.name}
       </Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} scroll={'paper'}>>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -144,238 +146,240 @@ export default function EventEditDialog(props) {
             </Button> */}
           </Toolbar>
         </AppBar>
-        <Composed>
-            { 
-                ({mutation, createCampaignAccountMutation}) => (
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={
-                            async ({ 
-                                    name,
-                                    address,
-                                    domain,
-                                    email,
-                                    employees,
-                                    fax,
-                                    phone,
-                                    revenue,
-                                    website,
-                                    email_domain,
-                                    NAICS,
-                                    state,
-                                    city,
-                                    country,
-                                    is_scheduled,
-                                    schedule_id,
-                                    campaign_id,
-                                    id,
-                                }) => {
-                                if (id) {
-                                    await mutation({
-                                        variables: {
-                                            objects: {
-                                                id,
-                                                name,
-                                                address,
-                                                domain,
-                                                email,
-                                                employees,
-                                                fax,
-                                                phone,
-                                                revenue,
-                                                website,
-                                                email_domain,
-                                                NAICS,
-                                                state,
-                                                city,
-                                                country,
-                                                is_scheduled,
-                                                schedule_id,
-                                            },
-                                            id
-                                        }
-                                    });
-                                } else {
-                                    const response = await mutation({
-                                        variables: {
-                                            objects: {
-                                                name,
-                                                address,
-                                                domain,
-                                                email,
-                                                employees,
-                                                fax,
-                                                phone,
-                                                revenue,
-                                                website,
-                                                email_domain,
-                                                NAICS,
-                                                state,
-                                                city,
-                                                country,
-                                                is_scheduled,
-                                                schedule_id,
-                                            }
-                                        }
-                                    });
+        <DialogContent dividers={true}>
+          <Composed>
+              { 
+                  ({mutation, createCampaignAccountMutation}) => (
+                      <Formik
+                          initialValues={initialValues}
+                          onSubmit={
+                              async ({ 
+                                      name,
+                                      address,
+                                      domain,
+                                      email,
+                                      employees,
+                                      fax,
+                                      phone,
+                                      revenue,
+                                      website,
+                                      email_domain,
+                                      NAICS,
+                                      state,
+                                      city,
+                                      country,
+                                      is_scheduled,
+                                      schedule_id,
+                                      campaign_id,
+                                      id,
+                                  }) => {
+                                  if (id) {
+                                      await mutation({
+                                          variables: {
+                                              objects: {
+                                                  id,
+                                                  name,
+                                                  address,
+                                                  domain,
+                                                  email,
+                                                  employees,
+                                                  fax,
+                                                  phone,
+                                                  revenue,
+                                                  website,
+                                                  email_domain,
+                                                  NAICS,
+                                                  state,
+                                                  city,
+                                                  country,
+                                                  is_scheduled,
+                                                  schedule_id,
+                                              },
+                                              id
+                                          }
+                                      });
+                                  } else {
+                                      const response = await mutation({
+                                          variables: {
+                                              objects: {
+                                                  name,
+                                                  address,
+                                                  domain,
+                                                  email,
+                                                  employees,
+                                                  fax,
+                                                  phone,
+                                                  revenue,
+                                                  website,
+                                                  email_domain,
+                                                  NAICS,
+                                                  state,
+                                                  city,
+                                                  country,
+                                                  is_scheduled,
+                                                  schedule_id,
+                                              }
+                                          }
+                                      });
 
-                                    await createCampaignAccountMutation({
-                                        variables: {
-                                            objects: {
-                                                account_id: response.data.insert_account.returning[0].id,
-                                                campaign_id,
-                                            }
-                                        }
-                                    });
+                                      await createCampaignAccountMutation({
+                                          variables: {
+                                              objects: {
+                                                  account_id: response.data.insert_account.returning[0].id,
+                                                  campaign_id,
+                                              }
+                                          }
+                                      });
 
-                                }
-                      
-                                handleClose()
-                                props.updateReload()
-                                
-                            }
-                        }
-                    >
-                        {({ values, handleChange, handleSubmit }) => (
-                        <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">Account Edit</FormLabel>
-                                <FormGroup aria-label="position" >
-                                    <TextField
-                                        name="name"
-                                        label="Name" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.name || ''}
-                                    />
-                                    <TextField
-                                        name="address"
-                                        label="Address" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.address || ''}
-                                    />
-                                    <TextField
-                                        name="email"
-                                        label="Email" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.email || ''}
-                                    />
-                                    <TextField
-                                        name="email_domain"
-                                        label="Email domain" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.email_domain || ''}
-                                    />
-                                    <TextField
-                                        name="employees"
-                                        label="Employees" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.employees || ''}
-                                    />
-                                    <TextField
-                                        name="phone"
-                                        label="Phone" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.phone || ''}
-                                    />
-                                    {/* <TextField
-                                        name="fax"
-                                        label="Fax" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.fax || ''}
-                                    /> */}
-                                    <TextField
-                                        name="revenue"
-                                        label="Revenue" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.revenue || ''}
-                                    />
-                                    <TextField
-                                        name="street"
-                                        label="Street" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.street || ''}
-                                    />
-                                    <TextField
-                                        name="city"
-                                        label="City" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.city || ''}
-                                    />
-                                    <TextField
-                                        name="state"
-                                        label="State" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.state || ''}
-                                    />
-                                    <TextField
-                                        name="country"
-                                        label="Country" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.country || ''}
-                                    />
-                                    {/* <TextField
-                                        name="NAICS"
-                                        label="NAICS" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.NAICS || ''}
-                                    /> */}
-                                    <TextField
-                                        name="website"
-                                        label="Website" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.website || ''}
-                                    />
-                                    {/* <TextField
-                                        name="domain"
-                                        label="Domain" 
-                                        variant="filled" 
-                                        margin="normal" 
-                                        onChange={handleChange}
-                                        value={values.domain || ''}
-                                    />
-                                        <FormControlLabel
-                                        label="Is Scheduled?"
-                                        control={
-                                            <Checkbox name="is_scheduled" onChange={handleChange} value={values.is_scheduled} />
-                                        } 
-                                    />*/}
-                                </FormGroup>
-                            </FormControl>
-                            <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
-                        </form>
-                        )}
-                    </Formik>
-                )
-            }
-        </Composed>
+                                  }
+                        
+                                  handleClose()
+                                  props.updateReload()
+                                  
+                              }
+                          }
+                      >
+                          {({ values, handleChange, handleSubmit }) => (
+                          <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
+                              <FormControl component="fieldset">
+                                  <FormLabel component="legend">Account Edit</FormLabel>
+                                  <FormGroup aria-label="position" >
+                                      <TextField
+                                          name="name"
+                                          label="Name" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.name || ''}
+                                      />
+                                      <TextField
+                                          name="address"
+                                          label="Address" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.address || ''}
+                                      />
+                                      {/* <TextField
+                                          name="email"
+                                          label="Email" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.email || ''}
+                                      /> */}
+                                      <TextField
+                                          name="email_domain"
+                                          label="Email domain" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.email_domain || ''}
+                                      />
+                                      <TextField
+                                          name="employees"
+                                          label="Employees" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.employees || ''}
+                                      />
+                                      <TextField
+                                          name="phone"
+                                          label="Phone" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.phone || ''}
+                                      />
+                                      {/* <TextField
+                                          name="fax"
+                                          label="Fax" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.fax || ''}
+                                      /> */}
+                                      <TextField
+                                          name="revenue"
+                                          label="Revenue" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.revenue || ''}
+                                      />
+                                      <TextField
+                                          name="street"
+                                          label="Street" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.street || ''}
+                                      />
+                                      <TextField
+                                          name="city"
+                                          label="City" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.city || ''}
+                                      />
+                                      <TextField
+                                          name="state"
+                                          label="State" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.state || ''}
+                                      />
+                                      <TextField
+                                          name="country"
+                                          label="Country" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.country || ''}
+                                      />
+                                      {/* <TextField
+                                          name="NAICS"
+                                          label="NAICS" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.NAICS || ''}
+                                      /> */}
+                                      <TextField
+                                          name="website"
+                                          label="Website" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.website || ''}
+                                      />
+                                      {/* <TextField
+                                          name="domain"
+                                          label="Domain" 
+                                          variant="filled" 
+                                          margin="normal" 
+                                          onChange={handleChange}
+                                          value={values.domain || ''}
+                                      />
+                                          <FormControlLabel
+                                          label="Is Scheduled?"
+                                          control={
+                                              <Checkbox name="is_scheduled" onChange={handleChange} value={values.is_scheduled} />
+                                          } 
+                                      />*/}
+                                  </FormGroup>
+                              </FormControl>
+                              <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
+                          </form>
+                          )}
+                      </Formik>
+                  )
+              }
+          </Composed>
+        </DialogContent>
       </Dialog>
     </div>
   );

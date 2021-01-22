@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Formik } from 'formik';
+import DialogContent from '@material-ui/core/DialogContent';
+
 import {
     TextField,
     TextareaAutosize,
@@ -266,7 +268,7 @@ export default function PreviewAODialog(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         {props.name}
       </Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} scroll={'paper'}>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -280,111 +282,113 @@ export default function PreviewAODialog(props) {
             </Button>}
           </Toolbar>
         </AppBar>
-        <Mutation
-            mutation={props && props.template ? updateTemplate : createTemplate}
-        >
-            { 
-                mutation => (
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={
-                            async ({ name, subject, body_text, body_html_text, campaign_id, id }) => {
-                                if (id) {
-                                    await mutation({
-                                        variables: {
-                                            objects: {
-                                                id,
-                                                name,
-                                                subject,
-                                                body_text,
-                                                body_html_text,
-                                                campaign_id,
-                                            },
-                                            id
-                                        }
-                                    });
-                                } else {
-                                    await mutation({
-                                        variables: {
-                                            objects: {
-                                                name,
-                                                campaign_id,
-                                                subject,
-                                                body_text,
-                                                body_html_text,
+        <DialogContent dividers={true}>
+            <Mutation
+                mutation={props && props.template ? updateTemplate : createTemplate}
+            >
+                { 
+                    mutation => (
+                        <Formik
+                            initialValues={initialValues}
+                            onSubmit={
+                                async ({ name, subject, body_text, body_html_text, campaign_id, id }) => {
+                                    if (id) {
+                                        await mutation({
+                                            variables: {
+                                                objects: {
+                                                    id,
+                                                    name,
+                                                    subject,
+                                                    body_text,
+                                                    body_html_text,
+                                                    campaign_id,
+                                                },
+                                                id
                                             }
-                                        }
-                                    });
-                                }
-                      
-                                
-                                handleClose()
-                                props.updateReload()
-                            }
-                        }
-                    >
-                        {({ values, handleChange, handleSubmit }) => (
-                            <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
-                                <FormControl component="fieldset">
-                                    <FormLabel component="legend">AO Preview</FormLabel>
-                                    { 
-                                        isPreview 
-                                        ? 
-                                        <div>
-                                            {insertBody('Subject',values.subject  || '')}
-                                            {insertBody('Body', values.body_html_text  || '')}
-                                        </div>
-                                        : <FormGroup aria-label="position" >
-                                            <TextField
-                                                name="name"
-                                                label="Name" 
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.name  || ''}
-                                            />
-                                            <TextField
-                                                name="subject"
-                                                label="Subject" 
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.subject  || ''}
-                                            />
-                                            <TextareaAutosize
-                                                name="body_text"
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.body_text  || ''}
-                                                rowsMax={10}
-                                                aria-label="body_text"
-                                                placeholder="Text"
-                                            />
-                                            <TextareaAutosize
-                                                name="body_html_text"
-                                                placeholder="HTML Text" 
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.body_html_text  || ''}
-                                                rowsMax={10}
-                                                aria-label="body_html_text"
-                                            />
-                                        </FormGroup>
+                                        });
+                                    } else {
+                                        await mutation({
+                                            variables: {
+                                                objects: {
+                                                    name,
+                                                    campaign_id,
+                                                    subject,
+                                                    body_text,
+                                                    body_html_text,
+                                                }
+                                            }
+                                        });
                                     }
-                                </FormControl>
-                                {
-                                    !isPreview 
-                                    && <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
+                        
+                                    
+                                    handleClose()
+                                    props.updateReload()
                                 }
-                                <Button variant="contained" type='button' onClick={togglePreview} style={{textAlign: 'inherit'}}>{!isPreview ? 'Preview' : 'Edit' }</Button>
-                            </form>
-                        )}
-                    </Formik>
-                )
-            }
-        </Mutation>
+                            }
+                        >
+                            {({ values, handleChange, handleSubmit }) => (
+                                <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="legend">AO Preview</FormLabel>
+                                        { 
+                                            isPreview 
+                                            ? 
+                                            <div>
+                                                {insertBody('Subject',values.subject  || '')}
+                                                {insertBody('Body', values.body_html_text  || '')}
+                                            </div>
+                                            : <FormGroup aria-label="position" >
+                                                <TextField
+                                                    name="name"
+                                                    label="Name" 
+                                                    variant="filled" 
+                                                    margin="normal" 
+                                                    onChange={handleChange}
+                                                    value={values.name  || ''}
+                                                />
+                                                <TextField
+                                                    name="subject"
+                                                    label="Subject" 
+                                                    variant="filled" 
+                                                    margin="normal" 
+                                                    onChange={handleChange}
+                                                    value={values.subject  || ''}
+                                                />
+                                                <TextareaAutosize
+                                                    name="body_text"
+                                                    variant="filled" 
+                                                    margin="normal" 
+                                                    onChange={handleChange}
+                                                    value={values.body_text  || ''}
+                                                    rowsMax={15}
+                                                    aria-label="body_text"
+                                                    placeholder="Text"
+                                                />
+                                                <TextareaAutosize
+                                                    name="body_html_text"
+                                                    placeholder="HTML Text" 
+                                                    variant="filled" 
+                                                    margin="normal" 
+                                                    onChange={handleChange}
+                                                    value={values.body_html_text  || ''}
+                                                    rowsMax={15}
+                                                    aria-label="body_html_text"
+                                                />
+                                            </FormGroup>
+                                        }
+                                    </FormControl>
+                                    {
+                                        !isPreview 
+                                        && <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
+                                    }
+                                    <Button variant="contained" type='button' onClick={togglePreview} style={{textAlign: 'inherit'}}>{!isPreview ? 'Preview' : 'Edit' }</Button>
+                                </form>
+                            )}
+                        </Formik>
+                    )
+                }
+            </Mutation>
+        </DialogContent>
       </Dialog>
     </div>
   );

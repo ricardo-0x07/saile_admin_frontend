@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Formik, useField } from 'formik';
+import DialogContent from '@material-ui/core/DialogContent';
 import {
     TextField,
     // FormControlLabel,
@@ -110,7 +111,7 @@ export default function EventEditDialog(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         {props.name}
       </Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} scroll={'paper'}>>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -124,196 +125,198 @@ export default function EventEditDialog(props) {
             </Button> */}
           </Toolbar>
         </AppBar>
-        <Mutation
-            mutation={props && props.contact ? updateContact : createContact}
-        >
-            { 
-                mutation => (
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={
-                            async ({ 
-                                bounce_type,
-                                email,
-                                first_outbound_done,
-                                firstname,
-                                gender,
-                                is_ema_eligible,
-                                is_eva_eligible,
-                                is_referral,
-                                lastname,
-                                member_status,
-                                phone,
-                                position,
-                                role,
-                                sam_status,
-                                second_outbound_done,
-                                source,
-                                title,
-                                to_followup,
-                                account_id,
-                                id
-                            }) => {
-                                if (id) {
-                                    await mutation({
-                                        variables: {
-                                            objects: {
-                                                id,
-                                                bounce_type,
-                                                email,
-                                                first_outbound_done,
-                                                firstname,
-                                                gender,
-                                                is_ema_eligible,
-                                                is_eva_eligible,
-                                                is_referral,
-                                                lastname,
-                                                member_status,
-                                                phone,
-                                                position,
-                                                role,
-                                                sam_status,
-                                                second_outbound_done,
-                                                source,
-                                                title,
-                                                to_followup,
-                                                account_id,
-                                            },
-                                            id
-                                        }
-                                    });
-                                } else {
-                                    await mutation({
-                                        variables: {
-                                            objects: {
-                                                bounce_type,
-                                                email,
-                                                first_outbound_done,
-                                                firstname,
-                                                gender,
-                                                is_ema_eligible,
-                                                is_eva_eligible,
-                                                is_referral,
-                                                lastname,
-                                                member_status,
-                                                phone,
-                                                position,
-                                                role,
-                                                sam_status,
-                                                second_outbound_done,
-                                                source,
-                                                title,
-                                                to_followup,
-                                                account_id,
+        <DialogContent dividers={true}>
+            <Mutation
+                mutation={props && props.contact ? updateContact : createContact}
+            >
+                { 
+                    mutation => (
+                        <Formik
+                            initialValues={initialValues}
+                            onSubmit={
+                                async ({ 
+                                    bounce_type,
+                                    email,
+                                    first_outbound_done,
+                                    firstname,
+                                    gender,
+                                    is_ema_eligible,
+                                    is_eva_eligible,
+                                    is_referral,
+                                    lastname,
+                                    member_status,
+                                    phone,
+                                    position,
+                                    role,
+                                    sam_status,
+                                    second_outbound_done,
+                                    source,
+                                    title,
+                                    to_followup,
+                                    account_id,
+                                    id
+                                }) => {
+                                    if (id) {
+                                        await mutation({
+                                            variables: {
+                                                objects: {
+                                                    id,
+                                                    bounce_type,
+                                                    email,
+                                                    first_outbound_done,
+                                                    firstname,
+                                                    gender,
+                                                    is_ema_eligible,
+                                                    is_eva_eligible,
+                                                    is_referral,
+                                                    lastname,
+                                                    member_status,
+                                                    phone,
+                                                    position,
+                                                    role,
+                                                    sam_status,
+                                                    second_outbound_done,
+                                                    source,
+                                                    title,
+                                                    to_followup,
+                                                    account_id,
+                                                },
+                                                id
                                             }
-                                        }
-                                    });
-                                }
-                                handleClose()
-                                props.updateReload()
-                                                            }
-                        }
-                    >
-                        {({ values, handleChange, handleSubmit }) => {
-                            return (
-                            <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
-                                <FormControl component="fieldset">
-                                    <FormLabel component="legend">Contact Creation/Update</FormLabel>
-                                    <FormGroup aria-label="position" >
-                                        <TextField
-                                            name="firstname"
-                                            label="First Name" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.firstname === null ? '' : values.firstname }
-                                        />
-                                        <TextField
-                                            name="lastname"
-                                            label="Last Name" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.lastname === null ? '' : values.lastname }
-                                        />
-                                        {/* <TextField
-                                            name="gender"
-                                            label="Gender" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.gender === null ? '' : values.gender }
-                                        /> */}
-                                        <TextField
-                                            name="title"
-                                            label="Title" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.title === null ? '' : values.title }
-                                        />
-                                        <TextField
-                                            name="phone"
-                                            label="Phone" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.phone === null ? '' : values.phone }
-                                        />
+                                        });
+                                    } else {
+                                        await mutation({
+                                            variables: {
+                                                objects: {
+                                                    bounce_type,
+                                                    email,
+                                                    first_outbound_done,
+                                                    firstname,
+                                                    gender,
+                                                    is_ema_eligible,
+                                                    is_eva_eligible,
+                                                    is_referral,
+                                                    lastname,
+                                                    member_status,
+                                                    phone,
+                                                    position,
+                                                    role,
+                                                    sam_status,
+                                                    second_outbound_done,
+                                                    source,
+                                                    title,
+                                                    to_followup,
+                                                    account_id,
+                                                }
+                                            }
+                                        });
+                                    }
+                                    handleClose()
+                                    props.updateReload()
+                                                                }
+                            }
+                        >
+                            {({ values, handleChange, handleSubmit }) => {
+                                return (
+                                <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="legend">Contact Creation/Update</FormLabel>
+                                        <FormGroup aria-label="position" >
+                                            <TextField
+                                                name="firstname"
+                                                label="First Name" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.firstname === null ? '' : values.firstname }
+                                            />
+                                            <TextField
+                                                name="lastname"
+                                                label="Last Name" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.lastname === null ? '' : values.lastname }
+                                            />
+                                            {/* <TextField
+                                                name="gender"
+                                                label="Gender" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.gender === null ? '' : values.gender }
+                                            /> */}
+                                            <TextField
+                                                name="title"
+                                                label="Title" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.title === null ? '' : values.title }
+                                            />
+                                            <TextField
+                                                name="phone"
+                                                label="Phone" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.phone === null ? '' : values.phone }
+                                            />
 
-                                        <TextField
-                                            name="email"
-                                            label="Email" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.email === null ? '' : values.email }
-                                        />
-                                        {/* <FormControlLabel
-                                            label="Is EMA Eligeble?"
-                                            control={
-                                                <Checkbox name="is_ema_eligible" onChange={handleChange} value={values.is_ema_eligible} />
-                                            }
-                                        />
-                                        <FormControlLabel
-                                            label="Is EVA Eligeble?"
-                                            control={
-                                                <Checkbox name="is_eva_eligible" onChange={handleChange} value={values.is_eva_eligible} />
-                                            }
-                                        />
-                                        <TextField
-                                            name="role"
-                                            label="Role" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.role === null ? '' : values.role }
-                                        />
-                                        <TextField
-                                            name="position"
-                                            label="Position" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.position === null ? '' : values.position }
-                                        /> 
-                                        <TextField
-                                            name="source"
-                                            label="Source" 
-                                            variant="filled" 
-                                            margin="normal" 
-                                            onChange={handleChange}
-                                            value={values.source === null ? '' : values.source }
-                                        /> */}
-                                    </FormGroup>
-                                </FormControl>
-                                <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
-                            </form>
-                        )}}
-                    </Formik>
-                )
-            }
-        </Mutation>
+                                            <TextField
+                                                name="email"
+                                                label="Email" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.email === null ? '' : values.email }
+                                            />
+                                            {/* <FormControlLabel
+                                                label="Is EMA Eligeble?"
+                                                control={
+                                                    <Checkbox name="is_ema_eligible" onChange={handleChange} value={values.is_ema_eligible} />
+                                                }
+                                            />
+                                            <FormControlLabel
+                                                label="Is EVA Eligeble?"
+                                                control={
+                                                    <Checkbox name="is_eva_eligible" onChange={handleChange} value={values.is_eva_eligible} />
+                                                }
+                                            />
+                                            <TextField
+                                                name="role"
+                                                label="Role" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.role === null ? '' : values.role }
+                                            />
+                                            <TextField
+                                                name="position"
+                                                label="Position" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.position === null ? '' : values.position }
+                                            /> 
+                                            <TextField
+                                                name="source"
+                                                label="Source" 
+                                                variant="filled" 
+                                                margin="normal" 
+                                                onChange={handleChange}
+                                                value={values.source === null ? '' : values.source }
+                                            /> */}
+                                        </FormGroup>
+                                    </FormControl>
+                                    <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
+                                </form>
+                            )}}
+                        </Formik>
+                    )
+                }
+            </Mutation>
+        </DialogContent>
       </Dialog>
     </div>
   );

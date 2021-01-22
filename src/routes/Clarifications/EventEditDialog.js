@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Formik } from 'formik';
+import DialogContent from '@material-ui/core/DialogContent';
+
 import {
     TextField,
     TextareaAutosize,
@@ -107,7 +109,7 @@ export default function EventEditDialog(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         {props.name}
       </Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition} scroll={'paper'}>>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -121,96 +123,98 @@ export default function EventEditDialog(props) {
             </Button> */}
           </Toolbar>
         </AppBar>
-        <Mutation
-            mutation={updateEvent}
-        >
-            { 
-                mutation => (
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={
-                            async ({ subject, label, body, cc, id }) => {
-                                if (id) {
-                                    await mutation({
-                                        variables: {
-                                            objects: {
-                                                id,
-                                                label,
-                                                subject,
-                                                cc,
-                                                body,
-                                            },
-                                            id
-                                        }
-                                    });
-                                }
-                                // props.history.push('/app')
-                                // props.history.goBack()
-                                handleClose()
-                                props.updateReload()
-                            }
-                        }
-                    >
-                        {({ values, handleChange, handleSubmit }) => (
-                            <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
-                                <FormControl component="fieldset">
-                                    <FormLabel component="legend">Event Edit</FormLabel>
-                                    { 
-                                        isPreview 
-                                        ? 
-                                        <div>
-                                            {insertBody('Subject',values.subject  || '')}
-                                            {insertBody('Body', values.body  || '')}
-                                        </div>
-                                        : <FormGroup aria-label="position" >
-                                            {/* <TextField
-                                                name="label"
-                                                label="Label" 
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.label  || ''}
-                                            />
-                                            <TextField
-                                                name="cc"
-                                                label="CC" 
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.cc  || ''}
-                                            /> */}
-                                            <TextField
-                                                name="subject"
-                                                label="Subject" 
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.subject  || ''}
-                                            />
-                                            <TextareaAutosize
-                                                name="body"
-                                                variant="filled" 
-                                                margin="normal" 
-                                                onChange={handleChange}
-                                                value={values.body  || ''}
-                                                rowsMax={30}
-                                                aria-label="body"
-                                                placeholder="Text"
-                                            />
-                                        </FormGroup>
-                                    }
-                                </FormControl>
-                                {
-                                    !isPreview 
-                                    && <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
-                                }
-                                <Button variant="contained" type='button' onClick={togglePreview} style={{textAlign: 'inherit'}}>{!isPreview ? 'Preview' : 'Edit' }</Button>
-                            </form>
-                        )}
-                    </Formik>
-                )
-            }
-        </Mutation>
+        <DialogContent dividers={true}>
+          <Mutation
+              mutation={updateEvent}
+          >
+              { 
+                  mutation => (
+                      <Formik
+                          initialValues={initialValues}
+                          onSubmit={
+                              async ({ subject, label, body, cc, id }) => {
+                                  if (id) {
+                                      await mutation({
+                                          variables: {
+                                              objects: {
+                                                  id,
+                                                  label,
+                                                  subject,
+                                                  cc,
+                                                  body,
+                                              },
+                                              id
+                                          }
+                                      });
+                                  }
+                                  // props.history.push('/app')
+                                  // props.history.goBack()
+                                  handleClose()
+                                  props.updateReload()
+                              }
+                          }
+                      >
+                          {({ values, handleChange, handleSubmit }) => (
+                              <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off" style={{width: '100%', flex: 1}}>
+                                  <FormControl component="fieldset">
+                                      <FormLabel component="legend">Event Edit</FormLabel>
+                                      { 
+                                          isPreview 
+                                          ? 
+                                          <div>
+                                              {insertBody('Subject',values.subject  || '')}
+                                              {insertBody('Body', values.body  || '')}
+                                          </div>
+                                          : <FormGroup aria-label="position" >
+                                              {/* <TextField
+                                                  name="label"
+                                                  label="Label" 
+                                                  variant="filled" 
+                                                  margin="normal" 
+                                                  onChange={handleChange}
+                                                  value={values.label  || ''}
+                                              />
+                                              <TextField
+                                                  name="cc"
+                                                  label="CC" 
+                                                  variant="filled" 
+                                                  margin="normal" 
+                                                  onChange={handleChange}
+                                                  value={values.cc  || ''}
+                                              /> */}
+                                              <TextField
+                                                  name="subject"
+                                                  label="Subject" 
+                                                  variant="filled" 
+                                                  margin="normal" 
+                                                  onChange={handleChange}
+                                                  value={values.subject  || ''}
+                                              />
+                                              <TextareaAutosize
+                                                  name="body"
+                                                  variant="filled" 
+                                                  margin="normal" 
+                                                  onChange={handleChange}
+                                                  value={values.body  || ''}
+                                                  rowsMax={30}
+                                                  aria-label="body"
+                                                  placeholder="Text"
+                                              />
+                                          </FormGroup>
+                                      }
+                                  </FormControl>
+                                  {
+                                      !isPreview 
+                                      && <Button variant="contained" type='submit' style={{textAlign: 'inherit'}}>Submit</Button>
+                                  }
+                                  <Button variant="contained" type='button' onClick={togglePreview} style={{textAlign: 'inherit'}}>{!isPreview ? 'Preview' : 'Edit' }</Button>
+                              </form>
+                          )}
+                      </Formik>
+                  )
+              }
+          </Mutation>
+        </DialogContent>
       </Dialog>
     </div>
   );
