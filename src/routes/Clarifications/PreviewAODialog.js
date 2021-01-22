@@ -55,24 +55,25 @@ export default function PreviewAODialog(props) {
     const [isPreview, setIsPreview] = React.useState(true)
     console.log("props: ", props)
     const { company, contact, account, event, referrer } = props;
-    let client_company = company && company.name? company.name : 'client company'
+    let client_company = company && company.name? company.name : ''
     let client_logo= company && company.logo? company.logo : 'https://d13rds6btkjz86.cloudfront.net/logos/Danlaw.Logo.png'
 
-    let target_firstname = contact && contact.firstname? contact.firstname : 'contact firstname'
-    let target_lastname = contact && contact.lastname? contact.lastname : 'contact lastname'
-    let target_fullname = `${target_firstname} ${target_lastname}` || 'contact fullname'
-    let target_title = contact && contact.title? contact.title : 'contact title'
-    let target_email = contact && contact.email? contact.email : 'contact email'
+    let target_firstname = contact && contact.firstname? contact.firstname : ' '
+    let target_lastname = contact && contact.lastname? contact.lastname : ' '
+    let target_fullname = `${target_firstname} ${target_lastname}` || ' '
+    let target_title = contact && contact.title? contact.title : ' '
+    let target_email = contact && contact.email? contact.email : ' '
 
-    let account_name = account && account.name? account.name : 'account name'
-    let target_company = account_name || 'target company'
-    let account_address = account && account.address? account.address : 'account address'
-    let account_website = account && account.website? account.website : 'account website'
-    let account_phone = account && account.phone? account.phone : 'account phone'
-    let account_employees = account && account.employees? account.employees : 'account employees'
+    let account_name = account && account.name? account.name : ' '
+    let target_company = account_name || ' '
+    let account_address = account && account.address? account.address : ''
+    let account_website = account && account.website? account.website : ''
+    let account_phone = account && account.phone? account.phone : ''
+    let account_employees = account && account.employees? account.employees : ''
+    let account_revenue = account && account.revenue? account.revenue : ''
 
-    let client_firstname = 'client firstname'
-    let client_signature = 'client signature'
+    let client_firstname = ' '
+    let client_signature = ' '
 
     let previous_from = event && event.sender? event.sender : ''
     let previous_to = event && event.to? event.to : ''
@@ -80,18 +81,18 @@ export default function PreviewAODialog(props) {
     let previous_subject = event && event.subject? event.subject : ''
     let previous_content = event && event.body? event.body : ''
 
-    let referree_firstname = contact && contact.firstname? contact.firstname : 'referree firstname'
-    let referree_lastname = contact && contact.lastname? contact.lastname : 'referree lastname'
-    let referree_fullname = `${referree_firstname} ${referree_lastname}` || 'referree fullname'
+    let referree_firstname = contact && contact.firstname? contact.firstname : ''
+    let referree_lastname = contact && contact.lastname? contact.lastname : ''
+    let referree_fullname = `${referree_firstname} ${referree_lastname}` || ' '
 
-    let referrer_firstname = referrer && referrer.firstname? referrer.firstname : 'referrer firstname'
-    let referrer_lastname = referrer && referrer.lastname? referrer.lastname : 'referrer lastname'
-    let referrer_fullname = `${referrer_firstname} ${referrer_lastname}` || 'referrer fullname'
+    let referrer_firstname = referrer && referrer.firstname? referrer.firstname : ''
+    let referrer_lastname = referrer && referrer.lastname? referrer.lastname : ''
+    let referrer_fullname = `${referrer_firstname} ${referrer_lastname}` || ' '
 
     let influencer_fullname=referrer_fullname || "Bill Blok"
-    let influencer_title=referrer && referrer.title? referrer.title : "CEO"
-    let influencer_email=referrer && referrer.email? referrer.email : "blokable.com"
-    let influencer_phone=referrer && referrer.phone? referrer.phone : "+1 800-928-6778"
+    let influencer_title=referrer && referrer.title? referrer.title : " "
+    let influencer_email=referrer && referrer.email? referrer.email : " "
+    let influencer_phone=referrer && referrer.phone? referrer.phone : " "
     let convert_url = ''
     let digital_labor = 70;
     let more_css= ` 
@@ -247,7 +248,7 @@ export default function PreviewAODialog(props) {
         .replaceAll('{account_name}', `<strong>${account_name}</strong>`).replaceAll('{account_address}', `<strong>${account_address}</strong>`).replaceAll('{account_website}', `${account_website}`)
         .replaceAll('{account_phone}', `${account_phone}`).replaceAll('{account_employees}', `<strong>${account_employees}</strong>`).replaceAll('{influencer_template}', `<strong>${influencer_template}</strong>`)
         .replaceAll('{target_title}', `<strong>${target_title}</strong>`).replaceAll('{target_email}', `${target_email}`).replaceAll('{influencer_template}', `${influencer_template}`).replaceAll('{more_css}', `${more_css}`)
-        .replaceAll('{digital_labor}', `${digital_labor}`).replaceAll('{digital_labor_old}', `${digital_labor}`).replaceAll('{convert_url}', `${convert_url}`).replaceAll('{client_logo}', `${client_logo}`)
+        .replaceAll('{digital_labor}', `${digital_labor}`).replaceAll('{digital_labor_old}', `${digital_labor}`).replaceAll('{convert_url}', `${convert_url}`).replaceAll('{client_logo}', `${client_logo}`).replaceAll('{account_revenue}', `${account_revenue}`)
         
         return (
         <React.Fragment>
@@ -265,7 +266,7 @@ export default function PreviewAODialog(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         {props.name}
       </Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog maxWidth={'md'} open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
