@@ -266,7 +266,7 @@ export default function PreviewAODialog(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         {props.name}
       </Button>
-      <Dialog maxWidth={'md'} open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
