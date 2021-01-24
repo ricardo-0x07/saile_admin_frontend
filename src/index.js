@@ -20,9 +20,12 @@ const browserHistory = createBrowserHistory();
 
 // Apply the middleware to the store
 const react_router_redux_middleware = routerMiddleware(browserHistory)
-
-
-const middleware = applyMiddleware(thunk, logger, react_router_redux_middleware)
+let middleware
+if (window.location.hostname === "localhost" ) {
+  middleware = applyMiddleware(thunk, logger, react_router_redux_middleware)
+} else {
+  middleware = applyMiddleware(thunk, react_router_redux_middleware)
+}
 const store = createStore(
   rootReducer,
   composeWithDevTools(middleware)

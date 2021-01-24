@@ -11,7 +11,7 @@ import { updateSingleCampaignAccount } from "../../graphql/mutations";
 
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from "react-apollo";
-import { getContactById, getCampaignContact, getCampaignAccount, getDelivered/*, clientEventByCampaignContact*/ } from "../../graphql/queries";
+import { getContactById, getCampaignContact, getCampaignAccount, sailebotEventDigitalLabor } from "../../graphql/queries";
 import CampaignContactEvents from '../CampaignContactEvents';
 import * as moment from 'moment';
 // import { createActionableOpportunity } from '../../utils/rest_api'
@@ -328,26 +328,49 @@ export const EventCard = ({ event, updateReload, client, history }) => {
             {
                   event && event.id && event.label && event.label === "actionable_opportunity" &&
                   <Typography>
-                    <Query query={getDelivered(event.id)} >
+                    <Query query={getContactById(contact_id)} >
                       { ({data, loading}) => {
                         if (
                           loading ||
                           !data ||
-                          !data.delivered ||
-                          !data.delivered.length > 0 ||
-                          !data.delivered
+                          !data.contact ||
+                          !data.contact.length > 0 ||
+                          !data.contact
                         ) {
                           return null;
                         }
-                        console.log('getDelivered data: ',  data)
+                        console.log('getContactById data: ',  data)
                         console.log('label: ', label)
-                        const { digital_labor } = data.delivered[0]
-                        if (digital_labor === undefined) {
+                        const contact = data.contact[0]
+                        if (contact === undefined) {
                           return null;
                         }
 
                         return (
-                          <span><strong>Digital Labour: </strong> {digital_labor} </span>
+                            <Query query={sailebotEventDigitalLabor(campaign_id, contact.account_id)} >
+                            { ({data, loading}) => {
+                              console.log('sailebotEventDigitalLabor data: ',  data)
+                              if (
+                                loading ||
+                                !data ||
+                                !data.event_aggregate ||
+                                !data.event_aggregate.aggregate.count ||
+                                !data.event_aggregate.aggregate
+                              ) {
+                                return null;
+                              }
+                              console.log('sailebotEventDigitalLabor data: ',  data)
+                              console.log('label: ', label)
+                              const digital_labor = data.event_aggregate.aggregate.count
+                              if (contact === undefined) {
+                                return null;
+                              }
+      
+                              return (
+                                <span><strong>Digital Labour: </strong> {digital_labor} </span>
+                              );
+                            }}
+                          </Query>  
                         );
                       }}
                     </Query>  

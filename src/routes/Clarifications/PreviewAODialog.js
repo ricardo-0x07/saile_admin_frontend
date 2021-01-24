@@ -56,7 +56,8 @@ export default function PreviewAODialog(props) {
     // let isPreview = true
     const [isPreview, setIsPreview] = React.useState(true)
     console.log("props: ", props)
-    const { company, contact, account, event, referrer } = props;
+    const { company, contact, account, event, referrer, digital_labor } = props;
+
     let client_company = company && company.name? company.name : ''
     let client_logo= company && company.logo? company.logo : 'https://d13rds6btkjz86.cloudfront.net/logos/Danlaw.Logo.png'
 
@@ -96,7 +97,7 @@ export default function PreviewAODialog(props) {
     let influencer_email=referrer && referrer.email? referrer.email : " "
     let influencer_phone=referrer && referrer.phone? referrer.phone : " "
     let convert_url = ''
-    let digital_labor = 70;
+    // let digital_labor = 70;
     let more_css= ` 
               a[href^="mailto"] {
                     color: white;

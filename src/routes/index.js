@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useRouteMatch } from 'react-router-dom';
+
 import { connect } from 'react-redux';
 import { Container } from 'react-bootstrap'
 import {
@@ -18,48 +19,57 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { ApolloProvider} from "react-apollo";
-import ManageCampaign from './ManageCampaign'
-import ManageClient from './ManageClient'
-import ManageCompany from './ManageCompany'
-import ManageSaileBot from './ManageSaileBot'
-import ManageDomain from './ManageDomain'
-import ManageCompanyDomain from './ManageCompanyDomain'
-import ManageTemplate from './ManageTemplate'
-import ManageAccount from './ManageAccount'
-import ManageContact from './ManageContact'
-import ManageRequirement from './ManageRequirement'
-import ManageSchedule from './ManageSchedule'
-import Campaigns from './Campaigns'
-import Requirements from './Requirements'
-import Schedules from './Schedules'
-import Clients from './Clients'
-// import Companies from './Companies'
-import SaileBots from './SaileBots'
-import Domains from './Domains'
-import CompanyDomains from './CompanyDomains'
-import Accounts from './Accounts'
-import ScheduleAccounts from './ScheduleAccounts'
-import Contacts from './Contacts'
-import Events from './Events'
-// import Questionnaire from './Questionnaire'
-import CampaignContactEvents from './CampaignContactEvents'
-import SailebotEvents from './SailebotEvents'
-import Clarifications from './Clarifications';
-import Templates from './Templates'
+// import ManageCampaign from './ManageCampaign'
+// import ManageClient from './ManageClient'
+// import ManageCompany from './ManageCompany'
+// import ManageSaileBot from './ManageSaileBot'
+// import ManageDomain from './ManageDomain'
+// import ManageCompanyDomain from './ManageCompanyDomain'
+// import ManageTemplate from './ManageTemplate'
+// import ManageAccount from './ManageAccount'
+// import ManageContact from './ManageContact'
+// import ManageRequirement from './ManageRequirement'
+// import ManageSchedule from './ManageSchedule'
+// import Campaigns from './Campaigns'
+// import Requirements from './Requirements'
+// import Schedules from './Schedules'
+// import Clients from './Clients'
+// // import Companies from './Companies'
+// import SaileBots from './SaileBots'
+// import Domains from './Domains'
+// import CompanyDomains from './CompanyDomains'
+// import Accounts from './Accounts'
+// import ScheduleAccounts from './ScheduleAccounts'
+// import Contacts from './Contacts'
+// import Events from './Events'
+// // import Questionnaire from './Questionnaire'
+// import CampaignContactEvents from './CampaignContactEvents'
+// import SailebotEvents from './SailebotEvents'
+// import Clarifications from './Clarifications';
+// import Templates from './Templates'
 import Login from './Login'
 import DashboardSideBar from '../components/DashboardSideBar';
-import { createClient,  } from '../graphql/apollo';
+import { createJWTClient } from '../graphql/apollo';
 import LogoutButton from './Logout/LogoutButton';
 import * as actions from '../actions';
 import { ADMIN_SECRET_HEADER_KEY } from '../actions/types'
-// import NotFound from '../components/NotFound';
+import NotFound from '../components/NotFound';
 import Unsubscribe from './Unsubscribe';
 import Confirmation from './Unsubscribe/confirmation';
-import Companies from './Companies';
-import Deployments from './Deployments';
-import ManageEvent from './ManageEvent'
-import Questionnaires from './Questionnaires';
+// import Companies from './Companies';
+// import Deployments from './Deployments';
+// import ManageEvent from './ManageEvent'
+// import Questionnaires from './Questionnaires';
+// import { useHistory, useLocation } from 'react-router-dom';
+// import Alert from '@material-ui/lab/Alert';
+import { useAsync } from 'react-async';
+
+
 // import { Link } from 'react-router-dom';
+import { getJWTAuth } from '../utils/rest_api'
+import { getAllowedRoutes } from '../utils';
+import PrivateRoutesConfig from '../utils/PrivateRoutesConfig';
+
 
 
 const drawerWidth = 240;
@@ -145,9 +155,56 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function Routes() {
+function Routes({ dispatch, admin, login, logout, clearAdminSecretState }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+    // const match = useRouteMatch('/app');
+    let allowedRoutes = [];
+     
+    let token = sessionStorage.getItem(ADMIN_SECRET_HEADER_KEY);
+
+    const { data, error, isPending, run } = useAsync({ deferFn: getJWTAuth });
+    console.log("error: ", error)
+    console.log("Boolean(error): ", Boolean(error))
+    console.log("isPending: ", isPending)
+    // console.log("history: ", history)
+    // // const [credentials, updateCredentials] = useState({
+    // //   token: ''
+    // // });
+    // const { from } = location.state || { from: { pathname: '/app/companies' } };
+    // console.log("from: ", from)
+  
+    // // const authenticate = () => {
+    // //   run({token});
+    // // };
+    console.log("clearAdminSecretState")
+    useEffect(() => {
+        if (data) login(data);
+    }, [dispatch, data, login]);
+    
+    useEffect(() => {
+        console.log("useEffect error: ", error)
+      if (error) {
+        console.log("clearAdminSecretState error: ", error)
+        clearAdminSecretState();
+      }
+    }, [dispatch, error, clearAdminSecretState]);
+
+    console.log("run")
+    useEffect(() => {
+        if (token) run({entity: {token}});
+    }, [dispatch, token, run]);
+
+    if (admin.loggedIn) {
+        allowedRoutes = getAllowedRoutes(PrivateRoutesConfig);
+    } else {
+        // return <Redirect to="/auth" />;
+    }
+
+
+
+
+  
     const handleDrawerOpen = () => {
       setOpen(true);
     };
@@ -156,7 +213,6 @@ function Routes() {
     };
     // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    let token = sessionStorage.getItem(ADMIN_SECRET_HEADER_KEY);
     
     const PrivateRoute = ({ component: Component, ...rest }) => (
         <Route
@@ -177,6 +233,7 @@ function Routes() {
 
     const AppLayout = (props) => {
         console.log("AppLayout props: ", props)
+        const match = useRouteMatch('/app');
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -216,7 +273,42 @@ function Routes() {
                 </Drawer>
                 <Paper className={classes.content}>
                     <div className={classes.appBarSpacer} />
-                    <Container >
+                    {
+                        true &&
+                        <Container>
+                            <Switch>
+                                {allowedRoutes.map((route) => {
+
+                                    const { 
+                                    path, 
+                                    component: Component,
+                                    // children, 
+                                    title,
+                                    permission,
+                                    ...rest 
+                                    } = route;
+                                    return (
+                                    <Route
+                                    {...rest}
+                                    key={path}
+                                    path={`${match.path}${path}`}
+                                    render={(routeProps) => (
+                                        <Component {...routeProps} {...props} />
+                                    )}
+        
+                                    />
+                                    // <Component children={children} />
+                                    // </Route>
+                                    )
+                                })}
+                                {
+                                    // isAddNotFound && 
+                                    <Route><NotFound /></Route>
+                                }
+                            </Switch>
+                        </Container>
+                    }
+                    {/* <Container >
                         <Route
                             exact
                             path='/app' 
@@ -278,7 +370,19 @@ function Routes() {
                         />
                         <Route
                             exact
+                            path='/app/clarifications-by-campaign' 
+                            render={(routeProps) => (
+                                <Clarifications {...routeProps} {...props} />
+                            )}
+                        />
+                        <Route
+                            exact
                             path='/app/events-by-contact' 
+                            component={Events}
+                        />
+                        <Route
+                            exact
+                            path='/app/events' 
                             component={Events}
                         />
                         <Route
@@ -296,22 +400,10 @@ function Routes() {
                             path='/app/events-by-client' 
                             component={SailebotEvents}
                         />
-                        {/* <Route
-                            exact
-                            path='/app/clarifications-by-campaign' 
-                            component={Clarifications}
-                        /> */}
                         <Route
                             exact
-                            path='/app/clarifications-by-campaign' 
-                            render={(routeProps) => (
-                                <Clarifications {...routeProps} {...props} />
-                            )}
-                        />
-                        <Route
-                            exact
-                            path='/app/events' 
-                            component={Events}
+                            path='/app/manage-event' 
+                            component={ManageEvent}
                         />
                         <Route
                             exact
@@ -348,21 +440,6 @@ function Routes() {
                             path='/app/clients-by-company' 
                             component={Clients}
                         />
-                        {/* <Route
-                            exact
-                            path='/app/clients' 
-                            component={Clients}
-                        /> */}
-                        <Route
-                            exact
-                            path='/app/requirements-by-sailebot' 
-                            component={Requirements}
-                        />
-                        <Route
-                            exact
-                            path='/app/requirements' 
-                            component={Requirements}
-                        />
                         <Route
                             exact
                             path='/app/campaigns-by-requirement' 
@@ -395,13 +472,18 @@ function Routes() {
                         />
                         <Route
                             exact
-                            path='/app/manage-event' 
-                            component={ManageEvent}
+                            path='/app/manage-company-domain' 
+                            component={ManageCompanyDomain}
                         />
                         <Route
                             exact
-                            path='/app/manage-company-domain' 
-                            component={ManageCompanyDomain}
+                            path='/app/requirements-by-sailebot' 
+                            component={Requirements}
+                        />
+                        <Route
+                            exact
+                            path='/app/requirements' 
+                            component={Requirements}
                         />
                         <Route
                             exact
@@ -441,7 +523,6 @@ function Routes() {
                         <Route
                             exact
                             path='/app/schedules-by-campaign' 
-                            // component={Schedules}
                             render={(routeProps) => (
                                 <Schedules {...routeProps} {...props} />
                             )}
@@ -456,15 +537,17 @@ function Routes() {
                             path='/app/manage-template' 
                             component={ManageTemplate}
                         />
-                        {/* <Route path='/app/404' component={NotFound}/> */}
-                    </Container>                
+                    </Container>      */}
+                    {/* <Route path='/app/404' component={NotFound}/> */}           
                 </Paper>
             </div>
         );
     }  
     function WrappedAppLayout() {
-        let token = sessionStorage.getItem(ADMIN_SECRET_HEADER_KEY);
-        const client = createClient(token)
+        let  token = sessionStorage.getItem(ADMIN_SECRET_HEADER_KEY);
+        // const client = createClient(token)
+        const client = createJWTClient(token)
+        
         return  (
             <ApolloProvider client={client}>
                 <AppLayout client={client}/>

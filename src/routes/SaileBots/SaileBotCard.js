@@ -70,9 +70,9 @@ export const SaileBotCard = ({ sailebot, company, client,  history }) => {
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-sailebot', {sailebot, client})}>Edit</Button>
                 <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-requirement', {sailebot})}>Add Requirement</Button>
-                <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-domain', {sailebot})}>Add Domain</Button>
+                {/* <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/manage-domain', {sailebot})}>Add Domain</Button> */}
                 <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/requirements-by-sailebot', {client, company, sailebot})}>View Requirements</Button>
-                <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/domains-by-sailebot', {sailebot})}>View Domains</Button>
+                {/* <Button  variant="contained" size="small" style={{ width: '100%'}} onClick={() => history.push('/app/domains-by-sailebot', {sailebot})}>View Domains</Button> */}
               </CardActions>
               {/* <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {

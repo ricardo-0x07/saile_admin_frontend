@@ -7,7 +7,7 @@ const aminState = {
 const aminReducer = (state = aminState, action) => {                          
 switch(action.type) {     
  case LOGIN_ACTION:   
-  return {   ...state, admin_secret: action.payload.token, user: action.payload.user, loggedIn: true   }  
+  return {   ...state, admin_secret: action.payload.token, user: JSON.parse(action.payload.user), loggedIn: true   }  
  case LOGOUT_ACTION:
   return aminState 
 case SET_USER:

@@ -343,6 +343,18 @@ export const sailebotEventCount = (sailebot_id) => {
     `;
 }
 
+export const sailebotEventDigitalLabor = (campaign_id, account_id) => {
+    return gql`
+        query ClientEventDigitalLabor {
+            event_aggregate(where: {campaign_id: {_eq: ${campaign_id}}, contact: {account_id: {_eq: ${account_id}}}}){
+                aggregate {
+                    count(columns: id, distinct: true)
+                }
+            }
+        }
+    `;
+}
+
 export const sailebotEventCountByLabel = (sailebot_id, label_query) => {
     return gql`
         query SailebotEventCountByLabel {

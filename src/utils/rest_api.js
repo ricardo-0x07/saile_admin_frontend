@@ -30,12 +30,15 @@ const process_apollo_accounts_api_endpoint = "https://ntmjes5dx4.execute-api.us-
 const jwtauthendpoint = "https://g2f4rqmf3f.execute-api.us-west-2.amazonaws.com/Stage";
 
 
-export const getJWTAuth = Credentials => {
-    return fetch(jwtauthendpoint, {
+export const getJWTAuth = async Credentials => {
+
+    const res = await fetch(jwtauthendpoint, {
         method: 'POST',
         headers: getHeaders(),
-        body: JSON.stringify(Credentials)
+        body: JSON.stringify(Credentials[0])
     })
+    if (!res.ok) throw new Error(res.statusText);
+    return res.json();
 };
 
 

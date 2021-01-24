@@ -21,7 +21,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import { Mutation, Query } from "react-apollo";
 import { updateEvent, updateContact, updateSingleCampaignAccount, updateCampaignContact, deleteEvent, deleteOutboundEventByContactIdLabel } from "../../graphql/mutations";
-import { getContactById, getCampaignContact, getCampaignAccount, getCampaignSaileBot, getCampaignAOTemplates, getCampaignReferrer } from "../../graphql/queries";
+import { getContactById, getCampaignContact, getCampaignAccount, getCampaignSaileBot, getCampaignAOTemplates, getCampaignReferrer, sailebotEventDigitalLabor } from "../../graphql/queries";
 // import { getCampaignAOTemplates } from "../../graphql/queries";
 import { adopt } from 'react-adopt';
 import { createreferral, createActionableOpportunity } from '../../utils/rest_api'
@@ -706,7 +706,33 @@ export const EventCard = ({ event, updateReload, history, apolloClient, company 
                                                           console.log('getCampaignReferrerQuery.data: ', getCampaignReferrerQuery.data)
                                                           
                                                           // PreviewAODialog getCampaignReferrer
-                                                          return <PreviewAODialog template={template} referrer={referrer} event={event} account={account} contact={contact} updateReload={getCampaignAOTemplatesQuery.refetch} history={history} apolloClient={apolloClient} name={`Preview AO`} company={company}/>;
+                                                          return (
+                                                            <Query query={sailebotEventDigitalLabor(campaign_id, account.id)} >
+                                                              { ({data, loading}) => {
+                                                                console.log('sailebotEventDigitalLabor data: ',  data)
+                                                                if (
+                                                                  loading ||
+                                                                  !data ||
+                                                                  !data.event_aggregate ||
+                                                                  !data.event_aggregate.aggregate.count ||
+                                                                  !data.event_aggregate.aggregate
+                                                                ) {
+                                                                  return null;
+                                                                }
+                                                                console.log('sailebotEventDigitalLabor data: ',  data)
+                                                                console.log('label: ', label)
+                                                                const digital_labor = data.event_aggregate.aggregate.count
+                                                                if (contact === undefined) {
+                                                                  return null;
+                                                                }
+                                        
+                                                                return (
+                                                                  <PreviewAODialog digital_labor={digital_labor || 70} template={template} referrer={referrer} event={event} account={account} contact={contact} updateReload={getCampaignAOTemplatesQuery.refetch} history={history} apolloClient={apolloClient} name={`Preview AO`} company={company}/>
+                                                                );
+                                                              }}
+                                                            </Query>  
+                                                          );
+                              
                                                         }}
                                                       </Query>
                                                     );

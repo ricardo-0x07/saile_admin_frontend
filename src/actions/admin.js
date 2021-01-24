@@ -4,7 +4,15 @@ import { LOGIN_ACTION, LOGOUT_ACTION, SET_USER, Endpoints, globalCookiePolicy, A
 import { push } from 'react-router-redux';
 //Sample Login Function
 export function login(payload) {
-    return dispatch => {
+  sessionStorage.setItem(ADMIN_SECRET_HEADER_KEY, payload.token);
+  let user =  payload.user ?  payload.user : {}
+  sessionStorage.setItem('user', user);
+  user = JSON.parse(user)
+  let roles =  user && user.role ?  [user.role] : []
+  roles = JSON.stringify(roles)
+  sessionStorage.setItem('roles', roles);
+  // let ROLES = sessionStorage.getItem('roles');
+  return dispatch => {
         dispatch({ type: LOGIN_ACTION, payload: payload });
     }
 }
@@ -83,6 +91,7 @@ export const clearAdminSecretState = () => {
   return dispatch => {
     sessionStorage.removeItem(ADMIN_SECRET_HEADER_KEY);
     sessionStorage.removeItem('token');
+    sessionStorage.clear();
     dispatch(push('/auth'))
     dispatch(logout())
   }
