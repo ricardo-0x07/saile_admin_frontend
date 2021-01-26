@@ -53,7 +53,7 @@ import { createJWTClient } from '../graphql/apollo';
 import LogoutButton from './Logout/LogoutButton';
 import * as actions from '../actions';
 import { ADMIN_SECRET_HEADER_KEY } from '../actions/types'
-import NotFound from '../components/NotFound';
+import Unavailable from '../components/Unavailable';
 import Unsubscribe from './Unsubscribe';
 import Confirmation from './Unsubscribe/confirmation';
 // import Companies from './Companies';
@@ -200,6 +200,7 @@ function Routes({ dispatch, admin, login, logout, clearAdminSecretState }) {
     } else {
         // return <Redirect to="/auth" />;
     }
+    console.log("allowedRoutes: ", allowedRoutes)
 
 
 
@@ -303,7 +304,7 @@ function Routes({ dispatch, admin, login, logout, clearAdminSecretState }) {
                                 })}
                                 {
                                     // isAddNotFound && 
-                                    <Route><NotFound /></Route>
+                                    <Route><Unavailable /></Route>
                                 }
                             </Switch>
                         </Container>
@@ -538,7 +539,7 @@ function Routes({ dispatch, admin, login, logout, clearAdminSecretState }) {
                             component={ManageTemplate}
                         />
                     </Container>      */}
-                    {/* <Route path='/app/404' component={NotFound}/> */}           
+                    {/* <Route path='/app/404' component={Unavailable}/> */}           
                 </Paper>
             </div>
         );
@@ -564,7 +565,7 @@ function Routes({ dispatch, admin, login, logout, clearAdminSecretState }) {
             <Route path="/auth" component={AuthLayout} />
             <PrivateRoute path="/app" component={WrappedAppLayout} />
             {/* <PrivateRoute exact from="/" to="/app" /> */}
-            {/* <Route path="*" component={NotFound} /> */}
+            {/* <Route path="*" component={Unavailable} /> */}
         </Switch>
     );
 }

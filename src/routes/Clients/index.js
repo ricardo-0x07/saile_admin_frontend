@@ -62,6 +62,7 @@ const Clients = (props) => {
   return (
     <Composed>
       {({ clientsQuery: {data, loading}, totalClientsQuery }) => {
+        console.log('clientsQuery data: ', data)
         if (
           loading ||
           !data ||
@@ -72,7 +73,7 @@ const Clients = (props) => {
         }
         console.log('clientsQuery data: ', data)
 
-        if (!totalClientsQuery.loading) {
+        if (!totalClientsQuery.loading && totalClientsQuery.data) {
           console.log('totalClientsQuery: ', totalClientsQuery)
           total =  Math.ceil(totalClientsQuery.data.client_aggregate.aggregate.count/limit)
         }
@@ -90,7 +91,7 @@ const Clients = (props) => {
             >
               {
                 data.client.filter(item => item ).map(x => (
-                  <ClientCard client={x} name={x.name} key={x.id}  history={props.history} company={props.location.state.company}/>
+                  <ClientCard client={x} name={x.name} key={x.id} history={props.history} admin={props.admin} company={props.location.state.company}/>
                 ))
               }
             </div>

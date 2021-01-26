@@ -27,7 +27,8 @@ const send_wind_request_lambda_api_endpoint = "https://6pil30vlr1.execute-api.us
 
 const process_wind_response_api_endpoint = "https://v6fsig7yj9.execute-api.us-west-2.amazonaws.com/Stage";
 const process_apollo_accounts_api_endpoint = "https://ntmjes5dx4.execute-api.us-west-2.amazonaws.com/Stage";
-const jwtauthendpoint = "https://g2f4rqmf3f.execute-api.us-west-2.amazonaws.com/Stage";
+// const jwtauthendpoint = "https://g2f4rqmf3f.execute-api.us-west-2.amazonaws.com/Stage";
+const jwtauthendpoint = "https://g2f4rqmf3f.execute-api.us-west-2.amazonaws.com/Prod";
 
 
 export const getJWTAuth = async Credentials => {

@@ -236,7 +236,7 @@ export default [
             Roles.ADMIN,
             Roles.MANAGER,
             Roles.SUPPORT,
-            Roles.DOO,
+            // Roles.DOO,
         ]
     },
     {
@@ -393,7 +393,7 @@ export default [
     },
     {
         component: Schedules,
-        path: '/schedules-by-template',
+        path: '/schedules-by-campaign',
         title: 'Campaign Schedule',
         exact: true,
         permission: [

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Query } from "react-apollo";
+import { connect } from 'react-redux';
 
 import { CampaignCard } from "./CampaignCard";
 import { listCampaigns, listRequirementCampaigns } from "../../graphql/queries";
@@ -134,7 +135,7 @@ const Campaigns = (props) => {
               {
                 props.location.state && props.location.state.requirement ?
                 data.campaign.filter(item => item.requirement_id === props.location.state.requirement.id ).map(x => (
-                  <CampaignCard campaign={x} name={x.name} key={x.id} history={props.history} requirement={props.location.state.requirement} sailebot={props.location.state.sailebot} client={props.location.state.client} comapny={props.location.state.comapny}/>
+                  <CampaignCard campaign={x} name={x.name} key={x.id} history={props.history} admin={props.admin}  requirement={props.location.state.requirement} sailebot={props.location.state.sailebot} client={props.location.state.client} comapny={props.location.state.comapny}/>
                 ))
                 :
                 data.campaign.filter(item => item ).map(x => (
@@ -150,4 +151,10 @@ const Campaigns = (props) => {
   );
 };
 
-export default Campaigns
+// export default Campaigns
+export default connect(
+  state => ({
+    admin: state.admin,
+    routing: state.routing
+  })
+)(Campaigns);

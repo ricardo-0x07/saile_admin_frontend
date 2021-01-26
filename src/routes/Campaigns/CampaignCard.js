@@ -27,6 +27,8 @@ import ProcessApolloAccountsFileUpload from './ProcessApolloAccountsFileUpload'
 import { CSVLink } from "react-csv";
 
 import { makeStyles } from '@material-ui/core/styles';
+import PrivateRoutesConfig from '../../utils/PrivateRoutesConfig';
+
 // import { blue } from '@material-ui/core/colors';
 
 
@@ -73,7 +75,7 @@ function SimpleDialog(props) {
   );
 }
 
-export const CampaignCard = ({ campaign, client, company, sailebot, requirement,  history }) => {
+export const CampaignCard = ({ campaign, client, admin, company, sailebot, requirement,  history }) => {
   const classes = useStyles();
 
   const [state, setState] = React.useState({
@@ -83,6 +85,12 @@ export const CampaignCard = ({ campaign, client, company, sailebot, requirement,
     showDownload: false,
     open: false,
   });
+  const allowed = PrivateRoutesConfig.reduce((acc, item) =>{
+    acc[`/app${item["path"]}`] = item['permission']
+    return acc
+  }, {})
+  console.log("allowed: ", allowed)
+  console.log("window.location: ", window.location)
 
   const getService = async () => {
     let services = await describeService({ campaign_id: campaign.id});
@@ -437,10 +445,30 @@ export const CampaignCard = ({ campaign, client, company, sailebot, requirement,
                   }
                 </CardActions>
                 <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/templates-by-campaign', {campaign, requirement})}>View Templates</Button>
-                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/schedules-by-campaign', {campaign, requirement, sailebot})}>View Schedules</Button>
-                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/accounts-by-campaign', {campaign, requirement, sailebot})}>View Accounts</Button>
-                  <Button variant="contained"  style={{ width: '100%', marginBottom: '1rem'}} size="small" onClick={() => history.push('/app/clarifications-by-campaign', {campaign, client, company, requirement, name: 'Campaign'})}>Clarifications</Button>
+                  <Button 
+                    variant="contained"  
+                    style={{ width: '100%', marginBottom: '1rem'}} 
+                    size="small" 
+                    disabled={!(admin && admin.user && admin.user.role && allowed['/app/templates-by-campaign'] && allowed['/app/templates-by-campaign'].includes(admin.user.role))}
+                    onClick={() => history.push('/app/templates-by-campaign', {campaign, requirement})}>View Templates</Button>
+                  <Button 
+                    variant="contained"  
+                    style={{ width: '100%', marginBottom: '1rem'}} 
+                    size="small" 
+                    disabled={!(admin && admin.user && admin.user.role && allowed['/app/schedules-by-campaign'] && allowed['/app/schedules-by-campaign'].includes(admin.user.role))}
+                    onClick={() => history.push('/app/schedules-by-campaign', {campaign, requirement, sailebot})}>View Schedules</Button>
+                  <Button 
+                    variant="contained"  
+                    style={{ width: '100%', marginBottom: '1rem'}} 
+                    size="small" 
+                    disabled={!(admin && admin.user && admin.user.role && allowed['/app/accounts-by-campaign'] && allowed['/app/accounts-by-campaign'].includes(admin.user.role))}
+                    onClick={() => history.push('/app/accounts-by-campaign', {campaign, requirement, sailebot})}>View Accounts</Button>
+                  <Button 
+                    variant="contained"  
+                    style={{ width: '100%', marginBottom: '1rem'}} 
+                    size="small" 
+                    disabled={!(admin && admin.user && admin.user.role && allowed['/app/clarifications-by-campaign'] && allowed['/app/clarifications-by-campaign'].includes(admin.user.role))}
+                    onClick={() => history.push('/app/clarifications-by-campaign', {campaign, client, company, requirement, name: 'Campaign'})}>Clarifications</Button>
                   <FormControlLabel
                     control={
                       <Switch
