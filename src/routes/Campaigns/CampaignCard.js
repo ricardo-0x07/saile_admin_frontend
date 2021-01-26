@@ -28,6 +28,8 @@ import { CSVLink } from "react-csv";
 
 import { makeStyles } from '@material-ui/core/styles';
 import PrivateRoutesConfig from '../../utils/PrivateRoutesConfig';
+import { isAvailable } from '../../utils'
+
 
 // import { blue } from '@material-ui/core/colors';
 
@@ -463,12 +465,15 @@ export const CampaignCard = ({ campaign, client, admin, company, sailebot, requi
                     size="small" 
                     disabled={!(admin && admin.user && admin.user.role && allowed['/app/accounts-by-campaign'] && allowed['/app/accounts-by-campaign'].includes(admin.user.role))}
                     onClick={() => history.push('/app/accounts-by-campaign', {campaign, requirement, sailebot})}>View Accounts</Button>
-                  <Button 
-                    variant="contained"  
-                    style={{ width: '100%', marginBottom: '1rem'}} 
-                    size="small" 
-                    disabled={!(admin && admin.user && admin.user.role && allowed['/app/clarifications-by-campaign'] && allowed['/app/clarifications-by-campaign'].includes(admin.user.role))}
-                    onClick={() => history.push('/app/clarifications-by-campaign', {campaign, client, company, requirement, name: 'Campaign'})}>Clarifications</Button>
+                  {
+                    isAvailable(admin, allowed['/app/clarifications-by-campaign']) &&
+                      <Button 
+                      variant="contained"  
+                      style={{ width: '100%', marginBottom: '1rem'}} 
+                      size="small" 
+                      disabled={!(admin && admin.user && admin.user.role && allowed['/app/clarifications-by-campaign'] && allowed['/app/clarifications-by-campaign'].includes(admin.user.role))}
+                      onClick={() => history.push('/app/clarifications-by-campaign', {campaign, client, company, requirement, name: 'Campaign'})}>Clarifications</Button>
+                  }
                   <FormControlLabel
                     control={
                       <Switch

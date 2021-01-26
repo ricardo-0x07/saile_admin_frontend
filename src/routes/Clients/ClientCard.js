@@ -9,6 +9,7 @@ import { Query } from "react-apollo";
 
 import { clientEventCountByLabel, clientEventCount } from "../../graphql/queries";
 import PrivateRoutesConfig from '../../utils/PrivateRoutesConfig';
+import { isAvailable } from '../../utils'
 
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -55,6 +56,7 @@ export const ClientCard = ({ admin, client,  history }) => {
   console.log("admin.user.role: ", admin.user.role)
   console.log("allowed['/app/manage-sailebot'].includes(): ", allowed[window.location.pathname].includes(admin.user.role))
 
+
   return (
     <Composed>
       {({ actionableEventCountQuery, referralEventCountQuery, clientEventCountQuery, referralIntroductionEventCountQuery }) => {
@@ -96,10 +98,10 @@ export const ClientCard = ({ admin, client,  history }) => {
               </CardActions>
               <CardActions style={{ display: 'flex', flexDirection: 'column' }} className={classes.root}>
                 {
-                  client &&
+                  client && isAvailable(admin, allowed['/app/clarifications-by-campaign']) &&
                   <Button
                     variant="contained" 
-                    disabled={!(admin && admin.user && admin.user.role && allowed['/app/clarifications-by-campaign'] && allowed['/app/clarifications-by-campaign'].includes(admin.user.role))}
+                    disabled={!isAvailable(admin, allowed['/app/clarifications-by-campaign'])}
                     style={{ width: '100%', marginBottom: '1rem'}}
                     size="small"
                     onClick={() => history.push('/app/clarifications-by-campaign', {client, company, name: 'Client'})}

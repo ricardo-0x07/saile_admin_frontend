@@ -13,3 +13,7 @@ export const getAllowedRoutes = (routes) => {
   else return intersection(permission, roles).length;
  });
 }
+
+export const isAvailable = (admin, permission) => {
+    return (admin && admin.user && admin.user.role && permission && permission.includes(admin.user.role))
+}
