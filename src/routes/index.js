@@ -19,34 +19,6 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { ApolloProvider} from "react-apollo";
-// import ManageCampaign from './ManageCampaign'
-// import ManageClient from './ManageClient'
-// import ManageCompany from './ManageCompany'
-// import ManageSaileBot from './ManageSaileBot'
-// import ManageDomain from './ManageDomain'
-// import ManageCompanyDomain from './ManageCompanyDomain'
-// import ManageTemplate from './ManageTemplate'
-// import ManageAccount from './ManageAccount'
-// import ManageContact from './ManageContact'
-// import ManageRequirement from './ManageRequirement'
-// import ManageSchedule from './ManageSchedule'
-// import Campaigns from './Campaigns'
-// import Requirements from './Requirements'
-// import Schedules from './Schedules'
-// import Clients from './Clients'
-// // import Companies from './Companies'
-// import SaileBots from './SaileBots'
-// import Domains from './Domains'
-// import CompanyDomains from './CompanyDomains'
-// import Accounts from './Accounts'
-// import ScheduleAccounts from './ScheduleAccounts'
-// import Contacts from './Contacts'
-// import Events from './Events'
-// // import Questionnaire from './Questionnaire'
-// import CampaignContactEvents from './CampaignContactEvents'
-// import SailebotEvents from './SailebotEvents'
-// import Clarifications from './Clarifications';
-// import Templates from './Templates'
 import Login from './Login'
 import DashboardSideBar from '../components/DashboardSideBar';
 import { createJWTClient } from '../graphql/apollo';

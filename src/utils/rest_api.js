@@ -38,8 +38,10 @@ export const getJWTAuth = async Credentials => {
         headers: getHeaders(),
         body: JSON.stringify(Credentials[0])
     })
-    if (!res.ok) throw new Error(res.statusText);
-    return res.json();
+    const response = await res.json()
+    console.log("response: ", response)
+    if (!res.ok) throw new Error(response.message);
+    return response;
 };
 
 

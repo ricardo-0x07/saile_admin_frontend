@@ -16,8 +16,8 @@ const styles = require('./Login.scss');
 
 const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
   // request state
-  const [loading, setLoading] = useState(false);
-  const [old_error, setError] = useState(null);
+  // const [isPending, setLoading] = useState(false);
+  // const [old_error, setError] = useState(null);
 
   // should persist admin secret
   const [shouldPersist, setShouldPersist] = useState(true);
@@ -36,7 +36,6 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
   const location = useLocation();
   const history = useHistory();
   const { from } = location.state || { from: { pathname: '/app/companies' } };
-
   useEffect(() => {
     if (data) login(data);
   }, [dispatch, data, login]);
@@ -62,15 +61,15 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
     const getLoginButtonText = () => {
       // login button text
       let loginText = 'Enter';
-      if (loading) {
+      if (isPending) {
         loginText = (
           <span>
             Verifying...
             <i className="fa fa-spinner fa-spin" aria-hidden="true" />
           </span>
         );
-      } else if (old_error) {
-        loginText = 'Error. Try again?';
+      } else if (error) {
+        loginText = `Error: ${error.message}. Try again?`;
       }
 
       return loginText;
@@ -78,49 +77,12 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
 
     const toggleShouldPersist = () => setShouldPersist(!shouldPersist);
 
-    // const onAdminSecretChange = e => setAdminSecretInput(e.target.value);
-    // const onAdminEmailChange = e => setAdminEmailInput(e.target.value);
 
     // form submit handler
     const onSubmit = e => {
         e.preventDefault();
 
-        // const successCallback = () => {
-        //     setLoading(false);
-        //     setError(null);
-        //     login({token: adminSecretInput, user: {}})
-        //     props.history.push('/app');
-        // };
-
-        // const errorCallback = err => {
-        //     setAdminSecretInput('');
-        //     setLoading(false);
-        //     setError(err);
-        // };
-
-        // if (adminSecretInput) {
-        //     setLoading(false);
-        //     setError(null);
-        // } else {
-        //     setLoading(false);
-        //     setError('adminSecretInput err');
-        // }
-        
-
-      setLoading(true);
-
-      setLoading(false);
-      setError(null);
       authenticate()
-      // login({token: adminSecretInput, user: {}})
-      // props.history.push('/app');
-        // verifyLogin({
-        //     adminSecret: adminSecretInput,
-        //     shouldPersist,
-        //     successCallback,
-        //     errorCallback,
-        //     requestAction
-        // });
     };
 
     return (
@@ -158,7 +120,7 @@ const Login = ({ admin, dispatch, requestAction, login, ...props}) => {
             type="submit"
             // color="green"
             className="form-control"
-            disabled={loading}
+            disabled={isPending}
           >
             {getLoginButtonText()}
           </Button>
